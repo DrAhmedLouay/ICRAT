@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>خريطة العراق التفاعلية</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        body { background: #0B1329; overflow: hidden; height: 530px; }
+        #map { width: 100%; height: 530px; border-radius: 12px; z-index: 1; border: 1px solid #CBD5E1; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+        
+        .info-hud {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            z-index: 1000;
+            background: rgba(15, 23, 42, 0.94);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: #FFFFFF;
+            border-radius: 12px;
+            padding: 14px 16px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.22);
+            min-width: 290px;
+            max-width: 340px;
+            direction: rtl;
+            text-align: right;
+            transition: all 0.3s ease;
+        }
+        .info-hud-title {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: #60A5FA;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            border-bottom: 1px solid rgba(255,255,255,0.12);
+            padding-bottom: 6px;
+        }
+        .hud-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.82rem;
+            margin-bottom: 5px;
+        }
+        .hud-lbl { color: #94A3B8; font-weight: 600; }
+        .hud-val { color: #F8FAFC; font-weight: 700; }
+        .hud-apply-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #10B981, #059669);
+            color: #FFFFFF;
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 0.9rem;
+            font-weight: 800;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            box-shadow: 0 4px 16px rgba(16, 185, 129, 0.45);
+        }
+        .hud-apply-btn:hover {
+            background: linear-gradient(135deg, #059669, #047857);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.6);
+        }
+        .hud-apply-btn:active {
+            transform: translateY(1px);
+        }
+        .hud-badge-click {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            color: #FFFFFF;
+            font-size: 0.76rem;
+            font-weight: 700;
+            padding: 5px 8px;
+            border-radius: 6px;
+            text-align: center;
+            margin-top: 8px;
+            border: 1px solid rgba(255,255,255,0.25);
+            animation: pulse-border 2s infinite;
+        }
+        @keyframes pulse-border {
+            0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.6); }
+            70% { box-shadow: 0 0 0 8px rgba(59, 130, 246, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+        }
+        .project-pin-icon {
+            background: #2563EB;
+            border: 3px solid #FFFFFF;
+            border-radius: 50%;
+            width: 36px !important;
+            height: 36px !important;
+            box-shadow: 0 0 24px rgba(37, 99, 235, 0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FFFFFF;
+            font-weight: 900;
+            font-size: 18px;
+            cursor: grab;
+        }
+        .project-pin-icon:active { cursor: grabbing; }
+        .gov-dot-icon {
+            border: 2px solid #FFFFFF;
+            border-radius: 50%;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+        }
+        .leaflet-popup-content-wrapper {
+            border-radius: 10px;
+            padding: 4px;
+            font-family: 'Cairo', sans-serif;
+            direction: rtl;
+            text-align: right;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+        }
+        .leaflet-popup-content {
+            font-size: 0.85rem;
+            line-height: 1.6;
+            margin: 10px 14px;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    
+    <div class="info-hud" id="hudBox">
+        <div class="info-hud-title">
+            <span>🎯 الموقع المحدد بالماوس</span>
+            <span style="font-size:0.75rem; background:#1E3A8A; color:#93C5FD; padding:2px 6px; border-radius:4px; font-weight:700;" id="hudLiveTag">مباشر</span>
+        </div>
+        <div class="hud-row">
+            <span class="hud-lbl">🌐 خط العرض (Lat):</span>
+            <span class="hud-val" id="hudLat">33.3152° N</span>
+        </div>
+        <div class="hud-row">
+            <span class="hud-lbl">🌐 خط الطول (Lon):</span>
+            <span class="hud-val" id="hudLon">44.3661° E</span>
+        </div>
+        <div class="hud-row">
+            <span class="hud-lbl">🏛️ أقرب محافظة:</span>
+            <span class="hud-val" style="color:#FBBF24;" id="hudGov">بغداد</span>
+        </div>
+        <div class="hud-row">
+            <span class="hud-lbl">💧 المياه الجوفية:</span>
+            <span class="hud-val" id="hudWater">2.5 م (متوسط)</span>
+        </div>
+        <button id="hudSyncBtn" class="hud-apply-btn" onclick="commitSelectedCoordinates()">
+            ⚡ اعتماد الإحداثيات فوراً في الحقول
+        </button>
+        <div id="hudNotice" style="display:none; background:#065F46; color:#A7F3D0; font-size:0.75rem; padding:4px 6px; border-radius:4px; margin-top:6px; text-align:center; font-weight:700;"></div>
+        <div class="hud-badge-click">
+            👆 انقر بالماوس في أي مكان بالعراق أو اضغط الزر الأخضر للاعتماد
+        </div>
+    </div>
+
+    <script>
+        // ------------------ STREAMLIT COMPONENT PROTOCOL ------------------
+        function sendStreamlitMessage(type, data) {
+            var msg = Object.assign({isStreamlitMessage: true, type: type}, data);
+            window.parent.postMessage(msg, "*");
+        }
+
+        function setComponentReady() {
+            sendStreamlitMessage("streamlit:componentReady", {apiVersion: 1});
+        }
+
+        function setFrameHeight(height) {
+            sendStreamlitMessage("streamlit:setFrameHeight", {height: height});
+        }
+
+        function setComponentValue(value) {
+            sendStreamlitMessage("streamlit:setComponentValue", {value: value});
+        }
+
+        // قاعدة بيانات محافظات العراق الـ 18
+        var GOVERNORATES = {
+            "BAGHDAD": {"name_ar": "بغداد", "lat": 33.3152, "lon": 44.3661, "groundwater_depth_m": 2.5, "salinity_badge": "متوسط", "soil_type_ar": "تربة رسوبية غرينية (Alluvial Silt/Clay)", "overall_geo_risk_score": 68},
+            "BASRA": {"name_ar": "البصرة", "lat": 30.5085, "lon": 47.7804, "groundwater_depth_m": 1.2, "salinity_badge": "شديد الملوحة والسبخات", "soil_type_ar": "سبخات وتربة طينية ملحية عالية التآكل", "overall_geo_risk_score": 92},
+            "NINAWA": {"name_ar": "نينوى (الموصل)", "lat": 36.3400, "lon": 43.1300, "groundwater_depth_m": 8.0, "salinity_badge": "منخفض", "soil_type_ar": "تربة صخرية جيرية متماسكة", "overall_geo_risk_score": 58},
+            "ERBIL": {"name_ar": "أربيل", "lat": 36.1901, "lon": 44.0091, "groundwater_depth_m": 12.0, "salinity_badge": "منخفض جداً", "soil_type_ar": "صخور كلسية وجبلية عالية الاستقرار", "overall_geo_risk_score": 42},
+            "SULAIMANIYAH": {"name_ar": "السليمانية", "lat": 35.5570, "lon": 45.4350, "groundwater_depth_m": 15.0, "salinity_badge": "منخفض جداً", "soil_type_ar": "تكوينات جبلية وصخور رسوبية صلبة", "overall_geo_risk_score": 45},
+            "DUHOK": {"name_ar": "دهوك", "lat": 36.8679, "lon": 42.9886, "groundwater_depth_m": 14.0, "salinity_badge": "منخفض جداً", "soil_type_ar": "تضاريس جبلية وصخور دولومايت كلسية", "overall_geo_risk_score": 48},
+            "KIRKUK": {"name_ar": "كركوك", "lat": 35.4681, "lon": 44.3922, "groundwater_depth_m": 6.5, "salinity_badge": "منخفض إلى متوسط", "soil_type_ar": "تربة حصوية طينية متدرجة", "overall_geo_risk_score": 55},
+            "ANBAR": {"name_ar": "الأنبار (الرمادي / الفلوجة)", "lat": 33.4233, "lon": 43.2974, "groundwater_depth_m": 7.5, "salinity_badge": "مرتفع جبسي", "soil_type_ar": "تربة رملية جبسية معرضة للهبوط بالماء (Gypiferous Sand)", "overall_geo_risk_score": 76},
+            "KARBALA": {"name_ar": "كربلاء المقدسة", "lat": 32.6160, "lon": 44.0249, "groundwater_depth_m": 2.8, "salinity_badge": "متوسط إلى مرتفع", "soil_type_ar": "تربة رملية طينية تداخلية مع جيوب كبريتية", "overall_geo_risk_score": 72},
+            "NAJAF": {"name_ar": "النجف الأشرف", "lat": 31.9961, "lon": 44.3150, "groundwater_depth_m": 4.5, "salinity_badge": "متوسط جبسي", "soil_type_ar": "تربة رملية حصوية صحراوية مع تكوينات طارق", "overall_geo_risk_score": 65},
+            "BABIL": {"name_ar": "بابل (الحلة)", "lat": 32.4789, "lon": 44.4208, "groundwater_depth_m": 2.0, "salinity_badge": "متوسط إلى عالي", "soil_type_ar": "تربة طينية رسوبية عالية الانضغاطية والانتفاخ", "overall_geo_risk_score": 78},
+            "WASIT": {"name_ar": "واسط (الكوت)", "lat": 32.5050, "lon": 45.8200, "groundwater_depth_m": 1.8, "salinity_badge": "مرتفع كبريتي", "soil_type_ar": "تربة طينية نهرية رخوة مشبعة بالمياه", "overall_geo_risk_score": 82},
+            "DHI_QAR": {"name_ar": "ذي قار (الناصرية)", "lat": 31.0500, "lon": 46.2500, "groundwater_depth_m": 1.5, "salinity_badge": "مرتفع سبخي", "soil_type_ar": "تربة أهوار وطين رسوبي مشبع عالي التملح", "overall_geo_risk_score": 88},
+            "MAYSAN": {"name_ar": "ميسان (العمارة)", "lat": 31.8400, "lon": 47.1400, "groundwater_depth_m": 1.3, "salinity_badge": "مرتفع أهوار", "soil_type_ar": "بيئة أهوار وتربة طينية رخوة جداً ذات قدرة تحمل منخفضة", "overall_geo_risk_score": 86},
+            "MUTHANNA": {"name_ar": "المثنى (السماوة)", "lat": 31.3100, "lon": 45.2800, "groundwater_depth_m": 5.0, "salinity_badge": "مرتفع كلسي جبسي", "soil_type_ar": "تربة رملية كلسية صحراوية صلبة وجافة", "overall_geo_risk_score": 70},
+            "DIWANIYAH": {"name_ar": "الديوانية (القادسية)", "lat": 31.9900, "lon": 44.9200, "groundwater_depth_m": 2.2, "salinity_badge": "متوسط", "soil_type_ar": "تربة غرينية طينية زراعية خصبة متوسطة التماسك", "overall_geo_risk_score": 74},
+            "DIYALA": {"name_ar": "ديالى (بعقوبة)", "lat": 33.7500, "lon": 44.6400, "groundwater_depth_m": 3.5, "salinity_badge": "منخفض إلى متوسط", "soil_type_ar": "تربة متباينة بين الرسوبية والحصوية في حمرين", "overall_geo_risk_score": 62},
+            "SALAH_ALDIN": {"name_ar": "صلاح الدين (تكريت / سامراء)", "lat": 34.6000, "lon": 43.6800, "groundwater_depth_m": 5.5, "salinity_badge": "متوسط جبسي", "soil_type_ar": "تربة حصوية رملية مع طبقات جبسية متبادلة", "overall_geo_risk_score": 64}
+        };
+
+        var currentLat = 33.3152;
+        var currentLon = 44.3661;
+        var map, projectMarker, radarCircle, satelliteLayer, streetsLayer, topoLayer;
+        var mapInitialized = false;
+
+        function calculateNearestGov(lat, lon) {
+            var minD = Infinity;
+            var bestK = 'BAGHDAD';
+            var R = 6371.0;
+            for (var k in GOVERNORATES) {
+                var g = GOVERNORATES[k];
+                var dlat = (g.lat - lat) * Math.PI / 180.0;
+                var dlon = (g.lon - lon) * Math.PI / 180.0;
+                var a = Math.sin(dlat/2)*Math.sin(dlat/2) + 
+                        Math.cos(lat*Math.PI/180.0) * Math.cos(g.lat*Math.PI/180.0) * 
+                        Math.sin(dlon/2)*Math.sin(dlon/2);
+                var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+                var dist = R * c;
+                if (dist < minD) {
+                    minD = dist;
+                    bestK = k;
+                }
+            }
+            return { key: bestK, data: GOVERNORATES[bestK] || GOVERNORATES['BAGHDAD'], distKm: minD };
+        }
+
+        function updateProjectPosition(lat, lon) {
+            currentLat = parseFloat(lat);
+            currentLon = parseFloat(lon);
+            if (projectMarker) projectMarker.setLatLng([currentLat, currentLon]);
+            if (radarCircle) radarCircle.setLatLng([currentLat, currentLon]);
+            
+            var nearest = calculateNearestGov(currentLat, currentLon);
+            
+            document.getElementById('hudLat').innerText = currentLat.toFixed(4) + '° N';
+            document.getElementById('hudLon').innerText = currentLon.toFixed(4) + '° E';
+            document.getElementById('hudGov').innerText = nearest.data.name_ar + ' (' + nearest.distKm.toFixed(1) + ' كم)';
+            document.getElementById('hudWater').innerText = nearest.data.groundwater_depth_m + ' م (' + (nearest.data.salinity_badge || '') + ')';
+            
+            if (projectMarker) {
+                projectMarker.bindPopup(
+                    '<div style="font-weight:800; font-size:0.95rem; color:#1E40AF; margin-bottom:4px;">🎯 موقع المشروع المحدد</div>' +
+                    '<b>المحافظة الأقرب:</b> ' + nearest.data.name_ar + '<br>' +
+                    '<b>الإحداثيات:</b> ' + currentLat.toFixed(4) + '° N, ' + currentLon.toFixed(4) + '° E<br>' +
+                    '<b>طبيعة التربة:</b> ' + nearest.data.soil_type_ar + '<br>' +
+                    '<button onclick="commitSelectedCoordinates()" style="margin-top:8px; background:#10B981; color:#fff; border:none; border-radius:6px; padding:8px 12px; font-weight:800; font-size:0.88rem; cursor:pointer; width:100%; box-shadow:0 3px 10px rgba(16,185,129,0.4);">⚡ اعتماد هذا الموقع</button>'
+                );
+            }
+        }
+
+        function commitSelectedCoordinates() {
+            var nearest = calculateNearestGov(currentLat, currentLon);
+            var payload = {
+                lat: parseFloat(currentLat.toFixed(4)),
+                lon: parseFloat(currentLon.toFixed(4)),
+                govKey: nearest.key,
+                govNameAr: nearest.data.name_ar,
+                timestamp: Date.now()
+            };
+            
+            // 1. إرسال القيمة لـ Streamlit فورياً
+            setComponentValue(payload);
+
+            // 2. نسخ الإحداثيات للحافظة
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(currentLat.toFixed(4) + ", " + currentLon.toFixed(4));
+            }
+
+            // 3. إظهار الإشعار الأخضر الفوري
+            var notice = document.getElementById('hudNotice');
+            if (notice) {
+                notice.style.display = 'block';
+                notice.innerHTML = '✅ جاري اعتماد وتثبيت الموقع: ' + nearest.data.name_ar + ' (' + currentLat.toFixed(4) + '°, ' + currentLon.toFixed(4) + '°)';
+                setTimeout(function() {
+                    notice.style.display = 'none';
+                }, 4000);
+            }
+        }
+
+        function initMap(initialLat, initialLon, initialStyle) {
+            currentLat = parseFloat(initialLat) || 33.3152;
+            currentLon = parseFloat(initialLon) || 44.3661;
+
+            satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                maxZoom: 19,
+                attribution: 'Tiles &copy; Esri'
+            });
+
+            streetsLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; OpenStreetMap'
+            });
+
+            topoLayer = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+                maxZoom: 17,
+                attribution: '&copy; OpenStreetMap'
+            });
+
+            var initLayer = (initialStyle === 'STANDARD') ? streetsLayer : satelliteLayer;
+            
+            map = L.map('map', {
+                center: [currentLat, currentLon],
+                zoom: 6,
+                layers: [initLayer]
+            });
+
+            var baseMaps = {
+                "🛰️ أقمار صناعية (Satellite)": satelliteLayer,
+                "🗺️ شوارع قياسية (OpenStreetMap)": streetsLayer,
+                "⛰️ تضاريس وطبوغرافيا (Topography)": topoLayer
+            };
+            L.control.layers(baseMaps, null, { position: 'topleft' }).addTo(map);
+            L.control.scale({ metric: true, imperial: false, position: 'bottomleft' }).addTo(map);
+
+            for (var k in GOVERNORATES) {
+                var g = GOVERNORATES[k];
+                var dotColor = g.overall_geo_risk_score >= 80 ? '#EF4444' : (g.overall_geo_risk_score >= 65 ? '#F59E0B' : '#10B981');
+                
+                var govIcon = L.divIcon({
+                    className: 'gov-dot-icon',
+                    html: '<div style="background:' + dotColor + '; width:12px; height:12px; border-radius:50%;"></div>',
+                    iconSize: [12, 12],
+                    iconAnchor: [6, 6]
+                });
+
+                var marker = L.marker([g.lat, g.lon], { icon: govIcon }).addTo(map);
+                marker.bindTooltip('<b>📍 ' + g.name_ar + '</b><br>المخاطر: ' + g.overall_geo_risk_score + '/100', {
+                    direction: 'top'
+                });
+            }
+
+            var projectPinIcon = L.divIcon({
+                className: 'project-pin-icon',
+                html: '🎯',
+                iconSize: [36, 36],
+                iconAnchor: [18, 18]
+            });
+
+            projectMarker = L.marker([currentLat, currentLon], {
+                icon: projectPinIcon,
+                draggable: true,
+                zIndexOffset: 1000
+            }).addTo(map);
+
+            radarCircle = L.circle([currentLat, currentLon], {
+                radius: 12000,
+                color: '#3B82F6',
+                weight: 2,
+                fillColor: '#60A5FA',
+                fillOpacity: 0.2
+            }).addTo(map);
+
+            // النقر بالماوس على أي مكان في الخريطة لنقل النجمة
+            map.on('click', function(e) {
+                updateProjectPosition(e.latlng.lat, e.latlng.lng);
+            });
+
+            // سحب النجمة بالماوس
+            projectMarker.on('dragend', function(e) {
+                var pos = projectMarker.getLatLng();
+                updateProjectPosition(pos.lat, pos.lng);
+            });
+
+            updateProjectPosition(currentLat, currentLon);
+            mapInitialized = true;
+        }
+
+        // الاستماع لرسائل Streamlit
+        window.addEventListener("message", function(event) {
+            if (event.data && event.data.type === "streamlit:render") {
+                var args = event.data.args || {};
+                if (args.govs) {
+                    GOVERNORATES = args.govs;
+                }
+                var pLat = parseFloat(args.project_lat) || currentLat;
+                var pLon = parseFloat(args.project_lon) || currentLon;
+                var style = args.initial_map_type || 'SATELLITE';
+
+                if (!mapInitialized) {
+                    initMap(pLat, pLon, style);
+                } else {
+                    if (Math.abs(pLat - currentLat) > 0.0001 || Math.abs(pLon - currentLon) > 0.0001) {
+                        updateProjectPosition(pLat, pLon);
+                    }
+                }
+                setFrameHeight(545);
+            }
+        });
+
+        // تهيئة مبدئية فورية
+        document.addEventListener("DOMContentLoaded", function() {
+            if (!mapInitialized) {
+                initMap(33.3152, 44.3661, 'SATELLITE');
+            }
+            setComponentReady();
+            setFrameHeight(545);
+        });
+
+        // إخطار Streamlit
+        setComponentReady();
+        setFrameHeight(545);
+    </script>
+</body>
+</html>

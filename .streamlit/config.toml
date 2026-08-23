@@ -1,0 +1,15 @@
+[server]
+maxMessageSize = 1000
+maxUploadSize = 1000
+enableCORS = false
+enableXsrfProtection = false
+headless = true
+
+[client]
+showErrorDetails = false
+
+[browser]
+gatherUsageStats = false
+
+[runner]
+fastReruns = true
