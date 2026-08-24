@@ -76,25 +76,30 @@ def render_centered_table(df: pd.DataFrame, max_height: Optional[int] = 480):
 def render_decision_hub_html_grid(df: pd.DataFrame):
     """عرض مصفوفة القرارات الهندسية ISO 31000 بتنسيق HTML/CSS فائق الدقة مع شريط تمرير 2D ورأس ثابت وتفاصيل العناصر المتعارضة (Element ID & Item Name)"""
     is_dark = st.session_state.get("theme_mode", "ROYAL") == "DARK"
+    th_bg = "#101E3D" if is_dark else "#1E3A8A"
+    th_col = "#38BDF8" if is_dark else "#FFFFFF"
+    th_brd = "#1E3A8A" if is_dark else "#3B82F6"
+    base_th = f'color: {th_col} !important; background: {th_bg} !important; padding: 12px 10px; font-weight: 800; border-bottom: 2px solid {th_brd};'
+
     parts = []
     parts.append('<div class="decision-hub-container" style="max-height: 520px; overflow-y: auto; overflow-x: auto; position: relative; margin: 12px 0;">')
     parts.append('<table class="decision-hub-table">')
     parts.append('<thead>')
     parts.append('<tr>')
-    parts.append('<th style="text-align: center; min-width: 85px;">كود التعارض</th>')
-    parts.append('<th style="text-align: center; min-width: 160px;">معرف العناصر (Element ID)</th>')
-    parts.append('<th style="text-align: right; min-width: 190px;">أسماء العناصر المتعارضة (Item Name)</th>')
-    parts.append('<th style="text-align: right; min-width: 170px;">توصيف التعارض</th>')
-    parts.append('<th style="text-align: center; min-width: 100px;">مؤشر الأولوية Ψ</th>')
-    parts.append('<th style="text-align: center; min-width: 165px;">تقييم ISO 31000</th>')
-    parts.append('<th style="text-align: right; min-width: 220px;">فارق التقييم الذكي (2D نظري ⇄ 4D تنفيذي)</th>')
-    parts.append('<th style="text-align: right; min-width: 190px;">نشاط P6 المتأثر</th>')
-    parts.append('<th style="text-align: center; min-width: 135px;">المسار الحرج</th>')
-    parts.append('<th style="text-align: center; min-width: 90px;">أيام التأخير</th>')
-    parts.append('<th style="text-align: center; min-width: 115px;">كلفة المعالجة 5D</th>')
-    parts.append('<th style="text-align: right; min-width: 175px;">العامل التفسيري الأكبر (AI)</th>')
-    parts.append('<th style="text-align: center; min-width: 105px;">استراتيجية ISO</th>')
-    parts.append('<th style="text-align: right; min-width: 250px;">التوصية الإنشائية</th>')
+    parts.append(f'<th style="text-align: center; min-width: 85px; {base_th}">كود التعارض</th>')
+    parts.append(f'<th style="text-align: center; min-width: 160px; {base_th}">معرف العناصر (Element ID)</th>')
+    parts.append(f'<th style="text-align: right; min-width: 190px; {base_th}">أسماء العناصر المتعارضة (Item Name)</th>')
+    parts.append(f'<th style="text-align: right; min-width: 170px; {base_th}">توصيف التعارض</th>')
+    parts.append(f'<th style="text-align: center; min-width: 100px; {base_th}">مؤشر الأولوية Ψ</th>')
+    parts.append(f'<th style="text-align: center; min-width: 165px; {base_th}">تقييم ISO 31000</th>')
+    parts.append(f'<th style="text-align: right; min-width: 220px; {base_th}">فارق التقييم الذكي (2D نظري ⇄ 4D تنفيذي)</th>')
+    parts.append(f'<th style="text-align: right; min-width: 190px; {base_th}">نشاط P6 المتأثر</th>')
+    parts.append(f'<th style="text-align: center; min-width: 135px; {base_th}">المسار الحرج</th>')
+    parts.append(f'<th style="text-align: center; min-width: 90px; {base_th}">أيام التأخير</th>')
+    parts.append(f'<th style="text-align: center; min-width: 115px; {base_th}">كلفة المعالجة 5D</th>')
+    parts.append(f'<th style="text-align: right; min-width: 175px; {base_th}">العامل التفسيري الأكبر (AI)</th>')
+    parts.append(f'<th style="text-align: center; min-width: 105px; {base_th}">استراتيجية ISO</th>')
+    parts.append(f'<th style="text-align: right; min-width: 250px; {base_th}">التوصية الإنشائية</th>')
     parts.append('</tr></thead><tbody>')
 
     for idx, row in df.iterrows():
@@ -1017,7 +1022,7 @@ def render_dynamic_theme_engine():
             color: #0B132B !important;
             font-weight: 900 !important;
         }
-        .stApp p, .stApp li, .stApp label, .stApp td, .stApp th {
+        .stApp p, .stApp li, .stApp label, .stApp td {
             color: #0F172A !important;
             font-weight: 700 !important;
         }
