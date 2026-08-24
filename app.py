@@ -302,6 +302,167 @@ st.set_page_config(
 )
 
 # تخصيص المظهر وتنسيقات CSS المتقدمة
+def render_dynamic_theme_engine():
+    current_theme = st.session_state.get("theme_mode", "ROYAL")
+    
+    if current_theme == "ROYAL":
+        theme_css = """
+        /* --- 🏛️ THEME: ROYAL EXECUTIVE --- */
+        .stApp {
+            background-color: #F8FAFC !important;
+            color: #0F172A !important;
+        }
+        section[data-testid="stSidebar"] {
+            background-color: #0F172A !important;
+            border-left: 1px solid #1E293B !important;
+        }
+        section[data-testid="stSidebar"] * {
+            color: #F8FAFC !important;
+        }
+        section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p {
+            color: #CBD5E1 !important;
+        }
+        section[data-testid="stSidebar"] h1, 
+        section[data-testid="stSidebar"] h2, 
+        section[data-testid="stSidebar"] h3, 
+        section[data-testid="stSidebar"] h4, 
+        section[data-testid="stSidebar"] h5,
+        section[data-testid="stSidebar"] h6 {
+            color: #FFFFFF !important;
+        }
+        section[data-testid="stSidebar"] div[data-testid="stRadio"] label span {
+            color: #F8FAFC !important;
+        }
+        .metric-card, .chart-card, div[data-testid="stMetric"], div[data-testid="stExpander"] {
+            background: #FFFFFF !important;
+            border: 1px solid #E2E8F0 !important;
+            box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04) !important;
+            border-radius: 12px !important;
+        }
+        .modern-topbar {
+            background: #FFFFFF !important;
+            border-color: #CBD5E1 !important;
+        }
+        .modern-topbar .topbar-label {
+            color: #475569 !important;
+        }
+        .modern-topbar .topbar-val {
+            color: #0F172A !important;
+        }
+        """
+    elif current_theme == "LIGHT":
+        theme_css = """
+        /* --- 🏢 THEME: MODERN LIGHT --- */
+        .stApp {
+            background-color: #FFFFFF !important;
+            color: #0F172A !important;
+        }
+        section[data-testid="stSidebar"] {
+            background-color: #F1F5F9 !important;
+            border-left: 1px solid #CBD5E1 !important;
+        }
+        section[data-testid="stSidebar"] * {
+            color: #1E293B !important;
+        }
+        section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p {
+            color: #475569 !important;
+        }
+        section[data-testid="stSidebar"] h1, 
+        section[data-testid="stSidebar"] h2, 
+        section[data-testid="stSidebar"] h3, 
+        section[data-testid="stSidebar"] h4, 
+        section[data-testid="stSidebar"] h5,
+        section[data-testid="stSidebar"] h6 {
+            color: #0F172A !important;
+        }
+        section[data-testid="stSidebar"] div[data-testid="stRadio"] label span {
+            color: #1E293B !important;
+        }
+        .metric-card, .chart-card, div[data-testid="stMetric"], div[data-testid="stExpander"] {
+            background: #F8FAFC !important;
+            border: 1px solid #E2E8F0 !important;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02) !important;
+            border-radius: 12px !important;
+        }
+        .modern-topbar {
+            background: #F8FAFC !important;
+            border-color: #CBD5E1 !important;
+        }
+        .modern-topbar .topbar-label {
+            color: #475569 !important;
+        }
+        .modern-topbar .topbar-val {
+            color: #0F172A !important;
+        }
+        """
+    else:  # DARK
+        theme_css = """
+        /* --- 🧊 THEME: DIGITAL TWIN DARK --- */
+        .stApp {
+            background-color: #0F172A !important;
+            color: #F8FAFC !important;
+        }
+        .stApp p, .stApp span, .stApp li {
+            color: #E2E8F0 !important;
+        }
+        .stApp h1, .stApp h2, .stApp h3, .stApp h4, .stApp h5, .stApp h6 {
+            color: #F8FAFC !important;
+        }
+        section[data-testid="stSidebar"] {
+            background-color: #090D16 !important;
+            border-left: 1px solid #1E293B !important;
+        }
+        section[data-testid="stSidebar"] * {
+            color: #F8FAFC !important;
+        }
+        section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p {
+            color: #94A3B8 !important;
+        }
+        section[data-testid="stSidebar"] h1, 
+        section[data-testid="stSidebar"] h2, 
+        section[data-testid="stSidebar"] h3, 
+        section[data-testid="stSidebar"] h4, 
+        section[data-testid="stSidebar"] h5,
+        section[data-testid="stSidebar"] h6 {
+            color: #FFFFFF !important;
+        }
+        section[data-testid="stSidebar"] div[data-testid="stRadio"] label span {
+            color: #F8FAFC !important;
+        }
+        .metric-card, .chart-card, div[data-testid="stMetric"], div[data-testid="stExpander"] {
+            background: #1E293B !important;
+            border: 1px solid #334155 !important;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3) !important;
+            border-radius: 12px !important;
+        }
+        div[data-testid="stMetric"] * {
+            color: #F8FAFC !important;
+        }
+        .modern-topbar {
+            background: #1E293B !important;
+            border-color: #334155 !important;
+        }
+        .modern-topbar .topbar-label {
+            color: #94A3B8 !important;
+        }
+        .modern-topbar .topbar-val {
+            color: #F8FAFC !important;
+        }
+        .stTabs [data-baseweb="tab"] {
+            background: #1E293B !important;
+            color: #CBD5E1 !important;
+            border-color: #334155 !important;
+        }
+        .stTabs [aria-selected="true"] {
+            background: #2563EB !important;
+            color: #FFFFFF !important;
+            border-color: #60A5FA !important;
+        }
+        """
+    st.markdown(f"<style>{theme_css}</style>", unsafe_allow_html=True)
+
+render_dynamic_theme_engine()
+
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap');
@@ -347,8 +508,6 @@ st.markdown("""
     section[data-testid="stSidebar"] {
         direction: rtl !important;
         text-align: right !important;
-        background: #F8FAFC !important;
-        border-left: 1px solid #E2E8F0 !important;
     }
     section[data-testid="stSidebar"] > div {
         direction: rtl !important;
@@ -1212,6 +1371,31 @@ with st.sidebar:
         key="radio_ui_mode_choice"
     )
     st.session_state.ui_layout_mode = "MODERN" if "🌟" in ui_choice else "CLASSIC"
+    st.divider()
+
+    st.markdown("##### 🎨 المظهر والتناسق اللوني (Design Theme)")
+    if "theme_mode" not in st.session_state:
+        st.session_state.theme_mode = "ROYAL"
+        
+    theme_choice = st.radio(
+        "اختر التناسق اللوني للمنصة:",
+        options=[
+            "🏛️ الاستوديو التنفيذي الملكي (Royal Executive)",
+            "🏢 المكاتب الهندسية الحديثة (Modern Light)",
+            "🧊 التوأم الرقمي الليلي (Dark Studio)"
+        ],
+        index=0 if st.session_state.theme_mode == "ROYAL" else (1 if st.session_state.theme_mode == "LIGHT" else 2),
+        key="radio_theme_mode_choice"
+    )
+    prev_theme = st.session_state.theme_mode
+    if "🏛️" in theme_choice:
+        st.session_state.theme_mode = "ROYAL"
+    elif "🏢" in theme_choice:
+        st.session_state.theme_mode = "LIGHT"
+    else:
+        st.session_state.theme_mode = "DARK"
+    if prev_theme != st.session_state.theme_mode:
+        st.rerun()
     st.divider()
 
     st.markdown("##### 🎛️ نظام تقييم مؤشر التلكؤ (ISRS Mode)")
