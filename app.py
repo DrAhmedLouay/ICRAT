@@ -953,17 +953,18 @@ AUTHORIZED_CREDENTIALS = {
 def render_login_portal():
     """بوابة الأمان والتحقق الرقمي المدمجة لحماية المنصة على الإنترنت"""
     login_card_html = """<style>
-@import url('https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Aref+Ruqaa:wght@700&family=Amiri:ital,wght@0,700;1,700&family=Rakkas&family=Gulzar&family=Scheherazade+New:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Katibeh&family=Amiri+Quran&family=Gulzar&display=swap');
+@import url('https://v1.fontapi.ir/css/Thuluth');
 .thuluth-title {
-    font-family: 'Amiri Quran', 'Aref Ruqaa', 'Thuluth', 'DecoType Thuluth', 'Traditional Arabic', serif !important;
+    font-family: 'Thuluth', 'Katibeh', 'Amiri Quran', 'DecoType Thuluth', serif !important;
     background: linear-gradient(135deg, #1E3A8A 0%, #1D4ED8 50%, #2563EB 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    font-weight: 700;
-    font-size: 2.15rem;
-    line-height: 1.6;
+    font-weight: 400;
+    font-size: 2.35rem;
+    line-height: 1.45;
     margin-bottom: 12px;
-    letter-spacing: 0.4px;
+    letter-spacing: 0.5px;
 }
 </style>
 <div style="max-width: 580px; margin: 25px auto 16px auto; background: #FFFFFF; border-radius: 20px; padding: 32px 36px; box-shadow: 0 18px 45px rgba(15, 23, 42, 0.09); border: 1px solid #E2E8F0; text-align: center; direction: rtl;">
