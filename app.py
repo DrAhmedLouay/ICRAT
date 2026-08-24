@@ -950,41 +950,40 @@ AUTHORIZED_CREDENTIALS = {
     "ruba": "Ruba@2026"
 }
 
+def _get_login_banner_base64():
+    banner_path = os.path.join(os.path.dirname(__file__), "icrat_login_banner.jpg")
+    if os.path.exists(banner_path):
+        try:
+            with open(banner_path, "rb") as f:
+                data = base64.b64encode(f.read()).decode("utf-8")
+            return f"data:image/jpeg;base64,{data}"
+        except Exception:
+            return None
+    return None
+
 def render_login_portal():
     """بوابة الأمان والتحقق الرقمي المدمجة لحماية المنصة على الإنترنت"""
-    login_card_html = """<style>
-@import url('https://fonts.googleapis.com/css2?family=Katibeh&family=Amiri+Quran&family=Gulzar&display=swap');
-@import url('https://v1.fontapi.ir/css/Thuluth');
-.thuluth-title {
-    font-family: 'Thuluth', 'Katibeh', 'Amiri Quran', 'DecoType Thuluth', serif !important;
-    background: linear-gradient(135deg, #1E3A8A 0%, #1D4ED8 50%, #2563EB 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    font-weight: 400;
-    font-size: 2.35rem;
-    line-height: 1.45;
-    margin-bottom: 12px;
-    letter-spacing: 0.5px;
-}
-</style>
-<div style="max-width: 580px; margin: 25px auto 16px auto; background: #FFFFFF; border-radius: 20px; padding: 32px 36px; box-shadow: 0 18px 45px rgba(15, 23, 42, 0.09); border: 1px solid #E2E8F0; text-align: center; direction: rtl;">
-<div style="display: inline-block; background: linear-gradient(135deg, #EFF6FF, #DBEAFE); border: 1px solid #BFDBFE; border-radius: 50%; padding: 14px; margin-bottom: 12px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);">
-<div style="font-size: 2.6rem; line-height: 1;">🏛️</div>
-</div>
-<h1 class="thuluth-title">المنصة العراقية لتقييم مخاطر البناء ودعم اتخاذ القرارات في المشاريع البنائية</h1>
-<div style="display: inline-block; background: #F1F5F9; color: #334155; font-size: 0.82rem; font-weight: 700; padding: 4px 12px; border-radius: 20px; border: 1px solid #CBD5E1; margin-bottom: 10px; font-family: 'Segoe UI', Tahoma, sans-serif; direction: ltr;">
+    banner_data_uri = _get_login_banner_base64()
+    if banner_data_uri:
+        banner_tag = f'<div style="border-radius: 16px; overflow: hidden; box-shadow: 0 6px 20px rgba(0,0,0,0.08); border: 1px solid #CBD5E1; margin-bottom: 16px;"><img src="{banner_data_uri}" style="width: 100%; height: auto; display: block; border-radius: 16px;" alt="المنصة العراقية لتقييم مخاطر البناء ودعم اتخاذ القرارات في المشاريع البنائية"></div>'
+    else:
+        banner_tag = '<div style="display: inline-block; background: linear-gradient(135deg, #EFF6FF, #DBEAFE); border: 1px solid #BFDBFE; border-radius: 50%; padding: 14px; margin-bottom: 12px;"><div style="font-size: 2.6rem; line-height: 1;">🏛️</div></div><h1 style="font-family: Cairo, sans-serif; font-size: 1.5rem; color: #1E3A8A; font-weight: 800; margin-bottom: 10px;">المنصة العراقية لتقييم مخاطر البناء ودعم اتخاذ القرارات في المشاريع البنائية</h1>'
+
+    login_card_html = f"""<div style="max-width: 640px; margin: 16px auto 14px auto; background: #FFFFFF; border-radius: 22px; padding: 22px 26px; box-shadow: 0 20px 50px rgba(15, 23, 42, 0.10); border: 1px solid #E2E8F0; text-align: center; direction: rtl;">
+{banner_tag}
+<div style="display: inline-block; background: #F1F5F9; color: #1E293B; font-size: 0.84rem; font-weight: 700; padding: 4px 14px; border-radius: 20px; border: 1px solid #CBD5E1; margin-bottom: 12px; font-family: 'Segoe UI', Tahoma, sans-serif; direction: ltr;">
 Iraqi Construction Risk Assessment & Decision Support Platform (ICRAT 2.0)
 </div>
-<div style="color: #2563EB; font-size: 0.88rem; font-weight: 700; margin-bottom: 14px; display: flex; align-items: center; justify-content: center; gap: 6px;">
+<div style="color: #2563EB; font-size: 0.90rem; font-weight: 800; margin-bottom: 14px; display: flex; align-items: center; justify-content: center; gap: 6px;">
 <span>🔒</span> <span>بوابة الدخول المعتمدة للمهندسين والمشرفين</span>
 </div>
-<div style="background: #F8FAFC; border-radius: 10px; padding: 10px 14px; border: 1px solid #E2E8F0; font-size: 0.82rem; color: #475569; margin-bottom: 8px; line-height: 1.5;">
+<div style="background: #F8FAFC; border-radius: 10px; padding: 10px 14px; border: 1px solid #E2E8F0; font-size: 0.82rem; color: #475569; margin-bottom: 4px; line-height: 1.5;">
 هذه المنصة محمية بنظام التحقق الرقمي المشفر. يرجى إدخال بيانات الاعتماد المصرح بها للوصول إلى أدوات ومحركات المشروع.
 </div>
 </div>"""
     st.markdown(login_card_html, unsafe_allow_html=True)
 
-    col_pad1, col_form, col_pad2 = st.columns([1, 1.8, 1])
+    col_pad1, col_form, col_pad2 = st.columns([1, 2, 1])
     with col_form:
         with st.form("security_login_form", clear_on_submit=False):
             u_input = st.text_input("👤 اسم المستخدم (Username):", placeholder="أدخل اسم المستخدم المصرح به...")
