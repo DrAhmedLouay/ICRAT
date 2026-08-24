@@ -574,7 +574,7 @@ def render_dynamic_theme_engine():
             border-right: 6px solid #3B82F6 !important;
             box-shadow: 0 4px 20px rgba(11,19,43,0.2) !important;
         }
-        .main-header h2, .main-header p, .main-header span, .main-header b {
+        .main-header, .main-header *, .main-header h2, .main-header p, .main-header span, .main-header b {
             color: #FFFFFF !important;
         }
         .main-header .en-badge-hdr {
@@ -1052,7 +1052,7 @@ def render_dynamic_theme_engine():
             border-right: 6px solid #2563EB !important;
             box-shadow: 0 4px 18px rgba(15,23,42,0.12) !important;
         }
-        .main-header h2, .main-header p, .main-header span, .main-header b {
+        .main-header, .main-header *, .main-header h2, .main-header p, .main-header span, .main-header b {
             color: #FFFFFF !important;
         }
         .main-header .en-badge-hdr {
@@ -1474,7 +1474,7 @@ def render_dynamic_theme_engine():
             border-right: 6px solid #38BDF8 !important;
             box-shadow: 0 6px 24px rgba(0,0,0,0.5) !important;
         }
-        .main-header h2, .main-header p, .main-header span, .main-header b {
+        .main-header, .main-header *, .main-header h2, .main-header p, .main-header span, .main-header b {
             color: #FFFFFF !important;
         }
         .main-header .en-badge-hdr {
@@ -1528,11 +1528,15 @@ def render_dynamic_theme_engine():
         div[data-testid="stSegmentedControl"] button, div[data-testid="stPills"] button,
         div[data-testid="stSegmentedControl"] [role="radio"], div[data-testid="stPills"] [role="radio"],
         div[data-baseweb="segmented-control"] [role="radio"], div[data-baseweb="segmented-control"] button,
-        div[data-testid="stSegmentedControl"] label, div[data-testid="stPills"] label {
+        div[data-testid="stSegmentedControl"] label, div[data-testid="stPills"] label,
+        div[data-testid="stPills"] [data-testid="stPillsChip"],
+        div[data-testid="stPills"] [role="button"],
+        div[data-testid="stPills"] > div > div > * {
             background-color: #0E1626 !important;
-            color: #FFFFFF !important;
+            background: #0E1626 !important;
+            color: #E2E8F0 !important;
             border: 2px solid #334155 !important;
-            border-radius: 10px !important;
+            border-radius: 20px !important;
             font-weight: 800 !important;
             font-size: 0.88rem !important;
         }
@@ -1540,25 +1544,41 @@ def render_dynamic_theme_engine():
         div[data-testid="stPills"] [data-testid="stMarkdownContainer"] p,
         div[data-testid="stSegmentedControl"] span, div[data-testid="stPills"] span,
         div[data-testid="stSegmentedControl"] div, div[data-testid="stPills"] div,
-        div[data-baseweb="segmented-control"] span, div[data-baseweb="segmented-control"] p {
-            color: #FFFFFF !important;
+        div[data-baseweb="segmented-control"] span, div[data-baseweb="segmented-control"] p,
+        div[data-testid="stPills"] [data-testid="stPillsChip"] p,
+        div[data-testid="stPills"] [data-testid="stPillsChip"] span,
+        div[data-testid="stPills"] button p,
+        div[data-testid="stPills"] button span,
+        div[data-testid="stPills"] [role="button"] p,
+        div[data-testid="stPills"] [role="button"] span {
+            color: #E2E8F0 !important;
             font-weight: 800 !important;
         }
         div[data-testid="stSegmentedControl"] button[aria-checked="true"], div[data-testid="stPills"] button[aria-checked="true"],
         div[data-testid="stSegmentedControl"] [role="radio"][aria-checked="true"], div[data-testid="stPills"] [role="radio"][aria-checked="true"],
         div[data-baseweb="segmented-control"] [aria-checked="true"],
-        div[data-testid="stSegmentedControl"] label[data-checked="true"], div[data-testid="stPills"] label[data-checked="true"] {
-            background: #2563EB !important;
+        div[data-testid="stSegmentedControl"] label[data-checked="true"], div[data-testid="stPills"] label[data-checked="true"],
+        div[data-testid="stPills"] [data-testid="stPillsChip"][aria-selected="true"],
+        div[data-testid="stPills"] button[aria-selected="true"],
+        div[data-testid="stPills"] [role="button"][aria-selected="true"],
+        div[data-testid="stPills"] [data-checked="true"],
+        div[data-testid="stPills"] [aria-selected="true"] {
+            background: linear-gradient(135deg, #1E3A8A 0%, #2563EB 100%) !important;
+            background-color: #2563EB !important;
             color: #FFFFFF !important;
             border: 2px solid #38BDF8 !important;
-            box-shadow: 0 0 16px rgba(56, 189, 248, 0.5) !important;
+            box-shadow: 0 0 16px rgba(56, 189, 248, 0.6) !important;
         }
         div[data-testid="stSegmentedControl"] [aria-checked="true"] [data-testid="stMarkdownContainer"] p,
         div[data-testid="stPills"] [aria-checked="true"] [data-testid="stMarkdownContainer"] p,
         div[data-testid="stSegmentedControl"] [aria-checked="true"] span,
         div[data-testid="stPills"] [aria-checked="true"] span,
         div[data-baseweb="segmented-control"] [aria-checked="true"] p,
-        div[data-baseweb="segmented-control"] [aria-checked="true"] span {
+        div[data-baseweb="segmented-control"] [aria-checked="true"] span,
+        div[data-testid="stPills"] [aria-selected="true"] p,
+        div[data-testid="stPills"] [aria-selected="true"] span,
+        div[data-testid="stPills"] [aria-checked="true"] p,
+        div[data-testid="stPills"] [aria-checked="true"] span {
             color: #FFFFFF !important;
             font-weight: 900 !important;
         }
@@ -1692,15 +1712,36 @@ def render_dynamic_theme_engine():
             border-left: 1px solid #1E293B !important;
         }
 
-        /* Form Controls & Widgets */
-        div[data-baseweb="select"] > div, div[data-testid="stTextInput"] input, div[data-testid="stNumberInput"] input, textarea {
+        /* Form Controls, Selectbox, Inputs & Buttons in Dark Theme */
+        div[data-testid="stSelectbox"] div[data-baseweb="select"],
+        div[data-testid="stSelectbox"] div[data-baseweb="select"] > div,
+        div[data-testid="stSelectbox"] [role="combobox"],
+        div[data-testid="stSelectbox"] div[aria-haspopup="listbox"],
+        div[data-baseweb="select"],
+        div[data-baseweb="select"] > div,
+        div[data-baseweb="select"] *,
+        div[data-testid="stTextInput"] input,
+        div[data-testid="stNumberInput"] input,
+        textarea {
             background-color: #0E1626 !important;
+            background: #0E1626 !important;
             color: #FFFFFF !important;
+            border-color: #334155 !important;
+        }
+        div[data-baseweb="select"] > div,
+        div[data-testid="stTextInput"] input,
+        div[data-testid="stNumberInput"] input,
+        textarea {
             border: 2px solid #334155 !important;
             border-radius: 8px !important;
             font-weight: 700 !important;
         }
-        div[data-baseweb="select"] span, div[data-baseweb="select"] div {
+        div[data-baseweb="select"] span,
+        div[data-baseweb="select"] p,
+        div[data-baseweb="select"] div,
+        div[data-testid="stSelectbox"] span,
+        div[data-testid="stSelectbox"] p,
+        div[data-testid="stSelectbox"] div {
             color: #FFFFFF !important;
             font-weight: 800 !important;
         }
@@ -1718,6 +1759,21 @@ def render_dynamic_theme_engine():
             color: #38BDF8 !important;
         }
         label, label p, label span {
+            color: #FFFFFF !important;
+            font-weight: 800 !important;
+        }
+        div[data-testid="stDownloadButton"] button,
+        button[data-testid="stBaseButton-secondary"],
+        .stDownloadButton button {
+            background: linear-gradient(135deg, #1E3A8A 0%, #2563EB 100%) !important;
+            color: #FFFFFF !important;
+            border: 2px solid #38BDF8 !important;
+            box-shadow: 0 0 14px rgba(56, 189, 248, 0.4) !important;
+            font-weight: 800 !important;
+            border-radius: 8px !important;
+        }
+        div[data-testid="stDownloadButton"] button *,
+        button[data-testid="stBaseButton-secondary"] * {
             color: #FFFFFF !important;
             font-weight: 800 !important;
         }
@@ -4201,7 +4257,7 @@ elif selected_tab == "🧩 التنسيق (ISO 31000)":
             
             if sel_clash_data and sel_analyzed:
                 st.markdown(f"""
-                <div style="background:#F1F5F9; border-radius:10px; padding:10px 14px; border:1px solid #CBD5E1; margin-bottom:12px; font-size:0.84rem;">
+                <div class="guidance-box">
                     <b>🤖 تقييم الذكاء الاصطناعي الأولي:</b> {sel_analyzed['iso_level_ar']} • مؤشر الأولوية: <b>{sel_analyzed['priority_score']:.1f}/100</b> • الكلفة التقديرية: <b>{sel_analyzed['estimated_rework_cost_usd']:,.0f} {curr_sym}</b>
                 </div>
                 """, unsafe_allow_html=True)
