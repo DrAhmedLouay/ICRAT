@@ -119,21 +119,21 @@ def render_decision_hub_html_grid(df: pd.DataFrame):
         el_id_badge = f'<span style="font-family:Consolas,SFMono-Regular,monospace; background:#F1F5F9; color:#0F172A; padding:3px 7px; border-radius:6px; font-weight:700; font-size:0.77rem; border:1px solid #CBD5E1; white-space:nowrap;">{row.get("معرف العناصر (Element ID)", "—")}</span>'
         item_name_badge = f'<span style="color:#1E293B; font-weight:600; font-size:0.80rem;">{row.get("أسماء العناصر (Item Name)", "—")}</span>'
 
-        parts.append(f'<tr style="background-color: {bg}; border-bottom: 1px solid #E2E8F0;">')
-        parts.append(f'<td style="padding: 10px 12px; text-align: center; font-weight: 700; color: #1E293B; border-left: 1px solid #F1F5F9; white-space: nowrap;">{row.get("كود التعارض")}</td>')
-        parts.append(f'<td style="padding: 10px 12px; text-align: center; border-left: 1px solid #F1F5F9; white-space: nowrap;">{el_id_badge}</td>')
-        parts.append(f'<td style="padding: 10px 12px; text-align: right; border-left: 1px solid #F1F5F9;">{item_name_badge}</td>')
-        parts.append(f'<td style="padding: 10px 12px; text-align: right; color: #475569; border-left: 1px solid #F1F5F9; font-size: 0.81rem; font-weight: 600;">{row.get("توصيف التعارض")}</td>')
-        parts.append(f'<td style="padding: 10px 12px; text-align: center; border-left: 1px solid #F1F5F9; white-space: nowrap;">{badge_score}</td>')
-        parts.append(f'<td style="padding: 10px 12px; text-align: center; color: #475569; border-left: 1px solid #F1F5F9; font-size: 0.8rem; font-weight: 700;">{row.get("تقييم ISO 31000")}</td>')
-        parts.append(f'<td style="padding: 10px 12px; text-align: right; border-left: 1px solid #F1F5F9;">{badge_delta}</td>')
-        parts.append(f'<td style="padding: 10px 12px; text-align: right; color: #1E293B; border-left: 1px solid #F1F5F9; font-weight: 600;">{row.get("نشاط P6 المتأثر")}</td>')
-        parts.append(f'<td style="padding: 10px 12px; text-align: center; border-left: 1px solid #F1F5F9; white-space: nowrap;">{badge_crit}</td>')
-        parts.append(f'<td style="padding: 10px 12px; text-align: center; color: #D97706; font-weight: 700; border-left: 1px solid #F1F5F9; white-space: nowrap;">{row.get("أيام التأخير")}</td>')
-        parts.append(f'<td style="padding: 10px 12px; text-align: center; color: #059669; font-weight: 700; border-left: 1px solid #F1F5F9; white-space: nowrap;">{row.get("كلفة المعالجة 5D")}</td>')
-        parts.append(f'<td style="padding: 10px 12px; text-align: right; color: #64748B; font-size: 0.82rem; border-left: 1px solid #F1F5F9;">{row.get("العامل التفسيري الأكبر (AI)")}</td>')
-        parts.append(f'<td style="padding: 10px 12px; text-align: center; border-left: 1px solid #F1F5F9; white-space: nowrap;">{badge_strat}</td>')
-        parts.append(f'<td style="padding: 10px 12px; text-align: right; color: #334155; font-size: 0.83rem; line-height: 1.4;">{row.get("التوصية الإنشائية")}</td>')
+        parts.append(f'<tr style="background-color: {bg}; border-bottom: 1px solid #CBD5E1;">')
+        parts.append(f'<td style="padding: 10px 12px; text-align: center; font-weight: 800; color: #0F172A; border-left: 1px solid #E2E8F0; white-space: nowrap;">{row.get("كود التعارض")}</td>')
+        parts.append(f'<td style="padding: 10px 12px; text-align: center; border-left: 1px solid #E2E8F0; white-space: nowrap;">{el_id_badge}</td>')
+        parts.append(f'<td style="padding: 10px 12px; text-align: right; border-left: 1px solid #E2E8F0;">{item_name_badge}</td>')
+        parts.append(f'<td style="padding: 10px 12px; text-align: right; color: #0F172A; border-left: 1px solid #E2E8F0; font-size: 0.84rem; font-weight: 700;">{row.get("توصيف التعارض")}</td>')
+        parts.append(f'<td style="padding: 10px 12px; text-align: center; border-left: 1px solid #E2E8F0; white-space: nowrap;">{badge_score}</td>')
+        parts.append(f'<td style="padding: 10px 12px; text-align: center; color: #0F172A; border-left: 1px solid #E2E8F0; font-size: 0.82rem; font-weight: 800;">{row.get("تقييم ISO 31000")}</td>')
+        parts.append(f'<td style="padding: 10px 12px; text-align: right; border-left: 1px solid #E2E8F0;">{badge_delta}</td>')
+        parts.append(f'<td style="padding: 10px 12px; text-align: right; color: #0F172A; border-left: 1px solid #E2E8F0; font-weight: 700;">{row.get("نشاط P6 المتأثر")}</td>')
+        parts.append(f'<td style="padding: 10px 12px; text-align: center; border-left: 1px solid #E2E8F0; white-space: nowrap;">{badge_crit}</td>')
+        parts.append(f'<td style="padding: 10px 12px; text-align: center; color: #B45309; font-weight: 800; border-left: 1px solid #E2E8F0; white-space: nowrap;">{row.get("أيام التأخير")}</td>')
+        parts.append(f'<td style="padding: 10px 12px; text-align: center; color: #047857; font-weight: 800; border-left: 1px solid #E2E8F0; white-space: nowrap;">{row.get("كلفة المعالجة 5D")}</td>')
+        parts.append(f'<td style="padding: 10px 12px; text-align: right; color: #1E293B; font-size: 0.84rem; font-weight: 700; border-left: 1px solid #E2E8F0;">{row.get("العامل التفسيري الأكبر (AI)")}</td>')
+        parts.append(f'<td style="padding: 10px 12px; text-align: center; border-left: 1px solid #E2E8F0; white-space: nowrap;">{badge_strat}</td>')
+        parts.append(f'<td style="padding: 10px 12px; text-align: right; color: #0F172A; font-size: 0.85rem; font-weight: 700; line-height: 1.45;">{row.get("التوصية الإنشائية")}</td>')
         parts.append('</tr>')
 
     parts.append('</tbody></table></div>')
@@ -301,277 +301,11 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# تخصيص المظهر وتنسيقات CSS المتقدمة
-def render_dynamic_theme_engine():
-    current_theme = st.session_state.get("theme_mode", "ROYAL")
-    
-    if current_theme == "ROYAL":
-        theme_css = """
-        /* --- 🏛️ THEME: ROYAL EXECUTIVE (HIGH CONTRAST) --- */
-        .stApp {
-            background-color: #F8FAFC !important;
-            color: #0F172A !important;
-        }
-        .stApp p, .stApp li, .stApp label {
-            color: #0F172A !important;
-            font-weight: 600 !important;
-        }
-        .stApp h1, .stApp h2, .stApp h3, .stApp h4, .stApp h5, .stApp h6 {
-            color: #0B132B !important;
-            font-weight: 800 !important;
-        }
-        section[data-testid="stSidebar"] {
-            background-color: #0B132B !important;
-            border-left: 2px solid #1E293B !important;
-        }
-        section[data-testid="stSidebar"] h1, 
-        section[data-testid="stSidebar"] h2, 
-        section[data-testid="stSidebar"] h3, 
-        section[data-testid="stSidebar"] h4, 
-        section[data-testid="stSidebar"] h5,
-        section[data-testid="stSidebar"] h6 {
-            color: #FFFFFF !important;
-            font-weight: 800 !important;
-            text-shadow: 0 1px 4px rgba(0,0,0,0.5) !important;
-        }
-        section[data-testid="stSidebar"] p,
-        section[data-testid="stSidebar"] label,
-        section[data-testid="stSidebar"] span,
-        section[data-testid="stSidebar"] div {
-            color: #F8FAFC !important;
-            font-weight: 600 !important;
-        }
-        section[data-testid="stSidebar"] .en-subtext {
-            color: #93C5FD !important;
-            font-weight: 700 !important;
-        }
-        section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p {
-            color: #E2E8F0 !important;
-            font-weight: 600 !important;
-        }
-        section[data-testid="stSidebar"] div[data-testid="stRadio"] label {
-            color: #FFFFFF !important;
-            font-weight: 700 !important;
-        }
-        section[data-testid="stSidebar"] div[data-testid="stRadio"] label span {
-            color: #FFFFFF !important;
-            font-weight: 700 !important;
-        }
-        section[data-testid="stSidebar"] hr {
-            border-color: #334155 !important;
-        }
-        .metric-card, .chart-card, div[data-testid="stMetric"], div[data-testid="stExpander"] {
-            background: #FFFFFF !important;
-            border: 1px solid #CBD5E1 !important;
-            box-shadow: 0 4px 18px rgba(15, 23, 42, 0.05) !important;
-            border-radius: 12px !important;
-        }
-        .modern-topbar {
-            background: #FFFFFF !important;
-            border: 1px solid #CBD5E1 !important;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.04) !important;
-        }
-        .modern-topbar .topbar-label {
-            color: #334155 !important;
-            font-weight: 700 !important;
-        }
-        .modern-topbar .topbar-val {
-            color: #0F172A !important;
-            font-weight: 800 !important;
-        }
-        """
-    elif current_theme == "LIGHT":
-        theme_css = """
-        /* --- 🏢 THEME: MODERN LIGHT (HIGH CONTRAST) --- */
-        .stApp {
-            background-color: #FFFFFF !important;
-            color: #0F172A !important;
-        }
-        .stApp p, .stApp li, .stApp label {
-            color: #0F172A !important;
-            font-weight: 600 !important;
-        }
-        .stApp h1, .stApp h2, .stApp h3, .stApp h4, .stApp h5, .stApp h6 {
-            color: #0F172A !important;
-            font-weight: 800 !important;
-        }
-        section[data-testid="stSidebar"] {
-            background-color: #F1F5F9 !important;
-            border-left: 2px solid #CBD5E1 !important;
-        }
-        section[data-testid="stSidebar"] h1, 
-        section[data-testid="stSidebar"] h2, 
-        section[data-testid="stSidebar"] h3, 
-        section[data-testid="stSidebar"] h4, 
-        section[data-testid="stSidebar"] h5,
-        section[data-testid="stSidebar"] h6 {
-            color: #0F172A !important;
-            font-weight: 800 !important;
-        }
-        section[data-testid="stSidebar"] p,
-        section[data-testid="stSidebar"] label,
-        section[data-testid="stSidebar"] span,
-        section[data-testid="stSidebar"] div {
-            color: #0F172A !important;
-            font-weight: 600 !important;
-        }
-        section[data-testid="stSidebar"] .en-subtext {
-            color: #1E40AF !important;
-            font-weight: 700 !important;
-        }
-        section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p {
-            color: #1E293B !important;
-            font-weight: 600 !important;
-        }
-        section[data-testid="stSidebar"] div[data-testid="stRadio"] label {
-            color: #0F172A !important;
-            font-weight: 700 !important;
-        }
-        section[data-testid="stSidebar"] div[data-testid="stRadio"] label span {
-            color: #0F172A !important;
-            font-weight: 700 !important;
-        }
-        section[data-testid="stSidebar"] hr {
-            border-color: #CBD5E1 !important;
-        }
-        .metric-card, .chart-card, div[data-testid="stMetric"], div[data-testid="stExpander"] {
-            background: #F8FAFC !important;
-            border: 1px solid #E2E8F0 !important;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02) !important;
-            border-radius: 12px !important;
-        }
-        .modern-topbar {
-            background: #F8FAFC !important;
-            border: 1px solid #CBD5E1 !important;
-        }
-        .modern-topbar .topbar-label {
-            color: #475569 !important;
-            font-weight: 700 !important;
-        }
-        .modern-topbar .topbar-val {
-            color: #0F172A !important;
-            font-weight: 800 !important;
-        }
-        """
-    else:  # DARK
-        theme_css = """
-        /* --- 🧊 THEME: DIGITAL TWIN DARK (HIGH CONTRAST) --- */
-        .stApp {
-            background-color: #060A14 !important;
-            color: #FFFFFF !important;
-        }
-        .stApp p, .stApp span, .stApp li, .stApp label {
-            color: #F8FAFC !important;
-            font-weight: 600 !important;
-        }
-        .stApp h1, .stApp h2, .stApp h3, .stApp h4, .stApp h5, .stApp h6 {
-            color: #FFFFFF !important;
-            font-weight: 800 !important;
-            text-shadow: 0 1px 6px rgba(0,0,0,0.8) !important;
-        }
-        section[data-testid="stSidebar"] {
-            background-color: #03060D !important;
-            border-left: 2px solid #1E293B !important;
-        }
-        section[data-testid="stSidebar"] h1, 
-        section[data-testid="stSidebar"] h2, 
-        section[data-testid="stSidebar"] h3, 
-        section[data-testid="stSidebar"] h4, 
-        section[data-testid="stSidebar"] h5,
-        section[data-testid="stSidebar"] h6 {
-            color: #FFFFFF !important;
-            font-weight: 800 !important;
-            text-shadow: 0 1px 4px rgba(0,0,0,0.7) !important;
-        }
-        section[data-testid="stSidebar"] p,
-        section[data-testid="stSidebar"] label,
-        section[data-testid="stSidebar"] span,
-        section[data-testid="stSidebar"] div {
-            color: #FFFFFF !important;
-            font-weight: 600 !important;
-        }
-        section[data-testid="stSidebar"] .en-subtext {
-            color: #38BDF8 !important;
-            font-weight: 700 !important;
-        }
-        section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p {
-            color: #F1F5F9 !important;
-            font-weight: 600 !important;
-        }
-        section[data-testid="stSidebar"] div[data-testid="stRadio"] label {
-            color: #FFFFFF !important;
-            font-weight: 700 !important;
-        }
-        section[data-testid="stSidebar"] div[data-testid="stRadio"] label span {
-            color: #FFFFFF !important;
-            font-weight: 700 !important;
-        }
-        section[data-testid="stSidebar"] hr {
-            border-color: #1E293B !important;
-        }
-        .metric-card, .chart-card, div[data-testid="stMetric"], div[data-testid="stExpander"] {
-            background: #0E1626 !important;
-            border: 1px solid #1E293B !important;
-            color: #FFFFFF !important;
-            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45) !important;
-            border-radius: 12px !important;
-        }
-        div[data-testid="stMetric"] * {
-            color: #FFFFFF !important;
-        }
-        div[data-testid="stMetric"] [data-testid="stMetricValue"] {
-            color: #38BDF8 !important;
-            font-weight: 800 !important;
-        }
-        .modern-topbar {
-            background: #0E1626 !important;
-            border: 1px solid #1E293B !important;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.3) !important;
-        }
-        .modern-topbar .topbar-label {
-            color: #94A3B8 !important;
-            font-weight: 700 !important;
-        }
-        .modern-topbar .topbar-val {
-            color: #38BDF8 !important;
-            font-weight: 800 !important;
-        }
-        .stTabs [data-baseweb="tab"] {
-            background: #0E1626 !important;
-            color: #E2E8F0 !important;
-            border: 1px solid #1E293B !important;
-            font-weight: 700 !important;
-        }
-        .stTabs [aria-selected="true"] {
-            background: #2563EB !important;
-            color: #FFFFFF !important;
-            border-color: #60A5FA !important;
-            font-weight: 800 !important;
-            box-shadow: 0 0 12px rgba(37, 99, 235, 0.5) !important;
-        }
-        """
-    st.markdown(f"<style>{theme_css}</style>", unsafe_allow_html=True)
-
-render_dynamic_theme_engine()
-
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap');
     
-    :root {
-        --primary-blue: #2563EB;
-        --navy-dark: #0F172A;
-        --navy-light: #1E293B;
-        --emerald-green: #10B981;
-        --amber-gold: #F59E0B;
-        --crimson-red: #EF4444;
-        --slate-bg: #F8FAFC;
-        --card-border: #E2E8F0;
-        --radius-lg: 14px;
-        --radius-md: 10px;
-    }
-
-    html, body, .stApp, .stMarkdown, p, h1, h2, h3, h4, h5, h6 {
+    html, body, .stApp, .stMarkdown {
         font-family: 'Cairo', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
         direction: rtl;
         text-align: right;
@@ -583,7 +317,6 @@ st.markdown("""
         line-height: 1.75 !important;
         word-wrap: break-word !important;
         overflow-wrap: break-word !important;
-        color: #334155;
     }
 
     h1, h2, h3, h4, h5, h6 {
@@ -592,7 +325,6 @@ st.markdown("""
         line-height: 1.45 !important;
         margin-top: 0.5rem !important;
         margin-bottom: 0.75rem !important;
-        color: #0F172A;
     }
 
     /* ضبط القائمة الجانبية الموحدة */
@@ -613,7 +345,7 @@ st.markdown("""
         flex-wrap: wrap !important;
         justify-content: flex-start !important;
         gap: 8px !important;
-        border-bottom: 2px solid #E2E8F0 !important;
+        border-bottom: 2px solid #CBD5E1 !important;
         padding-bottom: 8px !important;
     }
     .stTabs [data-baseweb="tab"] {
@@ -624,28 +356,13 @@ st.markdown("""
         font-size: 0.88rem !important;
         padding: 8px 14px !important;
         border-radius: 10px !important;
-        background: #FFFFFF !important;
-        border: 1px solid #CBD5E1 !important;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.02) !important;
         transition: all 0.2s ease !important;
-    }
-    .stTabs [data-baseweb="tab"]:hover {
-        background: #F1F5F9 !important;
-        border-color: #94A3B8 !important;
-    }
-    .stTabs [aria-selected="true"] {
-        background: linear-gradient(135deg, #EFF6FF, #DBEAFE) !important;
-        border-color: #3B82F6 !important;
-        color: #1D4ED8 !important;
-        font-weight: 800 !important;
-        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15) !important;
     }
 
     /* عزل حاويات الرسوم البيانية Plotly */
     .stPlotlyChart, div[data-testid="stPlotlyChart"], .js-plotly-plot, .plotly, svg.main-svg {
         direction: ltr !important;
         text-align: center !important;
-        border-radius: 12px !important;
     }
 
     /* معالجة منزلقات الأرقام Sliders */
@@ -660,7 +377,6 @@ st.markdown("""
         text-align: right !important;
         font-size: 0.92rem !important;
         font-weight: 700 !important;
-        color: #1E293B !important;
         display: block !important;
         margin-bottom: 6px !important;
         line-height: 1.4 !important;
@@ -673,27 +389,9 @@ st.markdown("""
         font-family: 'Segoe UI', Tahoma, monospace, sans-serif !important;
         font-weight: 800 !important;
         font-size: 0.95rem !important;
-        color: #1E40AF !important;
         display: block !important;
         visibility: visible !important;
         opacity: 1 !important;
-    }
-
-    /* شارات الأرقام والمصطلحات */
-    .val-badge {
-        background: #EFF6FF;
-        color: #1D4ED8;
-        border: 1px solid #BFDBFE;
-        border-radius: 8px;
-        padding: 4px 12px;
-        font-weight: 800;
-        font-size: 0.88rem;
-        direction: ltr !important;
-        display: inline-block;
-        margin-top: 4px;
-        margin-bottom: 8px;
-        font-family: 'Segoe UI', Tahoma, sans-serif !important;
-        line-height: 1.3 !important;
     }
 
     .en-badge {
@@ -702,7 +400,6 @@ st.markdown("""
         display: inline-block;
         font-family: 'Segoe UI', Tahoma, sans-serif !important;
         font-weight: 700;
-        background: #F1F5F9;
         padding: 2px 8px;
         border-radius: 6px;
         border: 1px solid #CBD5E1;
@@ -717,7 +414,6 @@ st.markdown("""
         display: block;
         font-family: 'Segoe UI', Tahoma, sans-serif !important;
         font-size: 0.78rem;
-        color: #64748B;
         text-align: left;
         margin-top: 3px;
         line-height: 1.3 !important;
@@ -891,6 +587,333 @@ st.markdown("""
     }
 </style>
 """, unsafe_allow_html=True)
+
+def render_dynamic_theme_engine():
+    """محرك الثيمات والتناسق اللوني المتقدم فائق التباين (WCAG AAA Extreme Contrast Engine)"""
+    current_theme = st.session_state.get("theme_mode", "ROYAL")
+    
+    if current_theme == "ROYAL":
+        theme_css = """
+        /* ================= 🏛️ THEME 1: ROYAL EXECUTIVE (ULTRA HIGH CONTRAST) ================= */
+        .stApp {
+            background-color: #F8FAFC !important;
+            color: #0F172A !important;
+        }
+        .stApp p, .stApp li, .stApp label, .stApp td, .stApp th {
+            color: #0F172A !important;
+            font-weight: 600;
+        }
+        .stApp h1, .stApp h2, .stApp h3, .stApp h4, .stApp h5, .stApp h6 {
+            color: #0B132B !important;
+            font-weight: 800 !important;
+        }
+        section[data-testid="stSidebar"] {
+            background-color: #0B132B !important;
+            border-left: 2px solid #1E293B !important;
+        }
+        section[data-testid="stSidebar"] h1, 
+        section[data-testid="stSidebar"] h2, 
+        section[data-testid="stSidebar"] h3, 
+        section[data-testid="stSidebar"] h4, 
+        section[data-testid="stSidebar"] h5,
+        section[data-testid="stSidebar"] h6 {
+            color: #FFFFFF !important;
+            font-weight: 800 !important;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.6) !important;
+        }
+        section[data-testid="stSidebar"] p,
+        section[data-testid="stSidebar"] label,
+        section[data-testid="stSidebar"] span,
+        section[data-testid="stSidebar"] div {
+            color: #FFFFFF !important;
+            font-weight: 700 !important;
+        }
+        section[data-testid="stSidebar"] .en-subtext {
+            color: #93C5FD !important;
+            font-weight: 700 !important;
+        }
+        section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p {
+            color: #E2E8F0 !important;
+            font-weight: 600 !important;
+        }
+        section[data-testid="stSidebar"] div[data-testid="stRadio"] label,
+        section[data-testid="stSidebar"] div[data-testid="stRadio"] label span {
+            color: #FFFFFF !important;
+            font-weight: 700 !important;
+        }
+        section[data-testid="stSidebar"] hr {
+            border-color: #334155 !important;
+        }
+        .kpi-card, .metric-card, .chart-card, div[data-testid="stMetric"], div[data-testid="stExpander"], .workflow-bar {
+            background: #FFFFFF !important;
+            border: 1px solid #CBD5E1 !important;
+            box-shadow: 0 4px 18px rgba(15, 23, 42, 0.05) !important;
+            border-radius: 12px !important;
+        }
+        .kpi-title {
+            color: #1E3A8A !important;
+            font-weight: 800 !important;
+        }
+        .kpi-value {
+            color: #0F172A !important;
+            font-weight: 900 !important;
+        }
+        .kpi-desc {
+            color: #475569 !important;
+            font-weight: 700 !important;
+        }
+        .workflow-step {
+            color: #1E293B !important;
+            font-weight: 700 !important;
+        }
+        .workflow-arrow {
+            color: #94A3B8 !important;
+        }
+        .modern-topbar {
+            background: #FFFFFF !important;
+            border: 1px solid #CBD5E1 !important;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.04) !important;
+        }
+        .modern-topbar .topbar-label {
+            color: #334155 !important;
+            font-weight: 700 !important;
+        }
+        .modern-topbar .topbar-val {
+            color: #0F172A !important;
+            font-weight: 800 !important;
+        }
+        .stTabs [data-baseweb="tab"] {
+            background: #FFFFFF !important;
+            color: #0F172A !important;
+            border: 1px solid #CBD5E1 !important;
+            font-weight: 700 !important;
+        }
+        .stTabs [aria-selected="true"] {
+            background: linear-gradient(135deg, #1E3A8A, #2563EB) !important;
+            color: #FFFFFF !important;
+            border-color: #1D4ED8 !important;
+            font-weight: 800 !important;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25) !important;
+        }
+        """
+    elif current_theme == "LIGHT":
+        theme_css = """
+        /* ================= 🏢 THEME 2: MODERN LIGHT (ULTRA HIGH CONTRAST) ================= */
+        .stApp {
+            background-color: #FFFFFF !important;
+            color: #0F172A !important;
+        }
+        .stApp p, .stApp li, .stApp label, .stApp td, .stApp th {
+            color: #0F172A !important;
+            font-weight: 600;
+        }
+        .stApp h1, .stApp h2, .stApp h3, .stApp h4, .stApp h5, .stApp h6 {
+            color: #0F172A !important;
+            font-weight: 800 !important;
+        }
+        section[data-testid="stSidebar"] {
+            background-color: #F1F5F9 !important;
+            border-left: 2px solid #CBD5E1 !important;
+        }
+        section[data-testid="stSidebar"] h1, 
+        section[data-testid="stSidebar"] h2, 
+        section[data-testid="stSidebar"] h3, 
+        section[data-testid="stSidebar"] h4, 
+        section[data-testid="stSidebar"] h5,
+        section[data-testid="stSidebar"] h6 {
+            color: #0F172A !important;
+            font-weight: 800 !important;
+        }
+        section[data-testid="stSidebar"] p,
+        section[data-testid="stSidebar"] label,
+        section[data-testid="stSidebar"] span,
+        section[data-testid="stSidebar"] div {
+            color: #0F172A !important;
+            font-weight: 700 !important;
+        }
+        section[data-testid="stSidebar"] .en-subtext {
+            color: #1E40AF !important;
+            font-weight: 700 !important;
+        }
+        section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p {
+            color: #1E293B !important;
+            font-weight: 600 !important;
+        }
+        section[data-testid="stSidebar"] div[data-testid="stRadio"] label,
+        section[data-testid="stSidebar"] div[data-testid="stRadio"] label span {
+            color: #0F172A !important;
+            font-weight: 700 !important;
+        }
+        section[data-testid="stSidebar"] hr {
+            border-color: #CBD5E1 !important;
+        }
+        .kpi-card, .metric-card, .chart-card, div[data-testid="stMetric"], div[data-testid="stExpander"], .workflow-bar {
+            background: #F8FAFC !important;
+            border: 1px solid #CBD5E1 !important;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02) !important;
+            border-radius: 12px !important;
+        }
+        .kpi-title {
+            color: #1E40AF !important;
+            font-weight: 800 !important;
+        }
+        .kpi-value {
+            color: #0F172A !important;
+            font-weight: 900 !important;
+        }
+        .kpi-desc {
+            color: #334155 !important;
+            font-weight: 700 !important;
+        }
+        .workflow-step {
+            color: #0F172A !important;
+            font-weight: 700 !important;
+        }
+        .workflow-arrow {
+            color: #94A3B8 !important;
+        }
+        .modern-topbar {
+            background: #F8FAFC !important;
+            border: 1px solid #CBD5E1 !important;
+        }
+        .modern-topbar .topbar-label {
+            color: #334155 !important;
+            font-weight: 700 !important;
+        }
+        .modern-topbar .topbar-val {
+            color: #0F172A !important;
+            font-weight: 800 !important;
+        }
+        .stTabs [data-baseweb="tab"] {
+            background: #F8FAFC !important;
+            color: #0F172A !important;
+            border: 1px solid #CBD5E1 !important;
+            font-weight: 700 !important;
+        }
+        .stTabs [aria-selected="true"] {
+            background: #1D4ED8 !important;
+            color: #FFFFFF !important;
+            border-color: #1E40AF !important;
+            font-weight: 800 !important;
+            box-shadow: 0 4px 12px rgba(29, 78, 216, 0.2) !important;
+        }
+        """
+    else:  # DARK
+        theme_css = """
+        /* ================= 🧊 THEME 3: DIGITAL TWIN DARK (ULTRA HIGH CONTRAST) ================= */
+        .stApp {
+            background-color: #060A14 !important;
+            color: #FFFFFF !important;
+        }
+        .stApp p, .stApp li, .stApp label, .stApp td, .stApp th {
+            color: #F8FAFC !important;
+            font-weight: 600;
+        }
+        .stApp h1, .stApp h2, .stApp h3, .stApp h4, .stApp h5, .stApp h6 {
+            color: #FFFFFF !important;
+            font-weight: 800 !important;
+            text-shadow: 0 1px 6px rgba(0,0,0,0.8) !important;
+        }
+        section[data-testid="stSidebar"] {
+            background-color: #03060D !important;
+            border-left: 2px solid #1E293B !important;
+        }
+        section[data-testid="stSidebar"] h1, 
+        section[data-testid="stSidebar"] h2, 
+        section[data-testid="stSidebar"] h3, 
+        section[data-testid="stSidebar"] h4, 
+        section[data-testid="stSidebar"] h5,
+        section[data-testid="stSidebar"] h6 {
+            color: #FFFFFF !important;
+            font-weight: 800 !important;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.7) !important;
+        }
+        section[data-testid="stSidebar"] p,
+        section[data-testid="stSidebar"] label,
+        section[data-testid="stSidebar"] span,
+        section[data-testid="stSidebar"] div {
+            color: #FFFFFF !important;
+            font-weight: 700 !important;
+        }
+        section[data-testid="stSidebar"] .en-subtext {
+            color: #38BDF8 !important;
+            font-weight: 700 !important;
+        }
+        section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p {
+            color: #F1F5F9 !important;
+            font-weight: 600 !important;
+        }
+        section[data-testid="stSidebar"] div[data-testid="stRadio"] label,
+        section[data-testid="stSidebar"] div[data-testid="stRadio"] label span {
+            color: #FFFFFF !important;
+            font-weight: 700 !important;
+        }
+        section[data-testid="stSidebar"] hr {
+            border-color: #1E293B !important;
+        }
+        .kpi-card, .metric-card, .chart-card, div[data-testid="stMetric"], div[data-testid="stExpander"], .workflow-bar {
+            background: #0E1626 !important;
+            border: 1px solid #1E293B !important;
+            color: #FFFFFF !important;
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45) !important;
+            border-radius: 12px !important;
+        }
+        .kpi-title {
+            color: #38BDF8 !important;
+            font-weight: 800 !important;
+        }
+        .kpi-value {
+            color: #FFFFFF !important;
+            font-weight: 900 !important;
+        }
+        .kpi-desc {
+            color: #94A3B8 !important;
+            font-weight: 700 !important;
+        }
+        .workflow-step {
+            color: #E2E8F0 !important;
+            font-weight: 700 !important;
+        }
+        .workflow-arrow {
+            color: #64748B !important;
+        }
+        div[data-testid="stMetric"] * {
+            color: #FFFFFF !important;
+        }
+        div[data-testid="stMetric"] [data-testid="stMetricValue"] {
+            color: #38BDF8 !important;
+            font-weight: 800 !important;
+        }
+        .modern-topbar {
+            background: #0E1626 !important;
+            border: 1px solid #1E293B !important;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.3) !important;
+        }
+        .modern-topbar .topbar-label {
+            color: #94A3B8 !important;
+            font-weight: 700 !important;
+        }
+        .modern-topbar .topbar-val {
+            color: #38BDF8 !important;
+            font-weight: 800 !important;
+        }
+        .stTabs [data-baseweb="tab"] {
+            background: #0E1626 !important;
+            color: #E2E8F0 !important;
+            border: 1px solid #1E293B !important;
+            font-weight: 700 !important;
+        }
+        .stTabs [aria-selected="true"] {
+            background: #2563EB !important;
+            color: #FFFFFF !important;
+            border-color: #60A5FA !important;
+            font-weight: 800 !important;
+            box-shadow: 0 0 12px rgba(37, 99, 235, 0.5) !important;
+        }
+        """
+    st.markdown(f"<style>{theme_css}</style>", unsafe_allow_html=True)
+
+render_dynamic_theme_engine()
 
 def load_clean_project_state(
     meta: dict,
