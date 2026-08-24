@@ -2896,7 +2896,7 @@ with st.sidebar:
                     res = process_universal_json_upload(data, sb_up_json.name)
                     if res["success"]:
                         st.success(f"✅ {res['title']}")
-                        st.markdown(f"<div class="subtext-muted" style="margin-bottom:6px;">💡 {res['msg']}</div>", unsafe_allow_html=True)
+                        st.markdown(f"""<div class="subtext-muted" style="margin-bottom:6px;">💡 {res['msg']}</div>""", unsafe_allow_html=True)
                         if st.button("🚀 تفعيل واستيراد البيانات الآن", type="primary", key="sb_btn_apply_json", use_container_width=True):
                             if res["type"] in ["FULL_PROJECT", "ACTIVITIES_LIST"]:
                                 load_clean_project_state(
@@ -4127,7 +4127,7 @@ elif selected_tab == "🧩 التنسيق (ISO 31000)":
 
         col_pag1, col_pag2 = st.columns([2.2, 1.2])
         with col_pag1:
-            st.markdown(f"<div class="subtext-muted" style="padding-top:8px; font-weight:600;">النتائج المعروضة: <b style='color:#0284C7;'>{len(df_hub_filtered)}</b> من أصل <b>{len(df_hub_full)}</b> تعارض</div>", unsafe_allow_html=True)
+            st.markdown(f"""<div class="subtext-muted" style="padding-top:8px; font-weight:600;">النتائج المعروضة: <b class="guidance-hl-2">{len(df_hub_filtered)}</b> من أصل <b>{len(df_hub_full)}</b> تعارض</div>""", unsafe_allow_html=True)
         with col_pag2:
             t_page_size = st.selectbox("📄 عدد التعارضات بالصفحة:", options=[50, 100, 200, "الكل"], index=0, key="triage_page_sz")
 
@@ -4139,7 +4139,7 @@ elif selected_tab == "🧩 التنسيق (ISO 31000)":
             with col_pg_btn1:
                 cur_page = st.number_input(f"📑 رقم الصفحة (من {total_pages}):", min_value=1, max_value=total_pages, value=1, step=1, key="triage_cur_pg")
             with col_pg_btn2:
-                st.markdown(f"<div class="subtext-muted" style="padding-top:28px;">عرض التعارضات من {(cur_page-1)*psize + 1} إلى {min(cur_page*psize, len(display_df))}</div>", unsafe_allow_html=True)
+                st.markdown(f"""<div class="subtext-muted" style="padding-top:28px;">عرض التعارضات من {(cur_page-1)*psize + 1} إلى {min(cur_page*psize, len(display_df))}</div>""", unsafe_allow_html=True)
             start_i = (cur_page - 1) * psize
             end_i = start_i + psize
             display_df = display_df.iloc[start_i:end_i]
@@ -4821,7 +4821,7 @@ elif selected_tab == "📅 مخطط جانت وبريمافيرا (Gantt)":
             filtered_sched.sort(key=lambda x: x.get("start_dt"))
 
         st.markdown(
-            f"<div class="subtext-muted" style="margin-bottom:8px;">📊 عرض <b>{len(filtered_sched)}</b> من أصل <b>{len(cpm_sched)}</b> نشاط</div>",
+            f"""<div class="subtext-muted" style="margin-bottom:8px;">📊 عرض <b>{len(filtered_sched)}</b> من أصل <b>{len(cpm_sched)}</b> نشاط</div>""",
             unsafe_allow_html=True
         )
 
@@ -5332,7 +5332,7 @@ elif selected_tab == "🏢 استيراد (P6 / IFC / JSON)":
                     res_tab = process_universal_json_upload(loaded_data, uploaded_json.name)
                     if res_tab["success"]:
                         st.success(f"✅ {res_tab['title']}")
-                        st.markdown(f"<div class="subtext-muted" style="margin-bottom:6px;">💡 {res_tab['msg']}</div>", unsafe_allow_html=True)
+                        st.markdown(f"""<div class="subtext-muted" style="margin-bottom:6px;">💡 {res_tab['msg']}</div>""", unsafe_allow_html=True)
                         if st.button("🚀 استعادة وتفعيل بيانات JSON", type="primary", key="btn_apply_json_tab11", use_container_width=True):
                             if res_tab["type"] in ["FULL_PROJECT", "ACTIVITIES_LIST"]:
                                 load_clean_project_state(
@@ -5467,7 +5467,7 @@ elif selected_tab == "📄 التقرير والتصدير":
         )
 
     glossary_items = glossary_data.search_glossary(query=search_query_tab12, category=cat_filter_tab12)
-    st.markdown(f"<div class="subtext-muted" style="margin-bottom:14px;">إجمالي المصطلحات المطابقة: <b>{len(glossary_items)}</b> مصطلح</div>", unsafe_allow_html=True)
+    st.markdown(f"""<div class="subtext-muted" style="margin-bottom:14px;">إجمالي المصطلحات المطابقة: <b>{len(glossary_items)}</b> مصطلح</div>""", unsafe_allow_html=True)
 
     # عرض بطاقات المصطلحات
     for g_item in glossary_items:
