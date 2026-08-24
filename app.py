@@ -2669,25 +2669,27 @@ if "session" in st.query_params and "user" in st.query_params:
         st.session_state["authenticated"] = True
         st.session_state["logged_user"] = q_user
 
-# 🎯 2. استرجاع التبويب النشط والمظهر ونمط العرض ونوع المشروع من رابط URL عند عمل Refresh
-if "tab" in st.query_params and st.query_params["tab"] in TAB_OPTIONS:
-    st.session_state["active_nav_tab"] = st.query_params["tab"]
-    st.session_state["pills_nav_tab"] = st.query_params["tab"]
+# 🎯 2. استرجاع التبويب النشط والمظهر ونمط العرض ونوع المشروع من رابط URL عند أول تحميل فقط
+if "_initial_query_restored" not in st.session_state:
+    st.session_state["_initial_query_restored"] = True
+    if "tab" in st.query_params and st.query_params["tab"] in TAB_OPTIONS:
+        st.session_state["active_nav_tab"] = st.query_params["tab"]
+        st.session_state["pills_nav_tab"] = st.query_params["tab"]
 
-if "theme" in st.query_params and st.query_params["theme"] in ["ROYAL", "LIGHT", "DARK"]:
-    st.session_state["theme_mode"] = st.query_params["theme"]
+    if "theme" in st.query_params and st.query_params["theme"] in ["ROYAL", "LIGHT", "DARK"]:
+        st.session_state["theme_mode"] = st.query_params["theme"]
 
-if "layout" in st.query_params and st.query_params["layout"] in ["MODERN", "CLASSIC"]:
-    st.session_state["ui_layout_mode"] = st.query_params["layout"]
+    if "layout" in st.query_params and st.query_params["layout"] in ["MODERN", "CLASSIC"]:
+        st.session_state["ui_layout_mode"] = st.query_params["layout"]
 
-if "isrs_mode" in st.query_params and st.query_params["isrs_mode"] in ["COMPARE", "ADVANCED", "STANDARD"]:
-    st.session_state["isrs_eval_mode"] = st.query_params["isrs_mode"]
+    if "isrs_mode" in st.query_params and st.query_params["isrs_mode"] in ["COMPARE", "ADVANCED", "STANDARD"]:
+        st.session_state["isrs_eval_mode"] = st.query_params["isrs_mode"]
 
-if "proj_src" in st.query_params and st.query_params["proj_src"] in ["SAMPLE", "CUSTOM"]:
-    st.session_state["project_source"] = st.query_params["proj_src"]
+    if "proj_src" in st.query_params and st.query_params["proj_src"] in ["SAMPLE", "CUSTOM"]:
+        st.session_state["project_source"] = st.query_params["proj_src"]
 
-if "sample" in st.query_params and st.query_params["sample"] in project_samples.SAMPLE_PROJECTS:
-    st.session_state["selected_sample_key"] = st.query_params["sample"]
+    if "sample" in st.query_params and st.query_params["sample"] in project_samples.SAMPLE_PROJECTS:
+        st.session_state["selected_sample_key"] = st.query_params["sample"]
 
 # 🎯 معالجة التقاط الإحداثيات المباشرة من نقرة الخريطة التفاعلية مع البقاء بنفس التبويب
 if "map_lat" in st.query_params and "map_lon" in st.query_params:
@@ -4045,25 +4047,21 @@ else:
     
     if "active_nav_tab" not in st.session_state:
         st.session_state.active_nav_tab = "📊 لوحة القيادة"
-        
-    if st.session_state.get("pills_nav_tab") not in TAB_OPTIONS or st.session_state.get("pills_nav_tab") != st.session_state.active_nav_tab:
-        st.session_state.pills_nav_tab = st.session_state.active_nav_tab
 
     selected_tab = st.pills(
         "تنقل بين شاشات وأدوات المنصة:",
         options=TAB_OPTIONS,
+        default=st.session_state.active_nav_tab,
         key="pills_nav_tab",
         label_visibility="collapsed"
     )
     
-    # 🎯 منع إلغاء التحديد التلقائي (Deselection Protection)
+    # 🎯 منع إلغاء التحديد التلقائي إذا نقر المستخدم على نفس التبويب
     if not selected_tab:
-        selected_tab = st.session_state.active_nav_tab
-        st.session_state.pills_nav_tab = selected_tab
+        selected_tab = st.session_state.get("active_nav_tab", "📊 لوحة القيادة")
         
     st.session_state.active_nav_tab = selected_tab
-    if st.query_params.get("tab") != selected_tab:
-        st.query_params["tab"] = selected_tab
+    st.query_params["tab"] = selected_tab
 
 # ----------------- TAB 1: DASHBOARD & ISRS -----------------
 if selected_tab == "📊 لوحة القيادة":
