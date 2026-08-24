@@ -543,7 +543,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 def render_dynamic_theme_engine():
-    """محرك الثيمات الديناميكي فائق الدقة: يضمن تباين لوني 100% WCAG AAA لجميع عناصر وخطوط وصفحات المنصة"""
+    """محرك الثيمات والتناسق اللوني الديناميكي الشامل المتوافق 100% مع معايير WCAG AAA"""
     current_theme = st.session_state.get("theme_mode", "ROYAL")
     
     if current_theme == "ROYAL":
@@ -619,7 +619,17 @@ def render_dynamic_theme_engine():
         .workflow-arrow { color: #64748B !important; font-weight: 900 !important; }
 
         /* 5. Navigation Hubs & Tabs (Segmented Control & Pills) */
-        div[data-testid="stSegmentedControl"] button, div[data-testid="stPills"] button {
+        div[data-testid="stSegmentedControl"], div[data-testid="stPills"], div[data-baseweb="segmented-control"] {
+            background-color: transparent !important;
+        }
+        div[data-testid="stSegmentedControl"] > div, div[data-testid="stPills"] > div {
+            background-color: transparent !important;
+        }
+        div[data-testid="stSegmentedControl"] [role="radiogroup"] > *,
+        div[data-testid="stSegmentedControl"] button, div[data-testid="stPills"] button,
+        div[data-testid="stSegmentedControl"] [role="radio"], div[data-testid="stPills"] [role="radio"],
+        div[data-baseweb="segmented-control"] [role="radio"], div[data-baseweb="segmented-control"] button,
+        div[data-testid="stSegmentedControl"] label, div[data-testid="stPills"] label {
             background-color: #FFFFFF !important;
             color: #0F172A !important;
             border: 2px solid #CBD5E1 !important;
@@ -628,22 +638,44 @@ def render_dynamic_theme_engine():
             font-size: 0.88rem !important;
             box-shadow: 0 2px 6px rgba(0,0,0,0.04) !important;
         }
-        div[data-testid="stSegmentedControl"] button *, div[data-testid="stPills"] button * {
+        div[data-testid="stSegmentedControl"] [data-testid="stMarkdownContainer"] p,
+        div[data-testid="stPills"] [data-testid="stMarkdownContainer"] p,
+        div[data-testid="stSegmentedControl"] span, div[data-testid="stPills"] span,
+        div[data-testid="stSegmentedControl"] div, div[data-testid="stPills"] div,
+        div[data-baseweb="segmented-control"] span, div[data-baseweb="segmented-control"] p {
             color: #0F172A !important;
             font-weight: 800 !important;
         }
-        div[data-testid="stSegmentedControl"] button[aria-checked="true"], div[data-testid="stPills"] button[aria-checked="true"] {
+        div[data-testid="stSegmentedControl"] button[aria-checked="true"], div[data-testid="stPills"] button[aria-checked="true"],
+        div[data-testid="stSegmentedControl"] [role="radio"][aria-checked="true"], div[data-testid="stPills"] [role="radio"][aria-checked="true"],
+        div[data-baseweb="segmented-control"] [aria-checked="true"],
+        div[data-testid="stSegmentedControl"] label[data-checked="true"], div[data-testid="stPills"] label[data-checked="true"] {
             background: linear-gradient(135deg, #1E3A8A 0%, #2563EB 100%) !important;
             color: #FFFFFF !important;
             border-color: #1D4ED8 !important;
             box-shadow: 0 4px 12px rgba(37,99,235,0.3) !important;
         }
-        div[data-testid="stSegmentedControl"] button[aria-checked="true"] *, div[data-testid="stPills"] button[aria-checked="true"] * {
+        div[data-testid="stSegmentedControl"] [aria-checked="true"] [data-testid="stMarkdownContainer"] p,
+        div[data-testid="stPills"] [aria-checked="true"] [data-testid="stMarkdownContainer"] p,
+        div[data-testid="stSegmentedControl"] [aria-checked="true"] span,
+        div[data-testid="stPills"] [aria-checked="true"] span,
+        div[data-baseweb="segmented-control"] [aria-checked="true"] p,
+        div[data-baseweb="segmented-control"] [aria-checked="true"] span {
             color: #FFFFFF !important;
             font-weight: 900 !important;
         }
 
-        /* 6. Tabs */
+        /* 6. Radio & Checkbox */
+        div[data-testid="stRadio"] label, div[data-testid="stRadio"] [data-testid="stMarkdownContainer"] p, div[data-testid="stRadio"] span {
+            color: #0F172A !important;
+            font-weight: 800 !important;
+        }
+        div[data-testid="stCheckbox"] label, div[data-testid="stCheckbox"] [data-testid="stMarkdownContainer"] p, div[data-testid="stCheckbox"] span {
+            color: #0F172A !important;
+            font-weight: 800 !important;
+        }
+
+        /* 7. Tabs */
         .stTabs [data-baseweb="tab-list"] { border-bottom: 2px solid #CBD5E1 !important; }
         .stTabs [data-baseweb="tab"] {
             background: #FFFFFF !important;
@@ -659,11 +691,15 @@ def render_dynamic_theme_engine():
         }
         .stTabs [aria-selected="true"] * { color: #FFFFFF !important; font-weight: 900 !important; }
 
-        /* 7. KPI & General Cards */
+        /* 8. KPI & General Cards */
         .kpi-card, .metric-card, .chart-card, div[data-testid="stMetric"], div[data-testid="stExpander"] {
             background: #FFFFFF !important;
             border: 2px solid #CBD5E1 !important;
             box-shadow: 0 4px 18px rgba(15,23,42,0.06) !important;
+        }
+        div[data-testid="stExpander"] summary, div[data-testid="stExpander"] summary span, div[data-testid="stExpander"] summary p {
+            color: #0F172A !important;
+            font-weight: 800 !important;
         }
         .kpi-title { color: #1E3A8A !important; font-weight: 800 !important; }
         .kpi-value { color: #0F172A !important; font-weight: 900 !important; }
@@ -707,7 +743,7 @@ def render_dynamic_theme_engine():
             min-width: 90px !important;
         }
 
-        /* 8. Tables & Grids */
+        /* 9. Tables & Grids */
         .custom-table-container, .decision-hub-container {
             border: 2px solid #CBD5E1 !important;
             background: #FFFFFF !important;
@@ -771,7 +807,77 @@ def render_dynamic_theme_engine():
             font-size: 0.82rem;
         }
 
-        /* 11. Custom Cards & Banners */
+        /* 10. Form Controls & Widgets */
+        div[data-baseweb="select"] > div, div[data-testid="stTextInput"] input, div[data-testid="stNumberInput"] input, textarea {
+            background-color: #FFFFFF !important;
+            color: #0F172A !important;
+            border: 2px solid #CBD5E1 !important;
+            border-radius: 8px !important;
+            font-weight: 700 !important;
+        }
+        div[data-baseweb="select"] span, div[data-baseweb="select"] div {
+            color: #0F172A !important;
+            font-weight: 800 !important;
+        }
+        div[data-baseweb="popover"] ul, div[data-baseweb="menu"] {
+            background-color: #FFFFFF !important;
+            color: #0F172A !important;
+            border: 1px solid #CBD5E1 !important;
+        }
+        div[data-baseweb="popover"] li, div[data-baseweb="menu"] li {
+            color: #0F172A !important;
+            font-weight: 800 !important;
+        }
+        label, label p, label span {
+            color: #0F172A !important;
+            font-weight: 800 !important;
+        }
+
+        /* 11. Sidebar (Royal Theme) */
+        section[data-testid="stSidebar"], div[data-testid="stSidebarUserContent"] {
+            background-color: #0B132B !important;
+            border-left: 2px solid #1E293B !important;
+        }
+        section[data-testid="stSidebar"] h1, section[data-testid="stSidebar"] h2, section[data-testid="stSidebar"] h3, section[data-testid="stSidebar"] h4, section[data-testid="stSidebar"] h5, section[data-testid="stSidebar"] h6 {
+            color: #FFFFFF !important;
+            font-weight: 900 !important;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.8) !important;
+        }
+        section[data-testid="stSidebar"] p, section[data-testid="stSidebar"] label, section[data-testid="stSidebar"] span, section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p {
+            color: #FFFFFF !important;
+            font-weight: 700 !important;
+        }
+        section[data-testid="stSidebar"] .en-subtext { color: #93C5FD !important; font-weight: 800 !important; }
+        section[data-testid="stSidebar"] hr { border-color: #1E293B !important; }
+        section[data-testid="stSidebar"] div[data-baseweb="select"] > div {
+            background-color: #131E35 !important;
+            color: #FFFFFF !important;
+            border: 2px solid #3B82F6 !important;
+        }
+        section[data-testid="stSidebar"] div[data-baseweb="select"] span {
+            color: #FFFFFF !important;
+            font-weight: 800 !important;
+        }
+        .sidebar-user-card {
+            background: rgba(255,255,255,0.08) !important;
+            border: 1px solid #1E3A8A !important;
+        }
+        .sidebar-user-lbl { color: #93C5FD !important; font-weight: 800 !important; }
+        .sidebar-user-val { color: #FFFFFF !important; font-weight: 800 !important; }
+        .sidebar-user-badge { background: #166534 !important; color: #DCFCE7 !important; border: 1px solid #22C55E !important; }
+        section[data-testid="stSidebar"] .stButton button {
+            background: #131E35 !important;
+            color: #FFFFFF !important;
+            border: 1px solid #3B82F6 !important;
+            font-weight: 800 !important;
+        }
+        section[data-testid="stSidebar"] .stButton button:hover {
+            background: #DC2626 !important;
+            color: #FFFFFF !important;
+            border-color: #EF4444 !important;
+        }
+
+        /* 12. Custom Cards & Banners */
         .info-card, .guide-card, .stat-box, .geo-profile-card {
             background: #FFFFFF !important;
             border: 2px solid #CBD5E1 !important;
@@ -822,7 +928,7 @@ def render_dynamic_theme_engine():
             font-weight: 800 !important;
         }
 
-        /* 12. Typography */
+        /* 13. Typography */
         .stApp h1, .stApp h2, .stApp h3, .stApp h4, .stApp h5, .stApp h6 {
             color: #0B132B !important;
             font-weight: 900 !important;
@@ -832,6 +938,7 @@ def render_dynamic_theme_engine():
             font-weight: 700 !important;
         }
         .en-subtext { color: #1E40AF !important; font-weight: 800 !important; }
+        .en-badge { background: #EFF6FF !important; color: #1E40AF !important; border: 1px solid #BFDBFE !important; }
         """
     elif current_theme == "LIGHT":
         theme_css = """
@@ -899,7 +1006,18 @@ def render_dynamic_theme_engine():
         }
         .workflow-arrow { color: #64748B !important; font-weight: 900 !important; }
 
-        div[data-testid="stSegmentedControl"] button, div[data-testid="stPills"] button {
+        /* Segmented Control & Pills in Light Theme */
+        div[data-testid="stSegmentedControl"], div[data-testid="stPills"], div[data-baseweb="segmented-control"] {
+            background-color: transparent !important;
+        }
+        div[data-testid="stSegmentedControl"] > div, div[data-testid="stPills"] > div {
+            background-color: transparent !important;
+        }
+        div[data-testid="stSegmentedControl"] [role="radiogroup"] > *,
+        div[data-testid="stSegmentedControl"] button, div[data-testid="stPills"] button,
+        div[data-testid="stSegmentedControl"] [role="radio"], div[data-testid="stPills"] [role="radio"],
+        div[data-baseweb="segmented-control"] [role="radio"], div[data-baseweb="segmented-control"] button,
+        div[data-testid="stSegmentedControl"] label, div[data-testid="stPills"] label {
             background-color: #F8FAFC !important;
             color: #0F172A !important;
             border: 2px solid #CBD5E1 !important;
@@ -907,18 +1025,41 @@ def render_dynamic_theme_engine():
             font-weight: 800 !important;
             font-size: 0.88rem !important;
         }
-        div[data-testid="stSegmentedControl"] button *, div[data-testid="stPills"] button * {
+        div[data-testid="stSegmentedControl"] [data-testid="stMarkdownContainer"] p,
+        div[data-testid="stPills"] [data-testid="stMarkdownContainer"] p,
+        div[data-testid="stSegmentedControl"] span, div[data-testid="stPills"] span,
+        div[data-testid="stSegmentedControl"] div, div[data-testid="stPills"] div,
+        div[data-baseweb="segmented-control"] span, div[data-baseweb="segmented-control"] p {
             color: #0F172A !important;
             font-weight: 800 !important;
         }
-        div[data-testid="stSegmentedControl"] button[aria-checked="true"], div[data-testid="stPills"] button[aria-checked="true"] {
+        div[data-testid="stSegmentedControl"] button[aria-checked="true"], div[data-testid="stPills"] button[aria-checked="true"],
+        div[data-testid="stSegmentedControl"] [role="radio"][aria-checked="true"], div[data-testid="stPills"] [role="radio"][aria-checked="true"],
+        div[data-baseweb="segmented-control"] [aria-checked="true"],
+        div[data-testid="stSegmentedControl"] label[data-checked="true"], div[data-testid="stPills"] label[data-checked="true"] {
             background-color: #1D4ED8 !important;
             color: #FFFFFF !important;
             border-color: #1E40AF !important;
+            box-shadow: 0 2px 8px rgba(29, 78, 216, 0.25) !important;
         }
-        div[data-testid="stSegmentedControl"] button[aria-checked="true"] *, div[data-testid="stPills"] button[aria-checked="true"] * {
+        div[data-testid="stSegmentedControl"] [aria-checked="true"] [data-testid="stMarkdownContainer"] p,
+        div[data-testid="stPills"] [aria-checked="true"] [data-testid="stMarkdownContainer"] p,
+        div[data-testid="stSegmentedControl"] [aria-checked="true"] span,
+        div[data-testid="stPills"] [aria-checked="true"] span,
+        div[data-baseweb="segmented-control"] [aria-checked="true"] p,
+        div[data-baseweb="segmented-control"] [aria-checked="true"] span {
             color: #FFFFFF !important;
             font-weight: 900 !important;
+        }
+
+        /* Radio & Checkbox */
+        div[data-testid="stRadio"] label, div[data-testid="stRadio"] [data-testid="stMarkdownContainer"] p, div[data-testid="stRadio"] span {
+            color: #0F172A !important;
+            font-weight: 800 !important;
+        }
+        div[data-testid="stCheckbox"] label, div[data-testid="stCheckbox"] [data-testid="stMarkdownContainer"] p, div[data-testid="stCheckbox"] span {
+            color: #0F172A !important;
+            font-weight: 800 !important;
         }
 
         .stTabs [data-baseweb="tab-list"] { border-bottom: 2px solid #CBD5E1 !important; }
@@ -939,6 +1080,10 @@ def render_dynamic_theme_engine():
         .kpi-card, .metric-card, .chart-card, div[data-testid="stMetric"], div[data-testid="stExpander"] {
             background: #F8FAFC !important;
             border: 2px solid #CBD5E1 !important;
+        }
+        div[data-testid="stExpander"] summary, div[data-testid="stExpander"] summary span, div[data-testid="stExpander"] summary p {
+            color: #0F172A !important;
+            font-weight: 800 !important;
         }
         .kpi-title { color: #1E40AF !important; font-weight: 800 !important; }
         .kpi-value { color: #0F172A !important; font-weight: 900 !important; }
@@ -1025,6 +1170,10 @@ def render_dynamic_theme_engine():
             border-radius: 8px !important;
             font-weight: 700 !important;
         }
+        div[data-baseweb="select"] span, div[data-baseweb="select"] div {
+            color: #0F172A !important;
+            font-weight: 800 !important;
+        }
         div[data-baseweb="popover"] ul, div[data-baseweb="menu"] {
             background-color: #FFFFFF !important;
             color: #0F172A !important;
@@ -1032,7 +1181,7 @@ def render_dynamic_theme_engine():
         }
         div[data-baseweb="popover"] li, div[data-baseweb="menu"] li {
             color: #0F172A !important;
-            font-weight: 700 !important;
+            font-weight: 800 !important;
         }
         label, label p, label span {
             color: #0F172A !important;
@@ -1130,6 +1279,7 @@ def render_dynamic_theme_engine():
             font-weight: 700 !important;
         }
         .en-subtext { color: #1E40AF !important; font-weight: 800 !important; }
+        .en-badge { background: #F1F5F9 !important; color: #1D4ED8 !important; border: 1px solid #CBD5E1 !important; }
         """
     else:  # DARK
         theme_css = """
@@ -1189,36 +1339,70 @@ def render_dynamic_theme_engine():
             background: #0E1626 !important;
             border: 2px solid #1E293B !important;
         }
-        .workflow-step { color: #94A3B8 !important; font-weight: 800 !important; }
+        .workflow-step { color: #E2E8F0 !important; font-weight: 800 !important; }
         .workflow-step.active {
             background: #1E3A8A !important;
-            color: #FFFFFF !important;
+            color: #38BDF8 !important;
             font-weight: 900 !important;
             border: 2px solid #38BDF8 !important;
+            box-shadow: 0 0 12px rgba(56, 189, 248, 0.4) !important;
         }
         .workflow-arrow { color: #64748B !important; font-weight: 900 !important; }
 
-        div[data-testid="stSegmentedControl"] button, div[data-testid="stPills"] button {
+        /* Segmented Control & Pills in Dark Theme */
+        div[data-testid="stSegmentedControl"], div[data-testid="stPills"], div[data-baseweb="segmented-control"] {
+            background-color: transparent !important;
+        }
+        div[data-testid="stSegmentedControl"] > div, div[data-testid="stPills"] > div {
+            background-color: transparent !important;
+        }
+        div[data-testid="stSegmentedControl"] [role="radiogroup"] > *,
+        div[data-testid="stSegmentedControl"] button, div[data-testid="stPills"] button,
+        div[data-testid="stSegmentedControl"] [role="radio"], div[data-testid="stPills"] [role="radio"],
+        div[data-baseweb="segmented-control"] [role="radio"], div[data-baseweb="segmented-control"] button,
+        div[data-testid="stSegmentedControl"] label, div[data-testid="stPills"] label {
             background-color: #0E1626 !important;
-            color: #E2E8F0 !important;
-            border: 2px solid #1E293B !important;
+            color: #FFFFFF !important;
+            border: 2px solid #334155 !important;
             border-radius: 10px !important;
             font-weight: 800 !important;
             font-size: 0.88rem !important;
         }
-        div[data-testid="stSegmentedControl"] button *, div[data-testid="stPills"] button * {
-            color: #E2E8F0 !important;
+        div[data-testid="stSegmentedControl"] [data-testid="stMarkdownContainer"] p,
+        div[data-testid="stPills"] [data-testid="stMarkdownContainer"] p,
+        div[data-testid="stSegmentedControl"] span, div[data-testid="stPills"] span,
+        div[data-testid="stSegmentedControl"] div, div[data-testid="stPills"] div,
+        div[data-baseweb="segmented-control"] span, div[data-baseweb="segmented-control"] p {
+            color: #FFFFFF !important;
             font-weight: 800 !important;
         }
-        div[data-testid="stSegmentedControl"] button[aria-checked="true"], div[data-testid="stPills"] button[aria-checked="true"] {
-            background-color: #2563EB !important;
+        div[data-testid="stSegmentedControl"] button[aria-checked="true"], div[data-testid="stPills"] button[aria-checked="true"],
+        div[data-testid="stSegmentedControl"] [role="radio"][aria-checked="true"], div[data-testid="stPills"] [role="radio"][aria-checked="true"],
+        div[data-baseweb="segmented-control"] [aria-checked="true"],
+        div[data-testid="stSegmentedControl"] label[data-checked="true"], div[data-testid="stPills"] label[data-checked="true"] {
+            background: #2563EB !important;
             color: #FFFFFF !important;
-            border-color: #38BDF8 !important;
-            box-shadow: 0 0 14px rgba(37, 99, 235, 0.6) !important;
+            border: 2px solid #38BDF8 !important;
+            box-shadow: 0 0 16px rgba(56, 189, 248, 0.5) !important;
         }
-        div[data-testid="stSegmentedControl"] button[aria-checked="true"] *, div[data-testid="stPills"] button[aria-checked="true"] * {
+        div[data-testid="stSegmentedControl"] [aria-checked="true"] [data-testid="stMarkdownContainer"] p,
+        div[data-testid="stPills"] [aria-checked="true"] [data-testid="stMarkdownContainer"] p,
+        div[data-testid="stSegmentedControl"] [aria-checked="true"] span,
+        div[data-testid="stPills"] [aria-checked="true"] span,
+        div[data-baseweb="segmented-control"] [aria-checked="true"] p,
+        div[data-baseweb="segmented-control"] [aria-checked="true"] span {
             color: #FFFFFF !important;
             font-weight: 900 !important;
+        }
+
+        /* Radio & Checkbox */
+        div[data-testid="stRadio"] label, div[data-testid="stRadio"] [data-testid="stMarkdownContainer"] p, div[data-testid="stRadio"] span {
+            color: #FFFFFF !important;
+            font-weight: 800 !important;
+        }
+        div[data-testid="stCheckbox"] label, div[data-testid="stCheckbox"] [data-testid="stMarkdownContainer"] p, div[data-testid="stCheckbox"] span {
+            color: #FFFFFF !important;
+            font-weight: 800 !important;
         }
 
         .stTabs [data-baseweb="tab-list"] { border-bottom: 2px solid #1E293B !important; }
@@ -1242,6 +1426,10 @@ def render_dynamic_theme_engine():
             border: 2px solid #1E293B !important;
             color: #FFFFFF !important;
             box-shadow: 0 6px 24px rgba(0, 0, 0, 0.5) !important;
+        }
+        div[data-testid="stExpander"] summary, div[data-testid="stExpander"] summary span, div[data-testid="stExpander"] summary p {
+            color: #FFFFFF !important;
+            font-weight: 800 !important;
         }
         .kpi-title { color: #38BDF8 !important; font-weight: 800 !important; }
         .kpi-value { color: #FFFFFF !important; font-weight: 900 !important; }
@@ -1324,38 +1512,18 @@ def render_dynamic_theme_engine():
             border-bottom: 1px solid #1E293B !important;
             border-left: 1px solid #1E293B !important;
         }
-        .badge-neutral-delta {
-            background: #1E293B !important;
-            color: #E2E8F0 !important;
-            border: 1px solid #334155 !important;
-            padding: 3px 8px;
-            border-radius: 6px;
-            font-size: 0.77rem;
-            font-weight: 700;
-        }
-        .badge-element-id {
-            font-family: Consolas, monospace !important;
-            background: #1E293B !important;
-            color: #38BDF8 !important;
-            padding: 3px 7px;
-            border-radius: 6px;
-            font-weight: 800;
-            font-size: 0.78rem;
-            border: 1px solid #334155;
-        }
-        .badge-item-name {
-            color: #E2E8F0 !important;
-            font-weight: 700 !important;
-            font-size: 0.82rem;
-        }
 
-        /* 9. Form Controls & Widgets */
+        /* Form Controls & Widgets */
         div[data-baseweb="select"] > div, div[data-testid="stTextInput"] input, div[data-testid="stNumberInput"] input, textarea {
             background-color: #0E1626 !important;
             color: #FFFFFF !important;
-            border: 2px solid #1E293B !important;
+            border: 2px solid #334155 !important;
             border-radius: 8px !important;
             font-weight: 700 !important;
+        }
+        div[data-baseweb="select"] span, div[data-baseweb="select"] div {
+            color: #FFFFFF !important;
+            font-weight: 800 !important;
         }
         div[data-baseweb="popover"] ul, div[data-baseweb="menu"] {
             background-color: #0E1626 !important;
@@ -1364,7 +1532,7 @@ def render_dynamic_theme_engine():
         }
         div[data-baseweb="popover"] li, div[data-baseweb="menu"] li {
             color: #FFFFFF !important;
-            font-weight: 700 !important;
+            font-weight: 800 !important;
         }
         div[data-baseweb="popover"] li:hover, div[data-baseweb="menu"] li:hover {
             background-color: #1E3A8A !important;
@@ -1390,6 +1558,15 @@ def render_dynamic_theme_engine():
         }
         section[data-testid="stSidebar"] .en-subtext { color: #38BDF8 !important; font-weight: 800 !important; }
         section[data-testid="stSidebar"] hr { border-color: #1E293B !important; }
+        section[data-testid="stSidebar"] div[data-baseweb="select"] > div {
+            background-color: #0E1626 !important;
+            color: #FFFFFF !important;
+            border: 2px solid #38BDF8 !important;
+        }
+        section[data-testid="stSidebar"] div[data-baseweb="select"] span {
+            color: #FFFFFF !important;
+            font-weight: 800 !important;
+        }
         .sidebar-user-card {
             background: rgba(255,255,255,0.06) !important;
             border: 1px solid #1E293B !important;
@@ -1409,6 +1586,7 @@ def render_dynamic_theme_engine():
             border-color: #EF4444 !important;
         }
 
+        /* Custom Cards & Banners */
         .info-card, .guide-card, .stat-box, .geo-profile-card {
             background: #0E1626 !important;
             border: 2px solid #1E293B !important;
@@ -1469,6 +1647,7 @@ def render_dynamic_theme_engine():
             font-weight: 700 !important;
         }
         .en-subtext { color: #38BDF8 !important; font-weight: 800 !important; }
+        .en-badge { background: #1E293B !important; color: #38BDF8 !important; border: 1px solid #334155 !important; }
         """
     st.markdown(f"<style>{theme_css}</style>", unsafe_allow_html=True)
 
@@ -3596,9 +3775,8 @@ elif selected_tab == "🧩 التنسيق (ISO 31000)":
         
         domain_labels = [domain_mapping.get(d, iso31000_coordination.COORDINATION_DOMAINS[d]["name_ar"]) for d in iso31000_coordination.COORDINATION_DOMAINS]
         domain_vals = [coord_summary["domain_breakdown"].get(d, 0) for d in iso31000_coordination.COORDINATION_DOMAINS]
-        domain_colors = ["#2563EB", "#0284C7", "#D97706", "#059669", "#7C3AED"]
-
         ch_theme = get_chart_layout_theme()
+        max_d_val = max(domain_vals) if domain_vals else 5
         fig_dom = go.Figure(go.Bar(
             x=domain_vals,
             y=domain_labels,
@@ -3608,7 +3786,8 @@ elif selected_tab == "🧩 التنسيق (ISO 31000)":
                 line=dict(color=ch_theme['grid_color'], width=1)
             ),
             text=[f"  <b>{v}</b> تعارض" if v > 0 else " 0" for v in domain_vals],
-            textposition='auto',
+            textposition='outside',
+            cliponaxis=False,
             textfont=dict(family='Cairo, sans-serif', size=12, color=ch_theme['font_color']),
             hovertemplate='<b>%{y}</b><br>عدد مشكلات التنسيق: <b>%{x}</b><extra></extra>'
         ))
@@ -3616,10 +3795,11 @@ elif selected_tab == "🧩 التنسيق (ISO 31000)":
         fig_dom.update_layout(
             height=320,
             font=dict(family='Cairo, sans-serif', size=12, color=ch_theme['font_color']),
-            margin=dict(l=185, r=30, t=20, b=25),
+            margin=dict(l=185, r=60, t=20, b=25),
             plot_bgcolor=ch_theme['plot_bgcolor'],
             paper_bgcolor=ch_theme['paper_bgcolor'],
             xaxis=dict(
+                range=[0, max_d_val + 1.2],
                 title=dict(text='عدد المشكلات والتعارضات المرصودة', font=dict(family='Cairo, sans-serif', size=12, color=ch_theme['axis_color'])),
                 gridcolor=ch_theme['grid_color'],
                 zeroline=False,
