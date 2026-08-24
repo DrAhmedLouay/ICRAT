@@ -963,28 +963,27 @@ def _get_login_banner_base64():
 
 def render_login_portal():
     """بوابة الأمان والتحقق الرقمي المدمجة لحماية المنصة على الإنترنت"""
-    banner_data_uri = _get_login_banner_base64()
-    if banner_data_uri:
-        banner_tag = f'<div style="border-radius: 16px; overflow: hidden; box-shadow: 0 6px 20px rgba(0,0,0,0.08); border: 1px solid #CBD5E1; margin-bottom: 16px;"><img src="{banner_data_uri}" style="width: 100%; height: auto; display: block; border-radius: 16px;" alt="المنصة العراقية لتقييم مخاطر البناء ودعم اتخاذ القرارات في المشاريع البنائية"></div>'
-    else:
-        banner_tag = '<div style="display: inline-block; background: linear-gradient(135deg, #EFF6FF, #DBEAFE); border: 1px solid #BFDBFE; border-radius: 50%; padding: 14px; margin-bottom: 12px;"><div style="font-size: 2.6rem; line-height: 1;">🏛️</div></div><h1 style="font-family: Cairo, sans-serif; font-size: 1.5rem; color: #1E3A8A; font-weight: 800; margin-bottom: 10px;">المنصة العراقية لتقييم مخاطر البناء ودعم اتخاذ القرارات في المشاريع البنائية</h1>'
-
-    login_card_html = f"""<div style="max-width: 640px; margin: 16px auto 14px auto; background: #FFFFFF; border-radius: 22px; padding: 22px 26px; box-shadow: 0 20px 50px rgba(15, 23, 42, 0.10); border: 1px solid #E2E8F0; text-align: center; direction: rtl;">
-{banner_tag}
-<div style="display: inline-block; background: #F1F5F9; color: #1E293B; font-size: 0.84rem; font-weight: 700; padding: 4px 14px; border-radius: 20px; border: 1px solid #CBD5E1; margin-bottom: 12px; font-family: 'Segoe UI', Tahoma, sans-serif; direction: ltr;">
+    col_pad1, col_center, col_pad2 = st.columns([1, 2.2, 1])
+    with col_center:
+        banner_path = os.path.join(os.path.dirname(__file__), "icrat_login_banner.jpg")
+        if not os.path.exists(banner_path):
+            banner_path = "icrat_login_banner.jpg"
+        if os.path.exists(banner_path):
+            st.image(banner_path, use_container_width=True)
+            
+        header_info_html = """<div style="background: #FFFFFF; border-radius: 16px; padding: 14px 18px; box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05); border: 1px solid #E2E8F0; text-align: center; direction: rtl; margin-top: -6px; margin-bottom: 14px;">
+<div style="display: inline-block; background: #F1F5F9; color: #1E293B; font-size: 0.82rem; font-weight: 700; padding: 4px 14px; border-radius: 20px; border: 1px solid #CBD5E1; margin-bottom: 8px; font-family: 'Segoe UI', Tahoma, sans-serif; direction: ltr;">
 Iraqi Construction Risk Assessment & Decision Support Platform (ICRAT 2.0)
 </div>
-<div style="color: #2563EB; font-size: 0.90rem; font-weight: 800; margin-bottom: 14px; display: flex; align-items: center; justify-content: center; gap: 6px;">
+<div style="color: #2563EB; font-size: 0.88rem; font-weight: 800; margin-bottom: 8px; display: flex; align-items: center; justify-content: center; gap: 6px;">
 <span>🔒</span> <span>بوابة الدخول المعتمدة للمهندسين والمشرفين</span>
 </div>
-<div style="background: #F8FAFC; border-radius: 10px; padding: 10px 14px; border: 1px solid #E2E8F0; font-size: 0.82rem; color: #475569; margin-bottom: 4px; line-height: 1.5;">
+<div style="background: #F8FAFC; border-radius: 10px; padding: 8px 12px; border: 1px solid #E2E8F0; font-size: 0.80rem; color: #475569; line-height: 1.5;">
 هذه المنصة محمية بنظام التحقق الرقمي المشفر. يرجى إدخال بيانات الاعتماد المصرح بها للوصول إلى أدوات ومحركات المشروع.
 </div>
 </div>"""
-    st.markdown(login_card_html, unsafe_allow_html=True)
+        st.markdown(header_info_html, unsafe_allow_html=True)
 
-    col_pad1, col_form, col_pad2 = st.columns([1, 2, 1])
-    with col_form:
         with st.form("security_login_form", clear_on_submit=False):
             u_input = st.text_input("👤 اسم المستخدم (Username):", placeholder="أدخل اسم المستخدم المصرح به...")
             p_input = st.text_input("🔑 كلمة المرور (Password):", type="password", placeholder="أدخل كلمة المرور...")
@@ -1002,7 +1001,7 @@ Iraqi Construction Risk Assessment & Decision Support Platform (ICRAT 2.0)
                 else:
                     st.error("❌ اسم المستخدم أو كلمة المرور غير صحيحة! يرجى التحقق وإعادة المحاولة.")
 
-    login_footer_html = """<div style="text-align: center; margin-top: 28px; padding-top: 16px; border-top: 1px solid #E2E8F0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; direction: ltr;">
+        login_footer_html = """<div style="text-align: center; margin-top: 24px; padding-top: 14px; border-top: 1px solid #E2E8F0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; direction: ltr;">
 <div style="font-size: 0.88rem; font-weight: 700; color: #1E293B; margin-bottom: 4px; letter-spacing: 0.2px;">
 Iraqi Construction Risk Assessment & Decision Support Platform
 </div>
@@ -1010,10 +1009,10 @@ Iraqi Construction Risk Assessment & Decision Support Platform
 Designed and Developed by Dr Ahmed Louay Ahmed
 </div>
 </div>"""
-    st.markdown(login_footer_html, unsafe_allow_html=True)
+        st.markdown(login_footer_html, unsafe_allow_html=True)
 
-    # تفعيل ميزة الحفظ التلقائي في مديري كلمات المرور بالمتصفح (Chrome, Safari, Edge, Keychain)
-    st.components.v1.html("""<script>
+        # تفعيل ميزة الحفظ التلقائي في مديري كلمات المرور بالمتصفح (Chrome, Safari, Edge, Keychain)
+        st.components.v1.html("""<script>
 setTimeout(function() {
     try {
         const doc = window.parent.document;
@@ -1112,11 +1111,17 @@ if "isrs_eval_mode" not in st.session_state:
 
 # ----------------- SIDEBAR -----------------
 with st.sidebar:
-    logo_path = os.path.join(os.path.dirname(__file__), "assets", "icrat_bim_logo.jpg")
-    if os.path.exists(logo_path):
-        st.image(logo_path, use_container_width=True)
+    banner_sidebar = os.path.join(os.path.dirname(__file__), "icrat_login_banner.jpg")
+    if not os.path.exists(banner_sidebar):
+        banner_sidebar = "icrat_login_banner.jpg"
+    if os.path.exists(banner_sidebar):
+        st.image(banner_sidebar, use_container_width=True)
     else:
-        st.image("https://img.icons8.com/isometric/512/crane.png", width=65)
+        logo_path = os.path.join(os.path.dirname(__file__), "assets", "icrat_bim_logo.jpg")
+        if os.path.exists(logo_path):
+            st.image(logo_path, use_container_width=True)
+        else:
+            st.image("https://img.icons8.com/isometric/512/crane.png", width=65)
 
     st.markdown(f"""
     <div style="background: #F8FAFC; border-radius: 10px; padding: 8px 12px; border: 1px solid #E2E8F0; margin-top: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; direction: rtl;">
