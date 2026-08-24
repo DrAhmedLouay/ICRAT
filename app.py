@@ -2346,6 +2346,37 @@ def get_chart_layout_theme():
             "paper_bgcolor": "rgba(0,0,0,0)"
         }
 
+def export_full_project_snapshot_bytes(
+    project_meta: dict,
+    activities: list,
+    risks: list = None,
+    coordination_issues: list = None,
+    delay_events: list = None,
+    expert_overrides: dict = None,
+    spatial_elements: list = None,
+    sim_params: dict = None
+) -> bytes:
+    """توليد حزمة المشروع الهندسية المتكاملة بصيغة .icrat المشفرة والمنظمة مع طابع زمني ورقم إصدار قياسي"""
+    snapshot_data = {
+        "app_signature": "ICRAT_IRAQ_CONSTRUCTION_RISK_AI_SYSTEM",
+        "schema_version": "2.0_2026",
+        "exported_at": datetime.now().isoformat(),
+        "exported_by": st.session_state.get("logged_user", "engineer"),
+        "project_source": st.session_state.get("project_source", "CUSTOM"),
+        "project_meta": dict(project_meta) if project_meta else {},
+        "activities": [dict(a) for a in (activities or [])],
+        "risk_register": [dict(r) for r in (risks or st.session_state.get("risk_register", []))],
+        "coordination_issues": [dict(c) for c in (coordination_issues or st.session_state.get("coordination_issues", []))],
+        "delay_events": [dict(e) for e in (delay_events or st.session_state.get("delay_events", []))],
+        "expert_overrides": dict(expert_overrides or st.session_state.get("expert_overrides", {})),
+        "ifc_spatial_elements": [dict(s) for s in (spatial_elements or st.session_state.get("ifc_spatial_elements", []))],
+        "simulation_parameters": sim_params or {
+            "iterations": int(st.session_state.get("sim_iterations", 5000)),
+            "confidence": str(st.session_state.get("target_confidence", "P80"))
+        }
+    }
+    return json.dumps(snapshot_data, ensure_ascii=False, indent=2).encode('utf-8')
+
 def load_clean_project_state(
     meta: dict,
     activities: list,
@@ -5928,6 +5959,26 @@ elif selected_tab == "🏢 استيراد (P6 / IFC / JSON)":
     # ------------------ SUB-TAB 3: MULTI-SOURCE INGESTION HUB ------------------
     with tab_setup_import:
         st.markdown("#### 📥 مركز استيراد الجداول والنماذج والتعارضات والنسخ الاحتياطي:")
+        
+        # 💾 شريط الحفظ الاحتياطي السريع قبل الاستيراد
+        snap_bytes_quick = export_full_project_snapshot_bytes(
+            project_meta=active_meta,
+            activities=st.session_state.activities
+        )
+        snap_fname_quick = f"ICRAT_Project_{active_meta.get('governorate', 'Iraq')}_{datetime.now().strftime('%Y%m%d_%H%M')}.icrat"
+        
+        col_snap_b1, col_snap_b2 = st.columns([3, 1.2])
+        with col_snap_b1:
+            st.info("💡 **توصية هندسية:** احفظ نسخة احتياطية من مشروعك الحالي محلياً على حاسوبك قبل استيراد أي ملف جديد لضمان عدم فقدان التعديلات.")
+        with col_snap_b2:
+            st.download_button(
+                label="💾 حفظ نسخة المشروع (.icrat)",
+                data=snap_bytes_quick,
+                file_name=snap_fname_quick,
+                mime="application/json",
+                key="btn_quick_export_tab11",
+                use_container_width=True
+            )
         st.markdown('<div class="subtext-muted" style="margin-bottom:16px;">استيراد وتحديث كافة مصادر البيانات الهندسية في مسار متناسق موحد أفقياً:</div>', unsafe_allow_html=True)
         
         col_imp_p6, col_imp_ifc, col_imp_navis, col_imp_json = st.columns(4)
@@ -6004,13 +6055,13 @@ elif selected_tab == "🏢 استيراد (P6 / IFC / JSON)":
         with col_imp_json:
             st.markdown("""
             <div style="background:linear-gradient(135deg, #059669, #047857); color:#FFFFFF; border-radius:10px 10px 0 0; padding:10px 12px; text-align:center; font-weight:800; font-size:0.95rem;">
-                4️⃣ استيراد واستعادة JSON الذكي
+                4️⃣ استيراد واستعادة حزمة المشروع (.icrat / .json)
             </div>
             <div class="import-card-body">
                 استعادة كامل بيانات المشروع، أو استيراد تذاكر OpenBIM BCF، أو جداول الأنشطة وسجلات المخاطر بصيغة <code>.json</code>.
             </div>
             """, unsafe_allow_html=True)
-            uploaded_json = st.file_uploader("اختر ملف JSON (.json):", type=["json"], key="json_file_uploader_tab")
+            uploaded_json = st.file_uploader("اختر ملف حزمة المشروع (.icrat / .json):", type=["icrat", "json"], key="json_file_uploader_tab")
             if uploaded_json is not None:
                 try:
                     loaded_data = json.load(uploaded_json)
@@ -6063,6 +6114,43 @@ elif selected_tab == "🏢 استيراد (P6 / IFC / JSON)":
 elif selected_tab == "📄 التقرير والتصدير":
     st.markdown("### 📄 التقارير التنفيذية الرسمية والتصدير (Executive Reports & PDF Brief)")
     st.markdown("<div class='en-subtext'>Official Executive Briefing, Multi-Page Markdown Report & CSV Datasets</div>", unsafe_allow_html=True)
+    
+    # 💾 بطاقة تصدير حزمة المشروع الكاملة (.icrat Snapshot)
+    st.markdown("""
+    <div style="background: linear-gradient(135deg, #0F172A 0%, #1E3A8A 100%); border: 2px solid #3B82F6; border-radius: 14px; padding: 18px 22px; margin-bottom: 20px; color: #FFFFFF; box-shadow: 0 4px 18px rgba(30,58,138,0.25);">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+            <div>
+                <div style="font-size:1.15rem; font-weight:900; color:#FFFFFF; margin-bottom:4px;">
+                    💾 تصدير وحفظ حزمة المشروع الهندسية الكاملة (.icrat Project Snapshot)
+                </div>
+                <div style="font-size:0.85rem; color:#93C5FD; font-weight:700; line-height:1.5;">
+                    احفظ كافة بيانات مشروعك (WBS الأنشطة، سجل المخاطر، تعارضات BIM، مطالبات EOT، الإحداثيات الجغرافية، والمحاكاة) في ملف محلي مشفر عالي الأمان يمكنك استعادته بنقرة واحدة في أي وقت.
+                </div>
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    snap_bytes_tab12 = export_full_project_snapshot_bytes(
+        project_meta=active_meta,
+        activities=st.session_state.activities
+    )
+    snap_fname_tab12 = f"ICRAT_Project_{active_meta.get('governorate', 'Iraq')}_{datetime.now().strftime('%Y%m%d_%H%M')}.icrat"
+    
+    col_snap1, col_snap2 = st.columns([2.5, 1.5])
+    with col_snap1:
+        st.markdown(f"""<div class="subtext-muted" style="margin-top:6px;">حجم الحزمة الجاهزة للتنزيل: <b>{len(snap_bytes_tab12)/1024:.1f} KB</b> • تتضمن <b>{len(st.session_state.activities)}</b> نشاط، <b>{len(st.session_state.risk_register)}</b> بند خطر، و <b>{len(st.session_state.coordination_issues)}</b> تعارض.</div>""", unsafe_allow_html=True)
+    with col_snap2:
+        st.download_button(
+            label="💾 تنزيل حزمة المشروع (.icrat)",
+            data=snap_bytes_tab12,
+            file_name=snap_fname_tab12,
+            mime="application/json",
+            key="btn_download_icrat_tab12",
+            type="primary",
+            use_container_width=True
+        )
+    st.markdown("---")
     
     # حساب بيانات المطالبات والتنسيق للتقرير
     eot_calc_res = get_cached_eot_claims(
