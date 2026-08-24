@@ -2898,10 +2898,62 @@ Iraqi Construction Risk Assessment & Decision Support Platform (ICRAT 2.0)
 </div>"""
         st.markdown(header_info_html, unsafe_allow_html=True)
 
+        
+        st.markdown("""<style>
+        div[data-testid="stForm"] div[data-testid="stTextInput"] div[data-baseweb="input"],
+        div[data-testid="stForm"] div[data-testid="stTextInput"] div[data-baseweb="base-input"],
+        div[data-testid="stForm"] div[data-testid="stTextInput"] input {
+            background-color: #E2E8F0 !important;
+            background: #E2E8F0 !important;
+            color: #0F172A !important;
+            font-weight: 800 !important;
+            font-size: 0.95rem !important;
+            border-radius: 8px !important;
+        }
+
+        div[data-testid="stForm"] div[data-testid="stTextInput"] div[data-baseweb="input"] {
+            border: 2px solid #94A3B8 !important;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.06) !important;
+        }
+
+        div[data-testid="stForm"] div[data-testid="stTextInput"] div[data-baseweb="input"]:focus-within {
+            border-color: #EA580C !important;
+            box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.2) !important;
+            background-color: #F1F5F9 !important;
+        }
+
+        div[data-testid="stForm"] div[data-testid="stTextInput"] input::placeholder {
+            color: #64748B !important;
+            font-weight: 600 !important;
+        }
+
+        div[data-testid="stForm"] div[data-testid="stTextInput"] label,
+        div[data-testid="stForm"] div[data-testid="stTextInput"] label p {
+            font-weight: 800 !important;
+            color: #0F172A !important;
+            font-size: 0.92rem !important;
+        }
+
+        div[data-testid="stForm"] button[kind="primaryFormSubmit"] {
+            background: linear-gradient(135deg, #1E3A8A 0%, #2563EB 100%) !important;
+            color: #FFFFFF !important;
+            font-weight: 900 !important;
+            font-size: 1.05rem !important;
+            border-radius: 8px !important;
+            border: none !important;
+            box-shadow: 0 4px 14px rgba(37,99,235,0.3) !important;
+            padding: 10px 0 !important;
+        }
+        div[data-testid="stForm"] button[kind="primaryFormSubmit"]:hover {
+            background: linear-gradient(135deg, #1D4ED8 0%, #1E40AF 100%) !important;
+            box-shadow: 0 6px 18px rgba(37,99,235,0.45) !important;
+        }
+        </style>""", unsafe_allow_html=True)
+
         with st.form("security_login_form", clear_on_submit=False):
             u_input = st.text_input("👤 اسم المستخدم (Username):", placeholder="أدخل اسم المستخدم المصرح به...")
             p_input = st.text_input("🔑 كلمة المرور (Password):", type="password", placeholder="أدخل كلمة المرور...")
-            submit_btn = st.form_submit_button("🚀 تسجيل الدخول إلى المنصة", use_container_width=True, type="primary")
+            submit_btn = st.form_submit_button("تسجيل الدخول إلى المنصة", use_container_width=True, type="primary")
 
             if submit_btn:
                 u_val = u_input.strip()
