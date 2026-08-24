@@ -75,6 +75,7 @@ def render_centered_table(df: pd.DataFrame, max_height: Optional[int] = 480):
 
 def render_decision_hub_html_grid(df: pd.DataFrame):
     """عرض مصفوفة القرارات الهندسية ISO 31000 بتنسيق HTML/CSS فائق الدقة مع شريط تمرير 2D ورأس ثابت وتفاصيل العناصر المتعارضة (Element ID & Item Name)"""
+    is_dark = st.session_state.get("theme_mode", "ROYAL") == "DARK"
     parts = []
     parts.append('<div class="decision-hub-container" style="max-height: 520px; overflow-y: auto; overflow-x: auto; position: relative; margin: 12px 0;">')
     parts.append('<table class="decision-hub-table">')
@@ -99,33 +100,77 @@ def render_decision_hub_html_grid(df: pd.DataFrame):
     for idx, row in df.iterrows():
         score_val = float(str(row.get("مؤشر الأولوية Ψ", "0")).replace("/100", "").strip() or 0)
         if score_val >= 70:
-            badge_score = f'<span style="background:#FEE2E2; color:#991B1B; padding:3px 8px; border-radius:6px; font-weight:800; font-size:0.82rem;">{row.get("مؤشر الأولوية Ψ")}</span>'
+            s_bg = "#2A0E12" if is_dark else "#FEE2E2"
+            s_col = "#FCA5A5" if is_dark else "#991B1B"
+            s_brd = "#EF4444" if is_dark else "#FCA5A5"
         elif score_val >= 40:
-            badge_score = f'<span style="background:#FEF3C7; color:#92400E; padding:3px 8px; border-radius:6px; font-weight:800; font-size:0.82rem;">{row.get("مؤشر الأولوية Ψ")}</span>'
+            s_bg = "#2A1D08" if is_dark else "#FEF3C7"
+            s_col = "#FDE68A" if is_dark else "#92400E"
+            s_brd = "#F59E0B" if is_dark else "#FCD34D"
         else:
-            badge_score = f'<span style="background:#DCFCE7; color:#166534; padding:3px 8px; border-radius:6px; font-weight:800; font-size:0.82rem;">{row.get("مؤشر الأولوية Ψ")}</span>'
+            s_bg = "#082618" if is_dark else "#DCFCE7"
+            s_col = "#A7F3D0" if is_dark else "#166534"
+            s_brd = "#10B981" if is_dark else "#86EFAC"
+        badge_score = f'<span style="background:{s_bg}; color:{s_col}; border:1px solid {s_brd}; padding:3px 8px; border-radius:6px; font-weight:800; font-size:0.82rem;">{row.get("مؤشر الأولوية Ψ")}</span>'
             
         crit_txt = str(row.get("المسار الحرج", ""))
         if "حرج" in crit_txt:
-            badge_crit = '<span style="background:#FEF2F2; color:#DC2626; border:1px solid #FECACA; padding:3px 8px; border-radius:6px; font-weight:700; font-size:0.78rem;">🔴 حرج (Float=0)</span>'
+            c_bg = "#2A0E12" if is_dark else "#FEF2F2"
+            c_col = "#FCA5A5" if is_dark else "#DC2626"
+            c_brd = "#EF4444" if is_dark else "#FECACA"
+            badge_crit = f'<span style="background:{c_bg}; color:{c_col}; border:1px solid {c_brd}; padding:3px 8px; border-radius:6px; font-weight:800; font-size:0.78rem;">🔴 حرج (Float=0)</span>'
         else:
-            badge_crit = f'<span style="background:#F0FDF4; color:#166534; border:1px solid #BBF7D0; padding:3px 8px; border-radius:6px; font-weight:700; font-size:0.78rem;">{crit_txt}</span>'
+            c_bg = "#082618" if is_dark else "#F0FDF4"
+            c_col = "#A7F3D0" if is_dark else "#166534"
+            c_brd = "#10B981" if is_dark else "#BBF7D0"
+            badge_crit = f'<span style="background:{c_bg}; color:{c_col}; border:1px solid {c_brd}; padding:3px 8px; border-radius:6px; font-weight:800; font-size:0.78rem;">{crit_txt}</span>'
 
-        strat_txt = str(row.get("استراتيجية ISO 31000", "MITIGATE"))
-        strat_bg = "#EDE9FE" if strat_txt == "MITIGATE" else ("#FEE2E2" if strat_txt == "AVOID" else "#DCFCE7")
-        strat_color = "#5B21B6" if strat_txt == "MITIGATE" else ("#991B1B" if strat_txt == "AVOID" else "#166534")
-        badge_strat = f'<span style="background:{strat_bg}; color:{strat_color}; padding:3px 8px; border-radius:6px; font-weight:800; font-size:0.75rem;">{strat_txt}</span>'
+        strat_txt = str(row.get("استراتيجية ISO 31000", "MITIGATE")).upper()
+        if "MITIGATE" in strat_txt:
+            st_bg = "#1E1338" if is_dark else "#EDE9FE"
+            st_col = "#C4B5FD" if is_dark else "#5B21B6"
+            st_brd = "#7C3AED" if is_dark else "#DDD6FE"
+        elif "AVOID" in strat_txt:
+            st_bg = "#2A0E12" if is_dark else "#FEE2E2"
+            st_col = "#FCA5A5" if is_dark else "#991B1B"
+            st_brd = "#EF4444" if is_dark else "#FCA5A5"
+        elif "TRANSFER" in strat_txt:
+            st_bg = "#0B1F35" if is_dark else "#E0F2FE"
+            st_col = "#7DD3FC" if is_dark else "#0369A1"
+            st_brd = "#0284C7" if is_dark else "#BAE6FD"
+        else:
+            st_bg = "#082618" if is_dark else "#DCFCE7"
+            st_col = "#A7F3D0" if is_dark else "#166534"
+            st_brd = "#10B981" if is_dark else "#86EFAC"
+        badge_strat = f'<span style="background:{st_bg}; color:{st_col}; border:1px solid {st_brd}; padding:3px 8px; border-radius:6px; font-weight:800; font-size:0.75rem;">{strat_txt}</span>'
 
         delta_txt = str(row.get("الفارق الذكي (4D Delta)", ""))
         if "تصعيد" in delta_txt or "Float = 0" in delta_txt:
-            badge_delta = f'<span style="background:#FEF2F2; color:#DC2626; border:1px solid #FECACA; padding:3px 8px; border-radius:6px; font-size:0.77rem; font-weight:700;">{delta_txt}</span>'
+            d_bg = "#2A0E12" if is_dark else "#FEF2F2"
+            d_col = "#FCA5A5" if is_dark else "#DC2626"
+            d_brd = "#EF4444" if is_dark else "#FECACA"
+            badge_delta = f'<span style="background:{d_bg}; color:{d_col}; border:1px solid {d_brd}; padding:3px 8px; border-radius:6px; font-size:0.77rem; font-weight:800;">{delta_txt}</span>'
         elif "خفض" in delta_txt or "حماية" in delta_txt:
-            badge_delta = f'<span style="background:#F0FDF4; color:#15803D; border:1px solid #BBF7D0; padding:3px 8px; border-radius:6px; font-size:0.77rem; font-weight:700;">{delta_txt}</span>'
+            d_bg = "#082618" if is_dark else "#F0FDF4"
+            d_col = "#A7F3D0" if is_dark else "#15803D"
+            d_brd = "#10B981" if is_dark else "#BBF7D0"
+            badge_delta = f'<span style="background:{d_bg}; color:{d_col}; border:1px solid {d_brd}; padding:3px 8px; border-radius:6px; font-size:0.77rem; font-weight:800;">{delta_txt}</span>'
         else:
-            badge_delta = f'<span class="badge-neutral-delta">{delta_txt}</span>'
+            d_bg = "#131E35" if is_dark else "#F1F5F9"
+            d_col = "#94A3B8" if is_dark else "#334155"
+            d_brd = "#1E293B" if is_dark else "#CBD5E1"
+            badge_delta = f'<span style="background:{d_bg}; color:{d_col}; border:1px solid {d_brd}; padding:3px 8px; border-radius:6px; font-size:0.77rem; font-weight:800;">{delta_txt}</span>'
 
-        el_id_badge = f'<span class="badge-element-id">{row.get("معرف العناصر (Element ID)", "—")}</span>'
-        item_name_badge = f'<span class="badge-item-name">{row.get("أسماء العناصر (Item Name)", "—")}</span>'
+        el_id_bg = "#131E35" if is_dark else "#F1F5F9"
+        el_id_col = "#38BDF8" if is_dark else "#0F172A"
+        el_id_brd = "#1E3A8A" if is_dark else "#CBD5E1"
+        el_id_badge = f'<span style="font-family:Consolas, monospace; background:{el_id_bg}; color:{el_id_col}; border:1px solid {el_id_brd}; padding:3px 7px; border-radius:6px; font-weight:800; font-size:0.78rem;">{row.get("معرف العناصر (Element ID)", "—")}</span>'
+        
+        item_col = "#FFFFFF" if is_dark else "#0F172A"
+        item_name_badge = f'<span style="color:{item_col}; font-weight:800; font-size:0.84rem;">{row.get("أسماء العناصر (Item Name)", "—")}</span>'
+
+        delay_col = "#FBBF24" if is_dark else "#D97706"
+        cost_col = "#34D399" if is_dark else "#059669"
 
         parts.append('<tr>')
         parts.append(f'<td style="text-align: center; font-weight: 800; white-space: nowrap;">{row.get("كود التعارض")}</td>')
@@ -137,8 +182,8 @@ def render_decision_hub_html_grid(df: pd.DataFrame):
         parts.append(f'<td style="text-align: right;">{badge_delta}</td>')
         parts.append(f'<td style="text-align: right; font-weight: 700;">{row.get("نشاط P6 المتأثر")}</td>')
         parts.append(f'<td style="text-align: center; white-space: nowrap;">{badge_crit}</td>')
-        parts.append(f'<td style="text-align: center; color: #D97706; font-weight: 800; white-space: nowrap;">{row.get("أيام التأخير")}</td>')
-        parts.append(f'<td style="text-align: center; color: #10B981; font-weight: 800; white-space: nowrap;">{row.get("كلفة المعالجة 5D")}</td>')
+        parts.append(f'<td style="text-align: center; color: {delay_col}; font-weight: 800; white-space: nowrap;">{row.get("أيام التأخير")}</td>')
+        parts.append(f'<td style="text-align: center; color: {cost_col}; font-weight: 800; white-space: nowrap;">{row.get("كلفة المعالجة 5D")}</td>')
         parts.append(f'<td style="text-align: right; font-size: 0.84rem; font-weight: 700;">{row.get("العامل التفسيري الأكبر (AI)")}</td>')
         parts.append(f'<td style="text-align: center; white-space: nowrap;">{badge_strat}</td>')
         parts.append(f'<td style="text-align: right; font-size: 0.85rem; font-weight: 700; line-height: 1.45;">{row.get("التوصية الإنشائية")}</td>')
