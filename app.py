@@ -52,13 +52,13 @@ def render_centered_table(df: pd.DataFrame, max_height: Optional[int] = 480):
     html += '<table style="width: 100%; border-collapse: collapse; text-align: center; font-family: Cairo, Segoe UI, sans-serif; font-size: 0.88rem; direction: rtl;">'
     html += '<thead style="position: sticky; top: 0; z-index: 10;"><tr style="background-color: #F1F5F9; border-bottom: 2px solid #94A3B8;">'
     for col in df.columns:
-        html += f'<th style="padding: 12px 14px; text-align: center !important; vertical-align: middle; color: #0F172A; font-weight: 800; white-space: nowrap; border-left: 1px solid #E2E8F0; background: #F1F5F9;">{col}</th>'
+        html += f'<th style="padding: 12px 14px; text-align: center !important; vertical-align: middle; color: #0F172A; font-weight: 800; white-space: nowrap; border-left: 1px solid #CBD5E1; background: #E2E8F0;">{col}</th>'
     html += '</tr></thead><tbody>'
     for idx, row in df.iterrows():
         bg = '#FFFFFF' if idx % 2 == 0 else '#F8FAFC'
-        html += f'<tr style="background-color: {bg}; border-bottom: 1px solid #E2E8F0;">'
+        html += f'<tr style="background-color: {bg}; border-bottom: 1px solid #CBD5E1;">'
         for val in row:
-            html += f'<td style="padding: 10px 14px; text-align: center !important; vertical-align: middle; color: #334155; white-space: nowrap; border-left: 1px solid #F1F5F9; font-weight: 600;">{val}</td>'
+            html += f'<td style="padding: 10px 14px; text-align: center !important; vertical-align: middle; color: #0F172A; white-space: nowrap; border-left: 1px solid #E2E8F0; font-weight: 700;">{val}</td>'
         html += '</tr>'
     html += '</tbody></table></div>'
     st.markdown(html, unsafe_allow_html=True)
@@ -595,22 +595,78 @@ def render_dynamic_theme_engine():
     if current_theme == "ROYAL":
         theme_css = """
         /* ================= 🏛️ THEME 1: ROYAL EXECUTIVE (ULTRA HIGH CONTRAST) ================= */
-        .stApp {
+        :root {
+            --primary-color: #2563EB;
+            --background-color: #F8FAFC;
+            --secondary-background-color: #FFFFFF;
+            --text-color: #0F172A;
+        }
+        .stApp, div[data-testid="stAppViewContainer"], .main {
             background-color: #F8FAFC !important;
             color: #0F172A !important;
         }
+        
+        /* Main Page Typography - 100% Solid Dark Text */
+        .stApp [data-testid="stMarkdownContainer"] p,
+        .stApp [data-testid="stMarkdownContainer"] span,
+        .stApp [data-testid="stMarkdownContainer"] li,
+        .stApp [data-testid="stMarkdownContainer"] div,
+        .stApp [data-testid="stWidgetLabel"] label,
+        .stApp [data-testid="stWidgetLabel"] p,
+        .stApp [data-testid="stWidgetLabel"] span,
+        .stApp div[data-testid="stRadio"] label p,
+        .stApp div[data-testid="stRadio"] span,
+        .stApp div[data-testid="stSelectbox"] label,
+        .stApp div[data-testid="stSlider"] label,
+        .stApp div[data-testid="stSlider"] p,
+        .stApp div[data-testid="stTextInput"] label,
+        .stApp div[data-testid="stNumberInput"] label,
+        .stApp div[data-testid="stExpander"] summary p,
+        .stApp div[data-testid="stExpanderDetails"] p,
+        .stApp div[data-testid="stAlert"] p,
         .stApp p, .stApp li, .stApp label, .stApp td, .stApp th {
             color: #0F172A !important;
-            font-weight: 600;
+            font-weight: 700 !important;
+            opacity: 1 !important;
         }
-        .stApp h1, .stApp h2, .stApp h3, .stApp h4, .stApp h5, .stApp h6 {
+        
+        .stApp h1, .stApp h2, .stApp h3, .stApp h4, .stApp h5, .stApp h6,
+        .stApp [data-testid="stMarkdownContainer"] h1,
+        .stApp [data-testid="stMarkdownContainer"] h2,
+        .stApp [data-testid="stMarkdownContainer"] h3,
+        .stApp [data-testid="stMarkdownContainer"] h4 {
             color: #0B132B !important;
-            font-weight: 800 !important;
+            font-weight: 900 !important;
+            opacity: 1 !important;
         }
-        section[data-testid="stSidebar"] {
+        
+        /* Sidebar Styling - 100% Deep Navy with Pure White Text */
+        section[data-testid="stSidebar"],
+        div[data-testid="stSidebarUserContent"] {
             background-color: #0B132B !important;
             border-left: 2px solid #1E293B !important;
         }
+        
+        section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p,
+        section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] span,
+        section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] li,
+        section[data-testid="stSidebar"] [data-testid="stWidgetLabel"] label,
+        section[data-testid="stSidebar"] [data-testid="stWidgetLabel"] p,
+        section[data-testid="stSidebar"] [data-testid="stWidgetLabel"] span,
+        section[data-testid="stSidebar"] div[data-testid="stRadio"] label,
+        section[data-testid="stSidebar"] div[data-testid="stRadio"] label p,
+        section[data-testid="stSidebar"] div[data-testid="stRadio"] span,
+        section[data-testid="stSidebar"] div[data-testid="stSelectbox"] label,
+        section[data-testid="stSidebar"] div[data-testid="stSlider"] label,
+        section[data-testid="stSidebar"] p,
+        section[data-testid="stSidebar"] label,
+        section[data-testid="stSidebar"] span {
+            color: #FFFFFF !important;
+            font-weight: 800 !important;
+            opacity: 1 !important;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.8) !important;
+        }
+        
         section[data-testid="stSidebar"] h1, 
         section[data-testid="stSidebar"] h2, 
         section[data-testid="stSidebar"] h3, 
@@ -618,103 +674,137 @@ def render_dynamic_theme_engine():
         section[data-testid="stSidebar"] h5,
         section[data-testid="stSidebar"] h6 {
             color: #FFFFFF !important;
-            font-weight: 800 !important;
-            text-shadow: 0 1px 4px rgba(0,0,0,0.6) !important;
+            font-weight: 900 !important;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.9) !important;
         }
-        section[data-testid="stSidebar"] p,
-        section[data-testid="stSidebar"] label,
-        section[data-testid="stSidebar"] span,
-        section[data-testid="stSidebar"] div {
-            color: #FFFFFF !important;
-            font-weight: 700 !important;
-        }
+        
         section[data-testid="stSidebar"] .en-subtext {
             color: #93C5FD !important;
-            font-weight: 700 !important;
+            font-weight: 800 !important;
+            opacity: 1 !important;
         }
-        section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p {
-            color: #E2E8F0 !important;
-            font-weight: 600 !important;
-        }
-        section[data-testid="stSidebar"] div[data-testid="stRadio"] label,
-        section[data-testid="stSidebar"] div[data-testid="stRadio"] label span {
-            color: #FFFFFF !important;
-            font-weight: 700 !important;
-        }
+        
         section[data-testid="stSidebar"] hr {
             border-color: #334155 !important;
         }
+        
+        /* Cards, Tables and Containers */
         .kpi-card, .metric-card, .chart-card, div[data-testid="stMetric"], div[data-testid="stExpander"], .workflow-bar {
             background: #FFFFFF !important;
-            border: 1px solid #CBD5E1 !important;
-            box-shadow: 0 4px 18px rgba(15, 23, 42, 0.05) !important;
+            border: 2px solid #CBD5E1 !important;
+            box-shadow: 0 4px 20px rgba(15, 23, 42, 0.07) !important;
             border-radius: 12px !important;
         }
         .kpi-title {
             color: #1E3A8A !important;
-            font-weight: 800 !important;
+            font-weight: 900 !important;
         }
         .kpi-value {
             color: #0F172A !important;
             font-weight: 900 !important;
         }
         .kpi-desc {
-            color: #475569 !important;
-            font-weight: 700 !important;
+            color: #334155 !important;
+            font-weight: 800 !important;
         }
         .workflow-step {
-            color: #1E293B !important;
-            font-weight: 700 !important;
+            color: #0F172A !important;
+            font-weight: 800 !important;
         }
         .workflow-arrow {
-            color: #94A3B8 !important;
+            color: #64748B !important;
+            font-weight: 800 !important;
         }
         .modern-topbar {
             background: #FFFFFF !important;
-            border: 1px solid #CBD5E1 !important;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.04) !important;
+            border: 2px solid #CBD5E1 !important;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05) !important;
         }
         .modern-topbar .topbar-label {
             color: #334155 !important;
-            font-weight: 700 !important;
+            font-weight: 800 !important;
         }
         .modern-topbar .topbar-val {
             color: #0F172A !important;
-            font-weight: 800 !important;
+            font-weight: 900 !important;
         }
         .stTabs [data-baseweb="tab"] {
             background: #FFFFFF !important;
             color: #0F172A !important;
-            border: 1px solid #CBD5E1 !important;
-            font-weight: 700 !important;
+            border: 2px solid #CBD5E1 !important;
+            font-weight: 800 !important;
         }
         .stTabs [aria-selected="true"] {
             background: linear-gradient(135deg, #1E3A8A, #2563EB) !important;
             color: #FFFFFF !important;
             border-color: #1D4ED8 !important;
-            font-weight: 800 !important;
-            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25) !important;
+            font-weight: 900 !important;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3) !important;
         }
         """
     elif current_theme == "LIGHT":
         theme_css = """
         /* ================= 🏢 THEME 2: MODERN LIGHT (ULTRA HIGH CONTRAST) ================= */
-        .stApp {
+        :root {
+            --primary-color: #1D4ED8;
+            --background-color: #FFFFFF;
+            --secondary-background-color: #F8FAFC;
+            --text-color: #0F172A;
+        }
+        .stApp, div[data-testid="stAppViewContainer"], .main {
             background-color: #FFFFFF !important;
             color: #0F172A !important;
         }
+        
+        .stApp [data-testid="stMarkdownContainer"] p,
+        .stApp [data-testid="stMarkdownContainer"] span,
+        .stApp [data-testid="stMarkdownContainer"] li,
+        .stApp [data-testid="stWidgetLabel"] label,
+        .stApp [data-testid="stWidgetLabel"] p,
+        .stApp [data-testid="stWidgetLabel"] span,
+        .stApp div[data-testid="stRadio"] label p,
+        .stApp div[data-testid="stRadio"] span,
+        .stApp div[data-testid="stSelectbox"] label,
+        .stApp div[data-testid="stSlider"] label,
+        .stApp div[data-testid="stSlider"] p,
+        .stApp div[data-testid="stExpander"] summary p,
+        .stApp div[data-testid="stExpanderDetails"] p,
+        .stApp div[data-testid="stAlert"] p,
         .stApp p, .stApp li, .stApp label, .stApp td, .stApp th {
             color: #0F172A !important;
-            font-weight: 600;
+            font-weight: 700 !important;
+            opacity: 1 !important;
         }
+        
         .stApp h1, .stApp h2, .stApp h3, .stApp h4, .stApp h5, .stApp h6 {
             color: #0F172A !important;
-            font-weight: 800 !important;
+            font-weight: 900 !important;
+            opacity: 1 !important;
         }
-        section[data-testid="stSidebar"] {
+        
+        section[data-testid="stSidebar"],
+        div[data-testid="stSidebarUserContent"] {
             background-color: #F1F5F9 !important;
             border-left: 2px solid #CBD5E1 !important;
         }
+        
+        section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p,
+        section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] span,
+        section[data-testid="stSidebar"] [data-testid="stWidgetLabel"] label,
+        section[data-testid="stSidebar"] [data-testid="stWidgetLabel"] p,
+        section[data-testid="stSidebar"] div[data-testid="stRadio"] label,
+        section[data-testid="stSidebar"] div[data-testid="stRadio"] label p,
+        section[data-testid="stSidebar"] div[data-testid="stRadio"] span,
+        section[data-testid="stSidebar"] div[data-testid="stSelectbox"] label,
+        section[data-testid="stSidebar"] div[data-testid="stSlider"] label,
+        section[data-testid="stSidebar"] p,
+        section[data-testid="stSidebar"] label,
+        section[data-testid="stSidebar"] span {
+            color: #0F172A !important;
+            font-weight: 800 !important;
+            opacity: 1 !important;
+        }
+        
         section[data-testid="stSidebar"] h1, 
         section[data-testid="stSidebar"] h2, 
         section[data-testid="stSidebar"] h3, 
@@ -722,40 +812,27 @@ def render_dynamic_theme_engine():
         section[data-testid="stSidebar"] h5,
         section[data-testid="stSidebar"] h6 {
             color: #0F172A !important;
-            font-weight: 800 !important;
+            font-weight: 900 !important;
         }
-        section[data-testid="stSidebar"] p,
-        section[data-testid="stSidebar"] label,
-        section[data-testid="stSidebar"] span,
-        section[data-testid="stSidebar"] div {
-            color: #0F172A !important;
-            font-weight: 700 !important;
-        }
+        
         section[data-testid="stSidebar"] .en-subtext {
             color: #1E40AF !important;
-            font-weight: 700 !important;
+            font-weight: 800 !important;
         }
-        section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p {
-            color: #1E293B !important;
-            font-weight: 600 !important;
-        }
-        section[data-testid="stSidebar"] div[data-testid="stRadio"] label,
-        section[data-testid="stSidebar"] div[data-testid="stRadio"] label span {
-            color: #0F172A !important;
-            font-weight: 700 !important;
-        }
+        
         section[data-testid="stSidebar"] hr {
             border-color: #CBD5E1 !important;
         }
+        
         .kpi-card, .metric-card, .chart-card, div[data-testid="stMetric"], div[data-testid="stExpander"], .workflow-bar {
             background: #F8FAFC !important;
-            border: 1px solid #CBD5E1 !important;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02) !important;
+            border: 2px solid #CBD5E1 !important;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03) !important;
             border-radius: 12px !important;
         }
         .kpi-title {
             color: #1E40AF !important;
-            font-weight: 800 !important;
+            font-weight: 900 !important;
         }
         .kpi-value {
             color: #0F172A !important;
@@ -763,61 +840,107 @@ def render_dynamic_theme_engine():
         }
         .kpi-desc {
             color: #334155 !important;
-            font-weight: 700 !important;
+            font-weight: 800 !important;
         }
         .workflow-step {
             color: #0F172A !important;
-            font-weight: 700 !important;
+            font-weight: 800 !important;
         }
         .workflow-arrow {
-            color: #94A3B8 !important;
+            color: #64748B !important;
         }
         .modern-topbar {
             background: #F8FAFC !important;
-            border: 1px solid #CBD5E1 !important;
+            border: 2px solid #CBD5E1 !important;
         }
         .modern-topbar .topbar-label {
             color: #334155 !important;
-            font-weight: 700 !important;
+            font-weight: 800 !important;
         }
         .modern-topbar .topbar-val {
             color: #0F172A !important;
-            font-weight: 800 !important;
+            font-weight: 900 !important;
         }
         .stTabs [data-baseweb="tab"] {
             background: #F8FAFC !important;
             color: #0F172A !important;
-            border: 1px solid #CBD5E1 !important;
-            font-weight: 700 !important;
+            border: 2px solid #CBD5E1 !important;
+            font-weight: 800 !important;
         }
         .stTabs [aria-selected="true"] {
             background: #1D4ED8 !important;
             color: #FFFFFF !important;
             border-color: #1E40AF !important;
-            font-weight: 800 !important;
-            box-shadow: 0 4px 12px rgba(29, 78, 216, 0.2) !important;
+            font-weight: 900 !important;
+            box-shadow: 0 4px 12px rgba(29, 78, 216, 0.25) !important;
         }
         """
     else:  # DARK
         theme_css = """
         /* ================= 🧊 THEME 3: DIGITAL TWIN DARK (ULTRA HIGH CONTRAST) ================= */
-        .stApp {
+        :root {
+            --primary-color: #38BDF8;
+            --background-color: #060A14;
+            --secondary-background-color: #0E1626;
+            --text-color: #FFFFFF;
+        }
+        .stApp, div[data-testid="stAppViewContainer"], .main {
             background-color: #060A14 !important;
             color: #FFFFFF !important;
         }
+        
+        .stApp [data-testid="stMarkdownContainer"] p,
+        .stApp [data-testid="stMarkdownContainer"] span,
+        .stApp [data-testid="stMarkdownContainer"] li,
+        .stApp [data-testid="stMarkdownContainer"] div,
+        .stApp [data-testid="stWidgetLabel"] label,
+        .stApp [data-testid="stWidgetLabel"] p,
+        .stApp [data-testid="stWidgetLabel"] span,
+        .stApp div[data-testid="stRadio"] label p,
+        .stApp div[data-testid="stRadio"] span,
+        .stApp div[data-testid="stSelectbox"] label,
+        .stApp div[data-testid="stSlider"] label,
+        .stApp div[data-testid="stSlider"] p,
+        .stApp div[data-testid="stExpander"] summary p,
+        .stApp div[data-testid="stExpanderDetails"] p,
+        .stApp div[data-testid="stAlert"] p,
         .stApp p, .stApp li, .stApp label, .stApp td, .stApp th {
-            color: #F8FAFC !important;
-            font-weight: 600;
+            color: #FFFFFF !important;
+            font-weight: 700 !important;
+            opacity: 1 !important;
         }
+        
         .stApp h1, .stApp h2, .stApp h3, .stApp h4, .stApp h5, .stApp h6 {
             color: #FFFFFF !important;
-            font-weight: 800 !important;
-            text-shadow: 0 1px 6px rgba(0,0,0,0.8) !important;
+            font-weight: 900 !important;
+            text-shadow: 0 1px 8px rgba(0,0,0,0.9) !important;
+            opacity: 1 !important;
         }
-        section[data-testid="stSidebar"] {
+        
+        section[data-testid="stSidebar"],
+        div[data-testid="stSidebarUserContent"] {
             background-color: #03060D !important;
             border-left: 2px solid #1E293B !important;
         }
+        
+        section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p,
+        section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] span,
+        section[data-testid="stSidebar"] [data-testid="stWidgetLabel"] label,
+        section[data-testid="stSidebar"] [data-testid="stWidgetLabel"] p,
+        section[data-testid="stSidebar"] div[data-testid="stRadio"] label,
+        section[data-testid="stSidebar"] div[data-testid="stRadio"] label p,
+        section[data-testid="stSidebar"] div[data-testid="stRadio"] span,
+        section[data-testid="stSidebar"] div[data-testid="stSelectbox"] label,
+        section[data-testid="stSidebar"] div[data-testid="stSlider"] label,
+        section[data-testid="stSidebar"] p,
+        section[data-testid="stSidebar"] label,
+        section[data-testid="stSidebar"] span {
+            color: #FFFFFF !important;
+            font-weight: 800 !important;
+            opacity: 1 !important;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.8) !important;
+        }
+        
         section[data-testid="stSidebar"] h1, 
         section[data-testid="stSidebar"] h2, 
         section[data-testid="stSidebar"] h3, 
@@ -825,42 +948,30 @@ def render_dynamic_theme_engine():
         section[data-testid="stSidebar"] h5,
         section[data-testid="stSidebar"] h6 {
             color: #FFFFFF !important;
-            font-weight: 800 !important;
-            text-shadow: 0 1px 4px rgba(0,0,0,0.7) !important;
+            font-weight: 900 !important;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.9) !important;
         }
-        section[data-testid="stSidebar"] p,
-        section[data-testid="stSidebar"] label,
-        section[data-testid="stSidebar"] span,
-        section[data-testid="stSidebar"] div {
-            color: #FFFFFF !important;
-            font-weight: 700 !important;
-        }
+        
         section[data-testid="stSidebar"] .en-subtext {
             color: #38BDF8 !important;
-            font-weight: 700 !important;
+            font-weight: 800 !important;
+            opacity: 1 !important;
         }
-        section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p {
-            color: #F1F5F9 !important;
-            font-weight: 600 !important;
-        }
-        section[data-testid="stSidebar"] div[data-testid="stRadio"] label,
-        section[data-testid="stSidebar"] div[data-testid="stRadio"] label span {
-            color: #FFFFFF !important;
-            font-weight: 700 !important;
-        }
+        
         section[data-testid="stSidebar"] hr {
             border-color: #1E293B !important;
         }
+        
         .kpi-card, .metric-card, .chart-card, div[data-testid="stMetric"], div[data-testid="stExpander"], .workflow-bar {
             background: #0E1626 !important;
-            border: 1px solid #1E293B !important;
+            border: 2px solid #1E293B !important;
             color: #FFFFFF !important;
-            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45) !important;
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.5) !important;
             border-radius: 12px !important;
         }
         .kpi-title {
             color: #38BDF8 !important;
-            font-weight: 800 !important;
+            font-weight: 900 !important;
         }
         .kpi-value {
             color: #FFFFFF !important;
@@ -882,12 +993,12 @@ def render_dynamic_theme_engine():
         }
         div[data-testid="stMetric"] [data-testid="stMetricValue"] {
             color: #38BDF8 !important;
-            font-weight: 800 !important;
+            font-weight: 900 !important;
         }
         .modern-topbar {
             background: #0E1626 !important;
-            border: 1px solid #1E293B !important;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.3) !important;
+            border: 2px solid #1E293B !important;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.35) !important;
         }
         .modern-topbar .topbar-label {
             color: #94A3B8 !important;
@@ -895,20 +1006,20 @@ def render_dynamic_theme_engine():
         }
         .modern-topbar .topbar-val {
             color: #38BDF8 !important;
-            font-weight: 800 !important;
+            font-weight: 900 !important;
         }
         .stTabs [data-baseweb="tab"] {
             background: #0E1626 !important;
             color: #E2E8F0 !important;
-            border: 1px solid #1E293B !important;
-            font-weight: 700 !important;
+            border: 2px solid #1E293B !important;
+            font-weight: 800 !important;
         }
         .stTabs [aria-selected="true"] {
             background: #2563EB !important;
             color: #FFFFFF !important;
             border-color: #60A5FA !important;
-            font-weight: 800 !important;
-            box-shadow: 0 0 12px rgba(37, 99, 235, 0.5) !important;
+            font-weight: 900 !important;
+            box-shadow: 0 0 14px rgba(37, 99, 235, 0.6) !important;
         }
         """
     st.markdown(f"<style>{theme_css}</style>", unsafe_allow_html=True)
