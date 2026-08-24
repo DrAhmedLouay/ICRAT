@@ -2792,65 +2792,32 @@ def _get_login_banner_base64():
     return None
 
 def render_login_portal():
-    """بوابة الأمان والتحقق الرقمي المدمجة لحماية المنصة على الإنترنت مع نظام الاستعادة التلقائية للجلسة"""
-    # 🎯 0. استرجاع الجلسة التلقائي الفوري من المتصفح (localStorage & Cookies) عند عمل Refresh
+    """بوابة الأمان والتحقق الرقمي لتسجيل الدخول إلى المنصة"""
+    # تنظيف أي كوكيز أو قيم جلسة سابقة عند التواجد في شاشة تسجيل الدخول
     st.components.v1.html("""<script>
-(function() {
-    try {
-        function getCookie(name) {
-            const v = '; ' + document.cookie;
-            const p = v.split('; ' + name + '=');
-            if (p.length === 2) return decodeURIComponent(p.pop().split(';').shift());
-            return null;
-        }
-
-        function getStored(key) {
-            try {
-                if (window.localStorage && window.localStorage.getItem(key)) return window.localStorage.getItem(key);
-            } catch(e) {}
-            try {
-                if (window.parent && window.parent.localStorage && window.parent.localStorage.getItem(key)) return window.parent.localStorage.getItem(key);
-            } catch(e) {}
-            try {
-                if (window.top && window.top.localStorage && window.top.localStorage.getItem(key)) return window.top.localStorage.getItem(key);
-            } catch(e) {}
-            try {
-                const c = getCookie(key);
-                if (c) return c;
-            } catch(e) {}
-            return null;
-        }
-
-        const token = getStored('icrat_session_token');
-        const user = getStored('icrat_session_user');
-        const tab = getStored('icrat_active_tab') || '📊 لوحة القيادة';
-        const theme = getStored('icrat_theme_mode') || 'ROYAL';
-        const layout = getStored('icrat_layout_mode') || 'MODERN';
-
-        if (token && user) {
-            let targetWin = window;
-            try {
-                if (window.parent && window.parent.location && window.parent.location.href) targetWin = window.parent;
-            } catch(e) {}
-            try {
-                if (window.top && window.top.location && window.top.location.href) targetWin = window.top;
-            } catch(e) {}
-
-            const u = new URL(targetWin.location.href);
-            if (!u.searchParams.has("session") || u.searchParams.get("session") !== token) {
-                u.searchParams.set("session", token);
-                u.searchParams.set("user", user);
-                u.searchParams.set("tab", tab);
-                u.searchParams.set("theme", theme);
-                u.searchParams.set("layout", layout);
-                targetWin.location.replace(u.toString());
+    (function() {
+        try {
+            function clearAll(w) {
+                if (!w) return;
+                try {
+                    if (w.localStorage) {
+                        w.localStorage.removeItem('icrat_session_user');
+                        w.localStorage.removeItem('icrat_session_token');
+                    }
+                } catch(e) {}
+                try {
+                    if (w.document) {
+                        w.document.cookie = "icrat_session_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+                        w.document.cookie = "icrat_session_user=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+                    }
+                } catch(e) {}
             }
-        }
-    } catch(err) {
-        console.error("ICRAT session auto-restore:", err);
-    }
-})();
-</script>""", height=0, width=0)
+            clearAll(window);
+            clearAll(window.parent);
+            clearAll(window.top);
+        } catch(e) {}
+    })();
+    </script>""", height=0, width=0)
 
     col_pad1, col_center, col_pad2 = st.columns([1, 2.2, 1])
     with col_center:
@@ -3171,35 +3138,9 @@ with st.sidebar:
     if st.button("🔒 تسجيل الخروج (Lock)", key="btn_auth_logout", use_container_width=True):
         st.session_state["authenticated"] = False
         st.session_state.pop("logged_user", None)
+        st.session_state.pop("user_role", None)
+        st.session_state.pop("user_fullname", None)
         st.query_params.clear()
-        st.components.v1.html("""<script>
-        (function() {
-            function clearStorage(w) {
-                if (!w) return;
-                try {
-                    if (w.localStorage) {
-                        w.localStorage.removeItem('icrat_session_user');
-                        w.localStorage.removeItem('icrat_session_token');
-                        w.localStorage.removeItem('icrat_active_tab');
-                        w.localStorage.removeItem('icrat_theme_mode');
-                        w.localStorage.removeItem('icrat_layout_mode');
-                    }
-                } catch(e) {}
-                try {
-                    if (w.document) {
-                        w.document.cookie = "icrat_session_token=; path=/; max-age=0";
-                        w.document.cookie = "icrat_session_user=; path=/; max-age=0";
-                        w.document.cookie = "icrat_active_tab=; path=/; max-age=0";
-                        w.document.cookie = "icrat_theme_mode=; path=/; max-age=0";
-                        w.document.cookie = "icrat_layout_mode=; path=/; max-age=0";
-                    }
-                } catch(e) {}
-            }
-            clearStorage(window);
-            clearStorage(window.parent);
-            clearStorage(window.top);
-        })();
-        </script>""", height=0, width=0)
         st.rerun()
 
     st.markdown("### ⚙️ لوحة التحكم والإعدادات")
