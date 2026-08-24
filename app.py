@@ -942,6 +942,54 @@ if "map_lat" in st.query_params and "map_lon" in st.query_params:
     except Exception as e:
         pass
 
+# ----------------- 🔒 SECURITY & ACCESS CONTROL GATEWAY -----------------
+AUTHORIZED_CREDENTIALS = {
+    "admin": "ICRAT2026@Secure",
+    "drahmed": "IraqRisk#2026",
+    "engineer": "Bim@2026"
+}
+
+def render_login_portal():
+    """بوابة الأمان والتحقق الرقمي المدمجة لحماية المنصة على الإنترنت"""
+    st.markdown("""
+    <div style="max-width: 500px; margin: 30px auto 16px auto; background: #FFFFFF; border-radius: 18px; padding: 28px 32px; box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08); border: 1px solid #E2E8F0; text-align: center; direction: rtl;">
+        <div style="font-size: 2.8rem; margin-bottom: 6px;">🏛️</div>
+        <h2 style="color: #0F172A; font-weight: 800; font-size: 1.35rem; margin-bottom: 4px;">منصة تقييم المخاطر الإنشائية (ICRAT 2.0)</h2>
+        <div style="color: #2563EB; font-size: 0.86rem; margin-bottom: 16px; font-weight: 700;">🔒 بوابة الدخول المعتمدة للمهندسين والمشرفين</div>
+        <div style="background: #F8FAFC; border-radius: 10px; padding: 10px 14px; border: 1px solid #E2E8F0; font-size: 0.82rem; color: #475569; margin-bottom: 12px; line-height: 1.5;">
+            هذه المنصة محمية بنظام التحقق الرقمي المشفر. يرجى إدخال بيانات الاعتماد المصرح بها للوصول إلى أدوات ومحركات المشروع.
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    col_pad1, col_form, col_pad2 = st.columns([1, 1.8, 1])
+    with col_form:
+        with st.form("security_login_form", clear_on_submit=False):
+            u_input = st.text_input("👤 اسم المستخدم (Username):", placeholder="أدخل اسم المستخدم المصرح به...")
+            p_input = st.text_input("🔑 كلمة المرور (Password):", type="password", placeholder="أدخل كلمة المرور...")
+            submit_btn = st.form_submit_button("🚀 تسجيل الدخول إلى المنصة", use_container_width=True, type="primary")
+
+            if submit_btn:
+                u_val = u_input.strip()
+                p_val = p_input.strip()
+                if u_val in AUTHORIZED_CREDENTIALS and AUTHORIZED_CREDENTIALS[u_val] == p_val:
+                    st.session_state["authenticated"] = True
+                    st.session_state["logged_user"] = u_val
+                    st.success(f"✅ تم التحقق بنجاح! مرحباً بك المهندس {u_val}")
+                    st.rerun()
+                else:
+                    st.error("❌ اسم المستخدم أو كلمة المرور غير صحيحة! يرجى التحقق وإعادة المحاولة.")
+
+    st.markdown("""
+    <div style="text-align: center; font-size: 0.76rem; color: #94A3B8; margin-top: 24px; direction: rtl;">
+        جمهورية العراق • وزارة الإعمار والإسكان والبلديات العامة • بوابة ICRAT 2.0 المؤمنة
+    </div>
+    """, unsafe_allow_html=True)
+    st.stop()
+
+if not st.session_state.get("authenticated", False):
+    render_login_portal()
+
 if "ifc_spatial_elements" not in st.session_state:
     st.session_state.ifc_spatial_elements = []
 if "uploaded_ifc_bytes" not in st.session_state:
@@ -1017,6 +1065,20 @@ with st.sidebar:
         st.image(logo_path, use_container_width=True)
     else:
         st.image("https://img.icons8.com/isometric/512/crane.png", width=65)
+
+    st.markdown(f"""
+    <div style="background: #F8FAFC; border-radius: 10px; padding: 8px 12px; border: 1px solid #E2E8F0; margin-top: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; direction: rtl;">
+        <div>
+            <div style="font-size: 0.72rem; color: #64748B; font-weight: 600;">المستخدم النشط:</div>
+            <div style="font-size: 0.85rem; color: #0F172A; font-weight: 800;">👤 {st.session_state.get('logged_user', 'Admin')}</div>
+        </div>
+        <span style="background: #DCFCE7; color: #166534; padding: 2px 8px; border-radius: 6px; font-size: 0.72rem; font-weight: 700; border: 1px solid #BBF7D0;">🟢 مصرح</span>
+    </div>
+    """, unsafe_allow_html=True)
+    if st.button("🔒 تسجيل الخروج (Lock)", key="btn_auth_logout", use_container_width=True):
+        st.session_state["authenticated"] = False
+        st.session_state.pop("logged_user", None)
+        st.rerun()
 
     st.markdown("### ⚙️ لوحة التحكم والإعدادات")
     st.markdown("<div class='en-subtext'>ICRAT 2.0 • Advanced Risk & Claims Engine</div>", unsafe_allow_html=True)
