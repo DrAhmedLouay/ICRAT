@@ -12,6 +12,8 @@ import plotly.graph_objects as go
 import plotly.express as px
 import json
 import importlib
+import hmac
+import hashlib
 from datetime import datetime
 import arabic_reshaper
 import math
@@ -1765,7 +1767,78 @@ def process_universal_json_upload(data: Any, filename: str) -> Dict[str, Any]:
         "error": "لم يتم التعرف على بنية ملف JSON المرفوع. يرجى التأكد من احتوائه على أنشطة (activities/tasks)، تذاكر (topics/BCF)، أو سجل مخاطر (risks)."
     }
 
-# ----------------- SESSION STATE INITIALIZATION -----------------
+# ----------------- SESSION STATE & NAVIGATION CONSTANTS -----------------
+TAB_OPTIONS = [
+    "📊 لوحة القيادة",
+    "📈 منحنيات S-Curve",
+    "🌪️ تحليل الحساسية",
+    "🧩 التنسيق (ISO 31000)",
+    "⚖️ المطالبات والتمديد (EOT)",
+    "🔮 مقارن السيناريوهات (What-If)",
+    "🤖 المستشار الذكي والمخاطبات",
+    "🧊 عارض BIM 3D التفاعلي",
+    "📅 مخطط جانت وبريمافيرا (Gantt)",
+    "🛡️ مصفوفة المخاطر",
+    "🏢 استيراد (P6 / IFC / JSON)",
+    "📄 التقرير والتصدير"
+]
+
+# ----------------- 🔒 SECURITY & ACCESS CONTROL GATEWAY -----------------
+AUTHORIZED_CREDENTIALS = {
+    "admin": "ICRAT2026@Secure",
+    "drahmed": "IraqRisk#2026",
+    "engineer": "Bim@2026",
+    "ruba": "Ruba@2026"
+}
+
+SECRET_SALT = "ICRAT_2026_IRAQ_CONSTRUCTION_RISK_SECURE_TOKEN_SALT_KEY"
+
+def generate_session_token(username: str) -> str:
+    """توليد رمز مصادقة مشفر للمستخدم لتمكين استعادة الجلسة بأمان عبر التحديثات (Browser Refresh)"""
+    key = SECRET_SALT.encode('utf-8')
+    u_clean = str(username).strip().lower()
+    pw = AUTHORIZED_CREDENTIALS.get(u_clean, '')
+    msg = f"{u_clean}:{pw}".encode('utf-8')
+    return hmac.new(key, msg, hashlib.sha256).hexdigest()[:32]
+
+def verify_session_token(username: str, token: str) -> bool:
+    """التحقق من صحة رمز الجلسة المسترجع من المتصفح لضمان أمان المصادقة"""
+    if not username or not token:
+        return False
+    u_key = str(username).strip().lower()
+    if u_key not in AUTHORIZED_CREDENTIALS:
+        return False
+    expected_token = generate_session_token(u_key)
+    return hmac.compare_digest(expected_token, str(token).strip())
+
+# 🎯 1. استرجاع المصادقة وحالة الجلسة تلقائياً عند عمل Refresh أو إعادة تحميل الصفحة
+if "session" in st.query_params and "user" in st.query_params:
+    q_user = str(st.query_params["user"]).strip()
+    q_token = str(st.query_params["session"]).strip()
+    if verify_session_token(q_user, q_token):
+        st.session_state["authenticated"] = True
+        st.session_state["logged_user"] = q_user
+
+# 🎯 2. استرجاع التبويب النشط والمظهر ونمط العرض ونوع المشروع من رابط URL عند عمل Refresh
+if "tab" in st.query_params and st.query_params["tab"] in TAB_OPTIONS:
+    st.session_state["active_nav_tab"] = st.query_params["tab"]
+    st.session_state["pills_nav_tab"] = st.query_params["tab"]
+
+if "theme" in st.query_params and st.query_params["theme"] in ["ROYAL", "LIGHT", "DARK"]:
+    st.session_state["theme_mode"] = st.query_params["theme"]
+
+if "layout" in st.query_params and st.query_params["layout"] in ["MODERN", "CLASSIC"]:
+    st.session_state["ui_layout_mode"] = st.query_params["layout"]
+
+if "isrs_mode" in st.query_params and st.query_params["isrs_mode"] in ["COMPARE", "ADVANCED", "STANDARD"]:
+    st.session_state["isrs_eval_mode"] = st.query_params["isrs_mode"]
+
+if "proj_src" in st.query_params and st.query_params["proj_src"] in ["SAMPLE", "CUSTOM"]:
+    st.session_state["project_source"] = st.query_params["proj_src"]
+
+if "sample" in st.query_params and st.query_params["sample"] in project_samples.SAMPLE_PROJECTS:
+    st.session_state["selected_sample_key"] = st.query_params["sample"]
+
 # 🎯 معالجة التقاط الإحداثيات المباشرة من نقرة الخريطة التفاعلية مع البقاء بنفس التبويب
 if "map_lat" in st.query_params and "map_lon" in st.query_params:
     try:
@@ -1790,17 +1863,12 @@ if "map_lat" in st.query_params and "map_lon" in st.query_params:
         st.session_state["gis_gov_selector"] = q_gov
         
         st.session_state.last_import_msg = f"🎯 تم بنجاح التقاط وتحديث إحداثيات الموقع مباشرة من الخريطة: ({q_lat:.4f}° N, {q_lon:.4f}° E) — أقرب محافظة: {iraq_georisk_engine.IRAQ_GOVERNORATES_DB[q_gov]['name_ar']}"
-        st.query_params.clear()
+        if "map_lat" in st.query_params:
+            del st.query_params["map_lat"]
+        if "map_lon" in st.query_params:
+            del st.query_params["map_lon"]
     except Exception as e:
         pass
-
-# ----------------- 🔒 SECURITY & ACCESS CONTROL GATEWAY -----------------
-AUTHORIZED_CREDENTIALS = {
-    "admin": "ICRAT2026@Secure",
-    "drahmed": "IraqRisk#2026",
-    "engineer": "Bim@2026",
-    "ruba": "Ruba@2026"
-}
 
 def _get_login_banner_base64():
     banner_path = os.path.join(os.path.dirname(__file__), "icrat_login_banner.jpg")
@@ -1906,6 +1974,12 @@ Iraqi Construction Risk Assessment & Decision Support Platform (ICRAT 2.0)
                 if u_key in AUTHORIZED_CREDENTIALS and AUTHORIZED_CREDENTIALS[u_key] == p_val:
                     st.session_state["authenticated"] = True
                     st.session_state["logged_user"] = u_val
+                    token = generate_session_token(u_key)
+                    st.query_params["session"] = token
+                    st.query_params["user"] = u_val
+                    st.query_params["tab"] = st.session_state.get("active_nav_tab", "📊 لوحة القيادة")
+                    st.query_params["theme"] = st.session_state.get("theme_mode", "ROYAL")
+                    st.query_params["layout"] = st.session_state.get("ui_layout_mode", "MODERN")
                     st.success(f"✅ تم التحقق بنجاح! مرحباً بك {u_val}")
                     st.rerun()
                 else:
@@ -2045,6 +2119,7 @@ with st.sidebar:
     if st.button("🔒 تسجيل الخروج (Lock)", key="btn_auth_logout", use_container_width=True):
         st.session_state["authenticated"] = False
         st.session_state.pop("logged_user", None)
+        st.query_params.clear()
         st.rerun()
 
     st.markdown("### ⚙️ لوحة التحكم والإعدادات")
@@ -2064,6 +2139,7 @@ with st.sidebar:
         key="radio_ui_mode_choice"
     )
     st.session_state.ui_layout_mode = "MODERN" if "🌟" in ui_choice else "CLASSIC"
+    st.query_params["layout"] = st.session_state.ui_layout_mode
     st.divider()
 
     st.markdown("##### 🎨 المظهر والتناسق اللوني (Design Theme)")
@@ -2087,6 +2163,7 @@ with st.sidebar:
         st.session_state.theme_mode = "LIGHT"
     else:
         st.session_state.theme_mode = "DARK"
+    st.query_params["theme"] = st.session_state.theme_mode
     if prev_theme != st.session_state.theme_mode:
         st.rerun()
     st.divider()
@@ -2108,6 +2185,7 @@ with st.sidebar:
         st.session_state.isrs_eval_mode = "ADVANCED"
     else:
         st.session_state.isrs_eval_mode = "STANDARD"
+    st.query_params["isrs_mode"] = st.session_state.isrs_eval_mode
     st.divider()
 
     mode_options = ["نماذج مشاريع عراقية جاهزة", "المشروع المخصص / المستورد"]
@@ -2122,6 +2200,7 @@ with st.sidebar:
 
     if proj_mode == "نماذج مشاريع عراقية جاهزة":
         st.session_state.project_source = "SAMPLE"
+        st.query_params["proj_src"] = "SAMPLE"
         sample_options = {
             "HOSPITAL_BAGHDAD": "🏥 مستشفى تعليمي 400 سرير (بغداد)",
             "SEWER_BASRA": "🌊 شبكات مجاري ومحطة معالجة (البصرة)",
@@ -2134,6 +2213,7 @@ with st.sidebar:
             format_func=lambda k: sample_options[k],
             index=list(sample_options.keys()).index(st.session_state.selected_sample_key)
         )
+        st.query_params["sample"] = chosen_sample
         if chosen_sample != st.session_state.selected_sample_key:
             st.session_state.selected_sample_key = chosen_sample
             sample_data = project_samples.SAMPLE_PROJECTS[chosen_sample]
@@ -2148,6 +2228,7 @@ with st.sidebar:
         active_meta = project_samples.SAMPLE_PROJECTS[st.session_state.selected_sample_key]
     else:
         st.session_state.project_source = "CUSTOM"
+        st.query_params["proj_src"] = "CUSTOM"
         active_meta = st.session_state.custom_project_meta
 
         st.markdown("""
@@ -2715,6 +2796,8 @@ if layout_mode == "MODERN":
     if not selected_tab:
         selected_tab = hub_tools[0]
     st.session_state.active_nav_tab = selected_tab
+    if st.query_params.get("tab") != selected_tab:
+        st.query_params["tab"] = selected_tab
 
 else:
     # النمط الكلاسيكي الأصلي
@@ -2735,6 +2818,8 @@ else:
     if not selected_tab:
         selected_tab = "📊 لوحة القيادة"
     st.session_state.active_nav_tab = selected_tab
+    if st.query_params.get("tab") != selected_tab:
+        st.query_params["tab"] = selected_tab
 
 # ----------------- TAB 1: DASHBOARD & ISRS -----------------
 if selected_tab == "📊 لوحة القيادة":
