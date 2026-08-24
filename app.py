@@ -163,10 +163,10 @@ def render_iso31000_matrix_html(issues):
     l_labels = {5: '5-شبه مؤكد', 4: '4-مرجح', 3: '3-متوسط', 2: '2-محتمل', 1: '1-نادر'}
     c_labels = {1: '1-ضئيل', 2: '2-طفيف', 3: '3-متوسط', 4: '4-كبير', 5: '5-كارثي'}
 
-    html = '<div style="background:#FFFFFF; border:1px solid #CBD5E1; border-radius:14px; padding:16px; box-shadow:0 2px 10px rgba(0,0,0,0.04); margin-bottom:15px; direction:rtl;">'
+    html = '<div class="matrix-container-card">'
     html += '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid #E2E8F0; padding-bottom:8px;">'
-    html += '<b style="font-size:1.02rem; color:#0F172A;">🎯 مصفوفة تقييم التعارضات والتنسيق (ISO 31000:2018)</b>'
-    html += '<span style="font-size:0.8rem; color:#64748B; font-weight:700;">الاحتمالية × الشدة</span>'
+    html += '<b class="matrix-hdr-title">🎯 مصفوفة تقييم التعارضات والتنسيق (ISO 31000:2018)</b>'
+    html += '<span class="matrix-hdr-sub">الاحتمالية × الشدة</span>'
     html += '</div>'
     
     html += '<div style="overflow-x:auto;">'
@@ -175,11 +175,11 @@ def render_iso31000_matrix_html(issues):
     html += '<thead><tr>'
     html += '<th style="background:#0F172A; color:#F8FAFC; padding:10px 8px; border-radius:8px; font-size:0.82rem; min-width:110px;">الاحتمالية ↓ / الشدة ←</th>'
     for c in range(1, 6):
-        html += f'<th style="background:#F1F5F9; color:#1E293B; padding:10px 8px; border-radius:8px; font-size:0.84rem; font-weight:800; border:1px solid #CBD5E1; min-width:90px;">{c_labels[c]}</th>'
+        html += f'<th class="matrix-th">{c_labels[c]}</th>'
     html += '</tr></thead><tbody>'
 
     for l in range(5, 0, -1):
-        html += f'<tr><td style="background:#F1F5F9; color:#1E293B; padding:10px 8px; border-radius:8px; font-weight:800; font-size:0.84rem; border:1px solid #CBD5E1;">{l_labels[l]}</td>'
+        html += f'<tr><td class="matrix-th">{l_labels[l]}</td>'
         for c in range(1, 6):
             score = l * c
             cell_issues = grid.get((l, c), [])
@@ -240,10 +240,10 @@ def render_risk_matrix_html(risks):
     p_labels = {5: '5-شبه مؤكد', 4: '4-مرجح', 3: '3-متوسط', 2: '2-محتمل', 1: '1-نادر'}
     i_labels = {1: '1-ضئيل', 2: '2-منخفض', 3: '3-متوسط', 4: '4-عالي', 5: '5-كارثي'}
 
-    html = '<div style="background:#FFFFFF; border:1px solid #CBD5E1; border-radius:14px; padding:16px; box-shadow:0 2px 10px rgba(0,0,0,0.04); margin-bottom:15px; direction:rtl;">'
+    html = '<div class="matrix-container-card">'
     html += '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid #E2E8F0; padding-bottom:8px;">'
-    html += '<b style="font-size:1.02rem; color:#0F172A;">🎯 مصفوفة الخطر النوعية للبيئة العراقية (5x5 Matrix)</b>'
-    html += '<span style="font-size:0.8rem; color:#64748B; font-weight:700;">الاحتمالية × التأثير</span>'
+    html += '<b class="matrix-hdr-title">🎯 مصفوفة الخطر النوعية للبيئة العراقية (5x5 Matrix)</b>'
+    html += '<span class="matrix-hdr-sub">الاحتمالية × التأثير</span>'
     html += '</div>'
     
     html += '<div style="overflow-x:auto;">'
@@ -252,11 +252,11 @@ def render_risk_matrix_html(risks):
     html += '<thead><tr>'
     html += '<th style="background:#0F172A; color:#F8FAFC; padding:10px 8px; border-radius:8px; font-size:0.82rem; min-width:110px;">الاحتمالية ↓ / التأثير ←</th>'
     for i in range(1, 6):
-        html += f'<th style="background:#F1F5F9; color:#1E293B; padding:10px 8px; border-radius:8px; font-size:0.84rem; font-weight:800; border:1px solid #CBD5E1; min-width:90px;">{i_labels[i]}</th>'
+        html += f'<th class="matrix-th">{i_labels[i]}</th>'
     html += '</tr></thead><tbody>'
 
     for p in range(5, 0, -1):
-        html += f'<tr><td style="background:#F1F5F9; color:#1E293B; padding:10px 8px; border-radius:8px; font-weight:800; font-size:0.84rem; border:1px solid #CBD5E1;">{p_labels[p]}</td>'
+        html += f'<tr><td class="matrix-th">{p_labels[p]}</td>'
         for i in range(1, 6):
             score = p * i
             cell_risks = grid.get((p, i), [])
@@ -657,6 +657,44 @@ def render_dynamic_theme_engine():
         .kpi-title { color: #1E3A8A !important; font-weight: 800 !important; }
         .kpi-value { color: #0F172A !important; font-weight: 900 !important; }
         .kpi-desc { color: #475569 !important; font-weight: 700 !important; }
+        .kpi-unit { font-size: 1rem; color: #475569 !important; font-weight: 700; }
+        .kpi-sub { color: #059669 !important; font-weight: 700 !important; font-size: 0.82rem; }
+
+        .isrs-compare-card {
+            background: #FFFFFF !important;
+            border: 2px solid #CBD5E1 !important;
+            border-radius: 12px !important;
+            padding: 14px !important;
+            margin-top: 8px !important;
+            display: flex !important;
+            justify-content: space-around !important;
+            align-items: center !important;
+            text-align: center !important;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04) !important;
+        }
+        .isrs-compare-lbl { font-size: 0.82rem; color: #334155 !important; font-weight: 800 !important; }
+
+        .matrix-container-card {
+            background: #FFFFFF !important;
+            border: 2px solid #CBD5E1 !important;
+            border-radius: 14px !important;
+            padding: 16px !important;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.04) !important;
+            margin-bottom: 15px !important;
+            direction: rtl !important;
+        }
+        .matrix-hdr-title { font-size: 1.02rem; color: #0F172A !important; font-weight: 800; }
+        .matrix-hdr-sub { font-size: 0.8rem; color: #475569 !important; font-weight: 700; }
+        .matrix-th {
+            background: #F1F5F9 !important;
+            color: #0F172A !important;
+            padding: 10px 8px !important;
+            border-radius: 8px !important;
+            font-size: 0.84rem !important;
+            font-weight: 800 !important;
+            border: 1px solid #CBD5E1 !important;
+            min-width: 90px !important;
+        }
 
         /* 8. Sidebar in Royal Mode */
         section[data-testid="stSidebar"], div[data-testid="stSidebarUserContent"] {
@@ -799,6 +837,42 @@ def render_dynamic_theme_engine():
         .kpi-title { color: #1E40AF !important; font-weight: 800 !important; }
         .kpi-value { color: #0F172A !important; font-weight: 900 !important; }
         .kpi-desc { color: #334155 !important; font-weight: 700 !important; }
+        .kpi-unit { font-size: 1rem; color: #475569 !important; font-weight: 700; }
+        .kpi-sub { color: #059669 !important; font-weight: 700 !important; font-size: 0.82rem; }
+
+        .isrs-compare-card {
+            background: #F8FAFC !important;
+            border: 2px solid #CBD5E1 !important;
+            border-radius: 12px !important;
+            padding: 14px !important;
+            margin-top: 8px !important;
+            display: flex !important;
+            justify-content: space-around !important;
+            align-items: center !important;
+            text-align: center !important;
+        }
+        .isrs-compare-lbl { font-size: 0.82rem; color: #334155 !important; font-weight: 800 !important; }
+
+        .matrix-container-card {
+            background: #FFFFFF !important;
+            border: 2px solid #CBD5E1 !important;
+            border-radius: 14px !important;
+            padding: 16px !important;
+            margin-bottom: 15px !important;
+            direction: rtl !important;
+        }
+        .matrix-hdr-title { font-size: 1.02rem; color: #0F172A !important; font-weight: 800; }
+        .matrix-hdr-sub { font-size: 0.8rem; color: #475569 !important; font-weight: 700; }
+        .matrix-th {
+            background: #F8FAFC !important;
+            color: #0F172A !important;
+            padding: 10px 8px !important;
+            border-radius: 8px !important;
+            font-size: 0.84rem !important;
+            font-weight: 800 !important;
+            border: 1px solid #CBD5E1 !important;
+            min-width: 90px !important;
+        }
 
         section[data-testid="stSidebar"], div[data-testid="stSidebarUserContent"] {
             background-color: #F1F5F9 !important;
@@ -945,8 +1019,46 @@ def render_dynamic_theme_engine():
         .kpi-title { color: #38BDF8 !important; font-weight: 800 !important; }
         .kpi-value { color: #FFFFFF !important; font-weight: 900 !important; }
         .kpi-desc { color: #94A3B8 !important; font-weight: 700 !important; }
+        .kpi-unit { font-size: 1rem; color: #94A3B8 !important; font-weight: 700; }
+        .kpi-sub { color: #34D399 !important; font-weight: 700 !important; font-size: 0.82rem; }
         div[data-testid="stMetric"] * { color: #FFFFFF !important; }
         div[data-testid="stMetric"] [data-testid="stMetricValue"] { color: #38BDF8 !important; }
+
+        .isrs-compare-card {
+            background: #0E1626 !important;
+            border: 2px solid #1E293B !important;
+            border-radius: 12px !important;
+            padding: 14px !important;
+            margin-top: 8px !important;
+            display: flex !important;
+            justify-content: space-around !important;
+            align-items: center !important;
+            text-align: center !important;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.4) !important;
+        }
+        .isrs-compare-lbl { font-size: 0.82rem; color: #94A3B8 !important; font-weight: 800 !important; }
+
+        .matrix-container-card {
+            background: #0E1626 !important;
+            border: 2px solid #1E293B !important;
+            border-radius: 14px !important;
+            padding: 16px !important;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.4) !important;
+            margin-bottom: 15px !important;
+            direction: rtl !important;
+        }
+        .matrix-hdr-title { font-size: 1.02rem; color: #FFFFFF !important; font-weight: 800; }
+        .matrix-hdr-sub { font-size: 0.8rem; color: #94A3B8 !important; font-weight: 700; }
+        .matrix-th {
+            background: #1E293B !important;
+            color: #FFFFFF !important;
+            padding: 10px 8px !important;
+            border-radius: 8px !important;
+            font-size: 0.84rem !important;
+            font-weight: 800 !important;
+            border: 1px solid #334155 !important;
+            min-width: 90px !important;
+        }
 
         section[data-testid="stSidebar"], div[data-testid="stSidebarUserContent"] {
             background-color: #03060D !important;
@@ -1833,34 +1945,36 @@ with st.sidebar:
             key="sidebar_g_cat"
         )
         g_results_side = glossary_data.search_glossary(query=g_search_side, category=g_cat_side)
-        st.markdown(f"<div style='font-size:0.75rem; color:#64748B; margin-bottom:8px;'>عدد المصطلحات المطابقة: <b>{len(g_results_side)}</b></div>", unsafe_allow_html=True)
+        st.markdown(f"<div style='font-size:0.75rem; color:#93C5FD; margin-bottom:8px; font-weight:700;'>عدد المصطلحات المطابقة: <b style='color:#FFFFFF;'>{len(g_results_side)}</b></div>", unsafe_allow_html=True)
         for item in g_results_side[:10]:
             st.markdown(f"""
-            <div style="background:#FFFFFF; border:1px solid #E2E8F0; border-radius:8px; padding:8px 10px; margin-bottom:8px; box-shadow:0 1px 3px rgba(0,0,0,0.02);">
+            <div style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.15); border-radius:8px; padding:8px 10px; margin-bottom:8px;">
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <b style="color:#2563EB; font-size:0.85rem;">{item['term_en']}</b>
-                    <span style="font-size:0.7rem; background:#F1F5F9; color:#475569; padding:2px 6px; border-radius:4px;">{item['category_ar']}</span>
+                    <b style="color:#60A5FA; font-size:0.85rem;">{item['term_en']}</b>
+                    <span style="font-size:0.7rem; background:#1E3A8A; color:#DBEAFE; padding:2px 6px; border-radius:4px; font-weight:700;">{item['category_ar']}</span>
                 </div>
-                <div style="font-size:0.8rem; font-weight:700; color:#0F172A; margin:2px 0;">{item['term_ar']}</div>
-                <div style="font-size:0.75rem; color:#475569; line-height:1.4;">{item['definition_ar']}</div>
+                <div style="font-size:0.82rem; font-weight:800; color:#FFFFFF; margin:3px 0;">{item['term_ar']}</div>
+                <div style="font-size:0.75rem; color:#CBD5E1; line-height:1.4;">{item['definition_ar']}</div>
             </div>
             """, unsafe_allow_html=True)
 
     st.divider()
     st.markdown(f"""
-    **📌 ملخص المشروع النشط:**
-    - **المشروع:** {active_meta.get('name_ar', '')}
-    - **الموقع:** {active_meta.get('location_ar', '')}
-    - **العملة:** {active_meta.get('currency', 'USD')} ({active_meta.get('currency_symbol', '$')})
-    - **الأنشطة:** {len(st.session_state.activities)} نشاط
-    - **المخاطر:** {len(st.session_state.risk_register)} خطر
-    - **مشكلات التنسيق:** {len(st.session_state.coordination_issues)} تعارض
-    """)
+    <div style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.12); border-radius:10px; padding:10px 12px; font-size:0.82rem; color:#FFFFFF; line-height:1.7;">
+        <b style="color:#60A5FA; font-size:0.88rem; display:block; margin-bottom:4px;">📌 ملخص المشروع النشط:</b>
+        <div>• <b>المشروع:</b> {active_meta.get('name_ar', '')}</div>
+        <div>• <b>الموقع:</b> {active_meta.get('location_ar', '')}</div>
+        <div>• <b>العملة:</b> {active_meta.get('currency', 'USD')} ({active_meta.get('currency_symbol', '$')})</div>
+        <div>• <b>الأنشطة:</b> {len(st.session_state.activities)} نشاط</div>
+        <div>• <b>المخاطر:</b> {len(st.session_state.risk_register)} خطر</div>
+        <div>• <b>مشكلات التنسيق:</b> {len(st.session_state.coordination_issues)} تعارض</div>
+    </div>
+    """, unsafe_allow_html=True)
     
     st.markdown("""
-    <div style="text-align:center; font-size:0.78rem; color:#64748B; border-top:1px solid #CBD5E1; padding-top:14px; margin-top:20px; direction:ltr;">
+    <div style="text-align:center; font-size:0.78rem; color:#94A3B8; border-top:1px solid rgba(255,255,255,0.15); padding-top:14px; margin-top:20px; direction:ltr;">
         Designed and developed by<br/>
-        <b style="color:#1E3A8A; font-size:0.85rem;">Dr Ahmed Louay Ahmed</b>
+        <b style="color:#60A5FA; font-size:0.88rem; font-weight:800;">Dr Ahmed Louay Ahmed</b>
     </div>
     """, unsafe_allow_html=True)
 
@@ -2248,7 +2362,7 @@ if selected_tab == "📊 لوحة القيادة":
         st.markdown(f"""
         <div class="kpi-card">
             <div class="kpi-title">⏱️ مدة الإنجاز الآمنة بمستوى <span class='en-badge'>{target_confidence}</span></div>
-            <div class="kpi-value">{dur_display} <span style="font-size:1rem; color:#64748B;">يوم</span></div>
+            <div class="kpi-value">{dur_display} <span class="kpi-unit">يوم</span></div>
             <div class="kpi-sub">المدة الحتمية المرجعية: {det_dur_display} يوم</div>
         </div>
         """, unsafe_allow_html=True)
@@ -2258,7 +2372,7 @@ if selected_tab == "📊 لوحة القيادة":
         st.markdown(f"""
         <div class="kpi-card">
             <div class="kpi-title">🛡️ احتياطي الطوارئ الزمني الموصى به</div>
-            <div class="kpi-value" style="color:#2563EB;">{cont_d_display} <span style="font-size:1rem; color:#64748B;">يوم</span></div>
+            <div class="kpi-value" style="color:#2563EB;">{cont_d_display} <span class="kpi-unit">يوم</span></div>
             <div class="kpi-sub">تأمين الالتزام بمستوى ثقة {target_confidence}</div>
         </div>
         """, unsafe_allow_html=True)
@@ -2269,7 +2383,7 @@ if selected_tab == "📊 لوحة القيادة":
         st.markdown(f"""
         <div class="kpi-card">
             <div class="kpi-title">💵 الميزانية الآمنة بمستوى <span class='en-badge'>{target_confidence}</span></div>
-            <div class="kpi-value">{cost_display} <span style="font-size:1rem; color:#64748B;">{curr_sym}</span></div>
+            <div class="kpi-value">{cost_display} <span class="kpi-unit">{curr_sym}</span></div>
             <div class="kpi-sub">الكلفة الحتمية المرجعية: {det_cost_display} {curr_sym}</div>
         </div>
         """, unsafe_allow_html=True)
@@ -2279,7 +2393,7 @@ if selected_tab == "📊 لوحة القيادة":
         st.markdown(f"""
         <div class="kpi-card">
             <div class="kpi-title">💰 احتياطي الطوارئ المالي الموصى به</div>
-            <div class="kpi-value" style="color:#D97706;">{cont_c_display} <span style="font-size:1rem; color:#64748B;">{curr_sym}</span></div>
+            <div class="kpi-value" style="color:#D97706;">{cont_c_display} <span class="kpi-unit">{curr_sym}</span></div>
             <div class="kpi-sub">يعادل {target_cost_contingency_pct:.1f}% من الميزانية المرجعية</div>
         </div>
         """, unsafe_allow_html=True)
@@ -2390,23 +2504,23 @@ if selected_tab == "📊 لوحة القيادة":
         delta_color = "#DC2626" if isrs_v2_result["delta_isrs"] > 0 else "#059669"
         delta_sign = "+" if isrs_v2_result["delta_isrs"] > 0 else ""
         st.markdown(f"""
-        <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:12px; padding:14px; margin-top:8px; display:flex; justify-content:space-around; align-items:center; text-align:center;">
+        <div class="isrs-compare-card">
             <div>
-                <div style="font-size:0.8rem; color:#64748B;">التقييم الأساسي</div>
+                <div class="isrs-compare-lbl">التقييم الأساسي</div>
                 <div style="font-size:1.3rem; font-weight:800; color:{b_color};">{b_score:.1f}%</div>
             </div>
             <div style="font-size:1.5rem; color:#94A3B8;">➔</div>
             <div>
-                <div style="font-size:0.8rem; color:#64748B;">التقييم الموسع v2.0</div>
+                <div class="isrs-compare-lbl">التقييم الموسع v2.0</div>
                 <div style="font-size:1.3rem; font-weight:800; color:{v2_color};">{v2_score:.1f}%</div>
             </div>
             <div style="font-size:1.5rem; color:#94A3B8;">=</div>
             <div>
-                <div style="font-size:0.8rem; color:#64748B;">فارق الأثر التنبؤي (Δ)</div>
+                <div class="isrs-compare-lbl">فارق الأثر التنبؤي (Δ)</div>
                 <div style="font-size:1.3rem; font-weight:900; color:{delta_color};">{delta_sign}{isrs_v2_result['delta_isrs']:.1f}%</div>
             </div>
             <div>
-                <div style="font-size:0.8rem; color:#64748B;">إجمالي عقوبات المؤشرات الـ 5</div>
+                <div class="isrs-compare-lbl">إجمالي عقوبات المؤشرات الـ 5</div>
                 <div style="font-size:1.3rem; font-weight:800; color:#7C3AED;">+{isrs_v2_result['new_indicators_penalties']['total_new_penalty']:.1f} نقطة</div>
             </div>
         </div>
