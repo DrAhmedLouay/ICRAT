@@ -305,7 +305,7 @@ def generate_executive_brief_html(
 ) -> str:
     """توليد وثيقة التقرير التنفيذي الرسمي المخصص للطباعة والعرض الوزاري (Executive Two-Pager)"""
     p_name = project_meta.get("name_ar", "المشروع الإنشائي")
-    client = project_meta.get("client_type_ar", "وزارة الإعمار والإسكان")
+    client = project_meta.get("client_type_ar", "الجهة المستفيدة / صاحب العمل")
     curr_sym = project_meta.get("currency_symbol", "$")
     
     p80_dur = sim_results["duration_percentiles"].get("P80", 0)

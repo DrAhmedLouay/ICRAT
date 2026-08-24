@@ -956,7 +956,8 @@ def render_login_portal():
     <div style="max-width: 500px; margin: 30px auto 16px auto; background: #FFFFFF; border-radius: 18px; padding: 28px 32px; box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08); border: 1px solid #E2E8F0; text-align: center; direction: rtl;">
         <div style="font-size: 2.8rem; margin-bottom: 6px;">🏛️</div>
         <h2 style="color: #0F172A; font-weight: 800; font-size: 1.35rem; margin-bottom: 4px;">منصة تقييم المخاطر الإنشائية (ICRAT 2.0)</h2>
-        <div style="color: #2563EB; font-size: 0.86rem; margin-bottom: 16px; font-weight: 700;">🔒 بوابة الدخول المعتمدة للمهندسين والمشرفين</div>
+        <div style="color: #2563EB; font-size: 0.86rem; margin-bottom: 6px; font-weight: 700;">🔒 بوابة الدخول المعتمدة للمهندسين والمشرفين</div>
+        <div style="font-size: 0.78rem; color: #64748B; margin-bottom: 16px; font-weight: 600; font-family: 'Segoe UI', Tahoma, sans-serif; direction: ltr;">Iraqi Construction Risk Assessment & Decision Support Platform</div>
         <div style="background: #F8FAFC; border-radius: 10px; padding: 10px 14px; border: 1px solid #E2E8F0; font-size: 0.82rem; color: #475569; margin-bottom: 12px; line-height: 1.5;">
             هذه المنصة محمية بنظام التحقق الرقمي المشفر. يرجى إدخال بيانات الاعتماد المصرح بها للوصول إلى أدوات ومحركات المشروع.
         </div>
@@ -983,8 +984,13 @@ def render_login_portal():
                     st.error("❌ اسم المستخدم أو كلمة المرور غير صحيحة! يرجى التحقق وإعادة المحاولة.")
 
     st.markdown("""
-    <div style="text-align: center; font-size: 0.76rem; color: #94A3B8; margin-top: 24px; direction: rtl;">
-        جمهورية العراق • وزارة الإعمار والإسكان والبلديات العامة • بوابة ICRAT 2.0 المؤمنة
+    <div style="text-align: center; margin-top: 28px; padding-top: 16px; border-top: 1px solid #E2E8F0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; direction: ltr;">
+        <div style="font-size: 0.88rem; font-weight: 700; color: #1E293B; margin-bottom: 4px; letter-spacing: 0.2px;">
+            Iraqi Construction Risk Assessment & Decision Support Platform
+        </div>
+        <div style="font-size: 0.82rem; font-weight: 600; color: #2563EB;">
+            Designed and Developed by Dr Ahmed Louay Ahmed
+        </div>
     </div>
     """, unsafe_allow_html=True)
     st.stop()
@@ -1009,7 +1015,7 @@ if "custom_project_meta" not in st.session_state:
         "id": "CUSTOM_PROJ_01",
         "name_ar": "مشروع إنشائي جديد (مخصص)",
         "name_en": "New Custom Construction Project",
-        "client_type_ar": "وزارة الإعمار والإسكان / القطاع الخاص",
+        "client_type_ar": "الجهة المستفيدة / صاحب العمل",
         "location_ar": "بغداد - العراق",
         "governorate": "BAGHDAD",
         "latitude": 33.3152,
@@ -1183,7 +1189,7 @@ with st.sidebar:
                 "id": "NEW_CUSTOM_01",
                 "name_ar": "مشروع مخصص جديد (فارغ)",
                 "name_en": "New Clean Custom Project",
-                "client_type_ar": "وزارة الإعمار والإسكان / القطاع الخاص",
+                "client_type_ar": "الجهة المستفيدة / صاحب العمل",
                 "location_ar": "العراق",
                 "currency": "USD",
                 "currency_symbol": "$",
@@ -2771,7 +2777,7 @@ elif selected_tab == "🤖 المستشار الذكي والمخاطبات":
             drafted_letter = contract_copilot.generate_official_eot_letter(
                 project_name=active_meta.get("name_ar", "المشروع الإنشائي"),
                 contract_ref=active_meta.get("id", "IRQ_PROJ_2026"),
-                client_name=active_meta.get("client_type_ar", "وزارة الإعمار والإسكان والبلديات العامة"),
+                client_name=active_meta.get("client_type_ar", "الجهة المستفيدة / صاحب العمل"),
                 contractor_name="شركة المقاولات العامة المنفذة",
                 claimed_days=eot_calc_res.get("total_entitled_eot_days", 45),
                 reasons_list=[ev.get("title_ar") for ev in st.session_state.delay_events if ev.get("delay_type") != "NON_EXCUSABLE"],
@@ -3538,7 +3544,7 @@ elif selected_tab == "🏢 استيراد (P6 / IFC / JSON)":
             col_m1, col_m2 = st.columns(2)
             with col_m1:
                 p_name_ar = st.text_input("اسم المشروع (بالعربية):", value=st.session_state.custom_project_meta.get("name_ar", "مشروع إنشائي جديد"))
-                p_client_ar = st.text_input("الجهة المستفيدة / رب العمل:", value=st.session_state.custom_project_meta.get("client_type_ar", "وزارة الإعمار والإسكان والبلديات العامة"))
+                p_client_ar = st.text_input("الجهة المستفيدة / رب العمل:", value=st.session_state.custom_project_meta.get("client_type_ar", "الجهة المستفيدة / صاحب العمل"))
                 p_location_ar = st.text_input("العنوان والموقع الإنشائي الميداني:", value=st.session_state.custom_project_meta.get("location_ar", "بغداد - العراق"))
                 p_currency = st.selectbox("عملة المشروع المعتمدة:", ["USD", "IQD"], index=0 if st.session_state.custom_project_meta.get("currency") == "USD" else 1)
 
