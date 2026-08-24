@@ -3775,6 +3775,7 @@ elif selected_tab == "🧩 التنسيق (ISO 31000)":
         
         domain_labels = [domain_mapping.get(d, iso31000_coordination.COORDINATION_DOMAINS[d]["name_ar"]) for d in iso31000_coordination.COORDINATION_DOMAINS]
         domain_vals = [coord_summary["domain_breakdown"].get(d, 0) for d in iso31000_coordination.COORDINATION_DOMAINS]
+        domain_colors = ["#2563EB", "#0284C7", "#D97706", "#059669", "#7C3AED"]
         ch_theme = get_chart_layout_theme()
         max_d_val = max(domain_vals) if domain_vals else 5
         fig_dom = go.Figure(go.Bar(
