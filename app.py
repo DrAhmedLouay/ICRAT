@@ -1254,13 +1254,10 @@ with st.sidebar:
             if sb_up_navis is not None:
                 sb_navis_res = navisworks_parser.parse_navisworks_clash_bytes(sb_up_navis.getvalue(), sb_up_navis.name)
                 if sb_navis_res.get("success"):
-                    if sb_navis_res.get("is_big_data_triaged"):
-                        st.success(f"⚡ تم بنجاح معالجة {sb_navis_res['total_clashes']:,} تعارض ({sb_navis_res['critical_clashes_count']:,} حرج)، وفرز أخطر {sb_navis_res['retained_clashes_count']:,} تعارض للسرعة الفائقة!")
-                    else:
-                        st.success(f"✅ تم تحليل التقرير: ({sb_navis_res['total_clashes']} تعارض / {sb_navis_res['critical_clashes_count']} حرج)")
+                    st.success(f"✅ تم بنجاح قراءة وتحليل كافة الـ {sb_navis_res['total_clashes']:,} تعارض بالكامل ({sb_navis_res['critical_clashes_count']:,} حرج)!")
                     if st.button("🚀 دمج وتفعيل تعارضات Navisworks", type="primary", key="sb_btn_apply_navis", use_container_width=True):
                         st.session_state.coordination_issues = sb_navis_res["coordination_issues"]
-                        st.session_state.last_import_msg = f"🎉 تم بنجاح استيراد تقرير Navisworks ({sb_navis_res['total_clashes']:,} تعارض) وتحديث مصفوفة ISO 31000!"
+                        st.session_state.last_import_msg = f"🎉 تم بنجاح استيراد وتفعيل كافة الـ {sb_navis_res['total_clashes']:,} تعارض بالكامل وتحديث مصفوفة ISO 31000!"
                         st.rerun()
 
         else:
@@ -2249,13 +2246,10 @@ elif selected_tab == "🧩 التنسيق (ISO 31000)":
             if up_t4_navis is not None:
                 res_t4 = navisworks_parser.parse_navisworks_clash_bytes(up_t4_navis.getvalue(), up_t4_navis.name)
                 if res_t4.get("success"):
-                    if res_t4.get("is_big_data_triaged"):
-                        st.success(f"⚡ تم بنجاح معالجة {res_t4['total_clashes']:,} تعارض ({res_t4['critical_clashes_count']:,} حرج)، وفرز أخطر {res_t4['retained_clashes_count']:,} تعارض للسرعة الفائقة!")
-                    else:
-                        st.success(f"✅ تم قراءة {res_t4['total_clashes']} تعارض ({res_t4['critical_clashes_count']} حرج)")
+                    st.success(f"✅ تم بنجاح قراءة وتحليل كافة الـ {res_t4['total_clashes']:,} تعارض بالكامل ({res_t4['critical_clashes_count']:,} حرج)!")
                     if st.button("🚀 تحديث مصفوفة ISO 31000", type="primary", key="btn_apply_tab4_navis", use_container_width=True):
                         st.session_state.coordination_issues = res_t4["coordination_issues"]
-                        st.session_state.last_import_msg = f"🎉 تم بنجاح استيراد تقرير Navisworks ({res_t4['total_clashes']:,} تعارض) وتحديث مصفوفة ISO 31000 بأعلى أداء!"
+                        st.session_state.last_import_msg = f"🎉 تم بنجاح استيراد وتفعيل كافة الـ {res_t4['total_clashes']:,} تعارض بالكامل في مصفوفة القرارات!"
                         st.rerun()
                 else:
                     st.error(res_t4.get("error", "فشل تحليل الملف"))
@@ -2493,11 +2487,17 @@ elif selected_tab == "🧩 التنسيق (ISO 31000)":
 
     with col_fb1:
         st.markdown("##### ✍️ استوديو فحص وتصحيح الخبير في الحلقة (Human-in-the-Loop Studio):")
-        clash_options = [c["id"] for c in st.session_state.coordination_issues[:1000]]
-        if clash_options:
-            sel_c_id = st.selectbox("1️⃣ اختر كود التعارض الهندسي للمراجعة والفحص:", options=clash_options, key="hitl_clash_sel")
-            sel_clash_data = next((c for c in st.session_state.coordination_issues if c["id"] == sel_c_id), None)
-            sel_analyzed = next((ac for ac in ai_hub_res["analyzed_clashes"] if ac["clash_id"] == sel_c_id), None)
+        col_s_box, col_s_in = st.columns([1.4, 1.1])
+        with col_s_box:
+            clash_options = [c["id"] for c in st.session_state.coordination_issues[:2000]]
+            sel_c_id_select = st.selectbox("1️⃣ اختر كود التعارض من القائمة السريعة:", options=clash_options, key="hitl_clash_sel") if clash_options else ""
+        with col_s_in:
+            manual_c_id = st.text_input("أو ابحث برقم الكود مباشرة:", placeholder="مثال: NV_045...", key="hitl_manual_cid")
+            
+        sel_c_id = manual_c_id.strip() if manual_c_id.strip() else sel_c_id_select
+        if sel_c_id:
+            sel_clash_data = next((c for c in st.session_state.coordination_issues if c["id"].lower() == sel_c_id.lower()), None)
+            sel_analyzed = next((ac for ac in ai_hub_res["analyzed_clashes"] if ac["clash_id"].lower() == sel_c_id.lower()), None)
             
             if sel_clash_data and sel_analyzed:
                 st.markdown(f"""
@@ -3636,13 +3636,10 @@ elif selected_tab == "🏢 استيراد (P6 / IFC / JSON)":
             if uploaded_navis is not None:
                 navis_res = navisworks_parser.parse_navisworks_clash_bytes(uploaded_navis.getvalue(), uploaded_navis.name)
                 if navis_res.get("success"):
-                    if navis_res.get("is_big_data_triaged"):
-                        st.success(f"⚡ تم بنجاح معالجة {navis_res['total_clashes']:,} تعارض ({navis_res['critical_clashes_count']:,} حرج)، وفرز أخطر {navis_res['retained_clashes_count']:,} تعارض للسرعة الفائقة!")
-                    else:
-                        st.success(f"✅ تم تحليل التقرير: ({navis_res['total_clashes']} تعارض)")
+                    st.success(f"✅ تم بنجاح قراءة وتحليل كافة الـ {navis_res['total_clashes']:,} تعارض بالكامل ({navis_res['critical_clashes_count']:,} حرج)!")
                     if st.button("🚀 دمج تعارضات Navisworks", type="primary", key="btn_apply_navis_tab11", use_container_width=True):
                         st.session_state.coordination_issues = navis_res["coordination_issues"]
-                        st.session_state.last_import_msg = f"🎉 تم بنجاح استيراد تقرير Navisworks ({navis_res['total_clashes']:,} تعارض) وترجمتها لمصفوفة ISO 31000 بأعلى أداء!"
+                        st.session_state.last_import_msg = f"🎉 تم بنجاح استيراد وتفعيل كافة الـ {navis_res['total_clashes']:,} تعارض بالكامل في مصفوفة ISO 31000!"
                         st.rerun()
 
         with col_imp_json:

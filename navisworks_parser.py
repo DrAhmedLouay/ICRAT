@@ -319,18 +319,11 @@ def parse_navisworks_xml(file_bytes: bytes, filename: str) -> Dict[str, Any]:
                 all_parsed_buffer.append(issue_dict)
                 elem.clear()
 
-        # استراتيجية الفرز الهرمي الذكي للملفات الضخمة
-        MAX_RETAINED_ISSUES = 2000
-        if len(all_parsed_buffer) > MAX_RETAINED_ISSUES:
-            # فرز وترتيب حسب الخطر وتداخل الكهروميكانيك مع الإنشائي
-            all_parsed_buffer.sort(key=lambda x: (x["risk_score"], x["consequence"], 1 if x["discipline"] == "MEP_STR" else 0), reverse=True)
-            issues = all_parsed_buffer[:MAX_RETAINED_ISSUES]
-            is_triaged = True
-        else:
-            issues = all_parsed_buffer
-            is_triaged = False
+        # الاحتفاظ بكافة التعارضات بنسبة 100% وبدون أي استثناء أو تقليص (Full 100% Retention)
+        issues = all_parsed_buffer
+        is_triaged = False
 
-        for i_item in issues[:500]:
+        for i_item in issues[:1000]:
             spatial_markers.append({
                 "id": i_item["id"],
                 "name": i_item["title_ar"],
@@ -522,16 +515,10 @@ def parse_navisworks_csv(file_bytes: bytes, filename: str) -> Dict[str, Any]:
             issues.append(issue_dict)
 
         total_csv_clashes = len(issues)
-        MAX_RETAINED_ISSUES = 2000
-        if total_csv_clashes > MAX_RETAINED_ISSUES:
-            issues.sort(key=lambda x: (x["risk_score"], x["consequence"], 1 if x["discipline"] == "MEP_STR" else 0), reverse=True)
-            retained_issues = issues[:MAX_RETAINED_ISSUES]
-            is_triaged = True
-        else:
-            retained_issues = issues
-            is_triaged = False
+        retained_issues = issues
+        is_triaged = False
             
-        for i_item in retained_issues[:500]:
+        for i_item in retained_issues[:1000]:
             spatial_markers.append({
                 "id": i_item["id"],
                 "name": i_item["title_ar"],
