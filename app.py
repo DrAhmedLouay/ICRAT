@@ -3736,6 +3736,116 @@ if layout_mode == "MODERN":
     """, unsafe_allow_html=True)
 
     # 2. تحديد المحور النشط
+    is_dark_theme = st.session_state.get("theme_mode", "ROYAL") == "DARK"
+    if is_dark_theme:
+        st.markdown("""<style>
+        div[data-testid="stSegmentedControl"], div[data-testid="stPills"], .stApp div[data-testid="stSegmentedControl"], .stApp div[data-testid="stPills"] {
+            background: transparent !important;
+        }
+        div[data-testid="stSegmentedControl"] button, div[data-testid="stPills"] button,
+        .stApp button[data-testid="stBaseButton-pills"], button[data-testid="stBaseButton-pills"],
+        div[data-testid="stSegmentedControl"] [role="radio"], div[data-testid="stPills"] [role="radio"],
+        div[data-testid="stSegmentedControl"] [role="button"], div[data-testid="stPills"] [role="button"],
+        div[data-testid="stPills"] [data-testid="stPillsChip"],
+        div[data-testid="stSegmentedControl"] > div > div > button, div[data-testid="stPills"] > div > div > button {
+            background-color: #0E1626 !important;
+            background: #0E1626 !important;
+            color: #FFFFFF !important;
+            border: 2px solid #334155 !important;
+            border-radius: 20px !important;
+            font-weight: 800 !important;
+            font-size: 0.88rem !important;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3) !important;
+        }
+        div[data-testid="stSegmentedControl"] button *, div[data-testid="stPills"] button *,
+        .stApp button[data-testid="stBaseButton-pills"] *,
+        div[data-testid="stSegmentedControl"] [data-testid="stMarkdownContainer"] p,
+        div[data-testid="stPills"] [data-testid="stMarkdownContainer"] p {
+            color: #FFFFFF !important;
+            font-weight: 800 !important;
+        }
+        div[data-testid="stSegmentedControl"] button:hover, div[data-testid="stPills"] button:hover,
+        .stApp button[data-testid="stBaseButton-pills"]:hover {
+            background-color: #131E35 !important;
+            background: #131E35 !important;
+            border-color: #38BDF8 !important;
+            color: #38BDF8 !important;
+        }
+        div[data-testid="stSegmentedControl"] button:hover *, div[data-testid="stPills"] button:hover * {
+            color: #38BDF8 !important;
+        }
+        div[data-testid="stSegmentedControl"] button[aria-selected="true"], div[data-testid="stPills"] button[aria-selected="true"],
+        div[data-testid="stSegmentedControl"] button[aria-checked="true"], div[data-testid="stPills"] button[aria-checked="true"],
+        .stApp button[data-testid="stBaseButton-pillsActive"],
+        .stApp button[data-testid="stBaseButton-pills"][aria-selected="true"] {
+            background: linear-gradient(135deg, #1E3A8A 0%, #2563EB 100%) !important;
+            background-color: #2563EB !important;
+            color: #FFFFFF !important;
+            border: 2px solid #38BDF8 !important;
+            box-shadow: 0 0 16px rgba(56, 189, 248, 0.6) !important;
+            border-radius: 20px !important;
+        }
+        div[data-testid="stSegmentedControl"] button[aria-selected="true"] *, div[data-testid="stPills"] button[aria-selected="true"] *,
+        .stApp button[data-testid="stBaseButton-pillsActive"] * {
+            color: #FFFFFF !important;
+            font-weight: 900 !important;
+        }
+        </style>""", unsafe_allow_html=True)
+    else:
+        st.markdown("""<style>
+        div[data-testid="stSegmentedControl"], div[data-testid="stPills"], .stApp div[data-testid="stSegmentedControl"], .stApp div[data-testid="stPills"] {
+            background: transparent !important;
+        }
+        div[data-testid="stSegmentedControl"] button, div[data-testid="stPills"] button,
+        .stApp button[data-testid="stBaseButton-pills"], button[data-testid="stBaseButton-pills"],
+        div[data-testid="stSegmentedControl"] [role="radio"], div[data-testid="stPills"] [role="radio"],
+        div[data-testid="stSegmentedControl"] [role="button"], div[data-testid="stPills"] [role="button"],
+        div[data-testid="stPills"] [data-testid="stPillsChip"],
+        div[data-testid="stSegmentedControl"] > div > div > button, div[data-testid="stPills"] > div > div > button {
+            background-color: #FFFFFF !important;
+            background: #FFFFFF !important;
+            color: #0F172A !important;
+            border: 2px solid #CBD5E1 !important;
+            border-radius: 20px !important;
+            font-weight: 800 !important;
+            font-size: 0.88rem !important;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04) !important;
+        }
+        div[data-testid="stSegmentedControl"] button *, div[data-testid="stPills"] button *,
+        .stApp button[data-testid="stBaseButton-pills"] *,
+        div[data-testid="stSegmentedControl"] [data-testid="stMarkdownContainer"] p,
+        div[data-testid="stPills"] [data-testid="stMarkdownContainer"] p {
+            color: #0F172A !important;
+            font-weight: 800 !important;
+        }
+        div[data-testid="stSegmentedControl"] button:hover, div[data-testid="stPills"] button:hover,
+        .stApp button[data-testid="stBaseButton-pills"]:hover {
+            background-color: #EFF6FF !important;
+            background: #EFF6FF !important;
+            border-color: #93C5FD !important;
+            color: #1D4ED8 !important;
+        }
+        div[data-testid="stSegmentedControl"] button:hover *, div[data-testid="stPills"] button:hover * {
+            color: #1D4ED8 !important;
+        }
+        div[data-testid="stSegmentedControl"] button[aria-selected="true"], div[data-testid="stPills"] button[aria-selected="true"],
+        div[data-testid="stSegmentedControl"] button[aria-checked="true"], div[data-testid="stPills"] button[aria-checked="true"],
+        .stApp button[data-testid="stBaseButton-pillsActive"],
+        .stApp button[data-testid="stBaseButton-pills"][aria-selected="true"] {
+            background: linear-gradient(135deg, #1E3A8A 0%, #2563EB 100%) !important;
+            background-color: #2563EB !important;
+            color: #FFFFFF !important;
+            border: 2px solid #1D4ED8 !important;
+            box-shadow: 0 4px 12px rgba(37,99,235,0.35) !important;
+            border-radius: 20px !important;
+        }
+        div[data-testid="stSegmentedControl"] button[aria-selected="true"] *, div[data-testid="stPills"] button[aria-selected="true"] *,
+        .stApp button[data-testid="stBaseButton-pillsActive"] * {
+            color: #FFFFFF !important;
+            font-weight: 900 !important;
+        }
+        </style>""", unsafe_allow_html=True)
+
     current_hub = "📊 1. مركز القيادة والتقارير التنفيذية"
     for hub_name, tools in MODERN_HUBS.items():
         if st.session_state.active_nav_tab in tools:
@@ -3771,6 +3881,152 @@ if layout_mode == "MODERN":
 
 else:
     # النمط الكلاسيكي الأصلي
+    is_dark_theme = st.session_state.get("theme_mode", "ROYAL") == "DARK"
+    if is_dark_theme:
+        st.markdown("""<style>
+        div[data-testid="stPills"], .stApp div[data-testid="stPills"] {
+            background: transparent !important;
+        }
+        div[data-testid="stPills"] button,
+        .stApp div[data-testid="stPills"] button,
+        .stApp button[data-testid="stBaseButton-pills"],
+        button[data-testid="stBaseButton-pills"],
+        div[data-testid="stPills"] [role="radio"],
+        div[data-testid="stPills"] [role="button"],
+        div[data-testid="stPills"] [data-testid="stPillsChip"],
+        div[data-testid="stPills"] > div > div > button,
+        div[data-testid="stPills"] > div > button {
+            background-color: #0E1626 !important;
+            background: #0E1626 !important;
+            color: #FFFFFF !important;
+            border: 2px solid #334155 !important;
+            border-radius: 20px !important;
+            font-weight: 800 !important;
+            font-size: 0.88rem !important;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3) !important;
+        }
+        div[data-testid="stPills"] button *,
+        .stApp button[data-testid="stBaseButton-pills"] *,
+        div[data-testid="stPills"] [data-testid="stMarkdownContainer"] p,
+        div[data-testid="stPills"] button p,
+        div[data-testid="stPills"] button span {
+            color: #FFFFFF !important;
+            font-weight: 800 !important;
+        }
+        div[data-testid="stPills"] button:hover,
+        .stApp button[data-testid="stBaseButton-pills"]:hover {
+            background-color: #131E35 !important;
+            background: #131E35 !important;
+            border-color: #38BDF8 !important;
+            color: #38BDF8 !important;
+        }
+        div[data-testid="stPills"] button:hover *,
+        .stApp button[data-testid="stBaseButton-pills"]:hover * {
+            color: #38BDF8 !important;
+        }
+        div[data-testid="stPills"] button[aria-selected="true"],
+        div[data-testid="stPills"] button[aria-checked="true"],
+        .stApp button[data-testid="stBaseButton-pillsActive"],
+        .stApp button[data-testid="stBaseButton-pills"][aria-selected="true"],
+        .stApp button[data-testid="stBaseButton-pills"][aria-checked="true"] {
+            background: linear-gradient(135deg, #1E3A8A 0%, #2563EB 100%) !important;
+            background-color: #2563EB !important;
+            color: #FFFFFF !important;
+            border: 2px solid #38BDF8 !important;
+            box-shadow: 0 0 16px rgba(56, 189, 248, 0.6) !important;
+            border-radius: 20px !important;
+        }
+        div[data-testid="stPills"] button[aria-selected="true"] *,
+        div[data-testid="stPills"] button[aria-checked="true"] *,
+        .stApp button[data-testid="stBaseButton-pillsActive"] *,
+        .stApp button[data-testid="stBaseButton-pillsActive"] p,
+        .stApp button[data-testid="stBaseButton-pillsActive"] span {
+            color: #FFFFFF !important;
+            font-weight: 900 !important;
+        }
+        .mode-badge-classic {
+            background: #131E35 !important;
+            color: #38BDF8 !important;
+            border: 1.5px solid #1E3A8A !important;
+            padding: 3px 12px !important;
+            border-radius: 20px !important;
+            font-weight: 800 !important;
+            font-size: 0.82rem !important;
+        }
+        </style>""", unsafe_allow_html=True)
+    else:
+        st.markdown("""<style>
+        div[data-testid="stPills"], .stApp div[data-testid="stPills"] {
+            background: transparent !important;
+        }
+        div[data-testid="stPills"] button,
+        .stApp div[data-testid="stPills"] button,
+        .stApp button[data-testid="stBaseButton-pills"],
+        button[data-testid="stBaseButton-pills"],
+        div[data-testid="stPills"] [role="radio"],
+        div[data-testid="stPills"] [role="button"],
+        div[data-testid="stPills"] [data-testid="stPillsChip"],
+        div[data-testid="stPills"] > div > div > button,
+        div[data-testid="stPills"] > div > button {
+            background-color: #FFFFFF !important;
+            background: #FFFFFF !important;
+            color: #0F172A !important;
+            border: 2px solid #CBD5E1 !important;
+            border-radius: 20px !important;
+            font-weight: 800 !important;
+            font-size: 0.88rem !important;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04) !important;
+        }
+        div[data-testid="stPills"] button *,
+        .stApp button[data-testid="stBaseButton-pills"] *,
+        div[data-testid="stPills"] [data-testid="stMarkdownContainer"] p,
+        div[data-testid="stPills"] button p,
+        div[data-testid="stPills"] button span {
+            color: #0F172A !important;
+            font-weight: 800 !important;
+        }
+        div[data-testid="stPills"] button:hover,
+        .stApp button[data-testid="stBaseButton-pills"]:hover {
+            background-color: #EFF6FF !important;
+            background: #EFF6FF !important;
+            border-color: #93C5FD !important;
+            color: #1D4ED8 !important;
+        }
+        div[data-testid="stPills"] button:hover *,
+        .stApp button[data-testid="stBaseButton-pills"]:hover * {
+            color: #1D4ED8 !important;
+        }
+        div[data-testid="stPills"] button[aria-selected="true"],
+        div[data-testid="stPills"] button[aria-checked="true"],
+        .stApp button[data-testid="stBaseButton-pillsActive"],
+        .stApp button[data-testid="stBaseButton-pills"][aria-selected="true"],
+        .stApp button[data-testid="stBaseButton-pills"][aria-checked="true"] {
+            background: linear-gradient(135deg, #1E3A8A 0%, #2563EB 100%) !important;
+            background-color: #2563EB !important;
+            color: #FFFFFF !important;
+            border: 2px solid #1D4ED8 !important;
+            box-shadow: 0 4px 12px rgba(37,99,235,0.35) !important;
+            border-radius: 20px !important;
+        }
+        div[data-testid="stPills"] button[aria-selected="true"] *,
+        div[data-testid="stPills"] button[aria-checked="true"] *,
+        .stApp button[data-testid="stBaseButton-pillsActive"] *,
+        .stApp button[data-testid="stBaseButton-pillsActive"] p,
+        .stApp button[data-testid="stBaseButton-pillsActive"] span {
+            color: #FFFFFF !important;
+            font-weight: 900 !important;
+        }
+        .mode-badge-classic {
+            background: #EFF6FF !important;
+            color: #1E40AF !important;
+            border: 1.5px solid #93C5FD !important;
+            padding: 3px 12px !important;
+            border-radius: 20px !important;
+            font-weight: 800 !important;
+            font-size: 0.82rem !important;
+        }
+        </style>""", unsafe_allow_html=True)
+
     st.markdown("""
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
         <span class="subtext-muted">تنقل بين شاشات وأدوات المنصة (الواجهة الكلاسيكية):</span>
