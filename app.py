@@ -34,6 +34,15 @@ import iraq_georisk_engine
 import ai_bim_decision_hub
 import glossary_data
 import streamlit.components.v1 as components
+from typing import Optional
+
+# إعداد الصفحة
+st.set_page_config(
+    page_title="ICRAT 2.0 | المنصة الهندسية المتكاملة لتقييم المخاطر والمطالبات",
+    page_icon="🏗️",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
 
 # تهيئة معالجة النصوص العربية
 def ar(text: str) -> str:
@@ -293,14 +302,6 @@ def render_risk_matrix_html(risks):
     html += '</div></div>'
     st.markdown(html, unsafe_allow_html=True)
 
-# إعداد الصفحة
-st.set_page_config(
-    page_title="ICRAT 2.0 | المنصة الهندسية المتكاملة لتقييم المخاطر والمطالبات",
-    page_icon="🏗️",
-    layout="wide",
-    initial_sidebar_state="expanded"
-)
-
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap');
@@ -327,7 +328,7 @@ st.markdown("""
         margin-bottom: 0.75rem !important;
     }
 
-    /* ضبط القائمة الجانبية الموحدة */
+    /* Sidebar Layout */
     section[data-testid="stSidebar"] {
         direction: rtl !important;
         text-align: right !important;
@@ -338,14 +339,13 @@ st.markdown("""
         padding-top: 1.2rem !important;
     }
     
-    /* ضبط التبويبات Tabs وجعلها انسيابية */
+    /* Tabs Layout */
     .stTabs [data-baseweb="tab-list"] {
         direction: rtl !important;
         display: flex !important;
         flex-wrap: wrap !important;
         justify-content: flex-start !important;
         gap: 8px !important;
-        border-bottom: 2px solid #CBD5E1 !important;
         padding-bottom: 8px !important;
     }
     .stTabs [data-baseweb="tab"] {
@@ -359,50 +359,27 @@ st.markdown("""
         transition: all 0.2s ease !important;
     }
 
-    /* عزل حاويات الرسوم البيانية Plotly */
+    /* Plotly Container */
     .stPlotlyChart, div[data-testid="stPlotlyChart"], .js-plotly-plot, .plotly, svg.main-svg {
         direction: ltr !important;
         text-align: center !important;
     }
 
-    /* معالجة منزلقات الأرقام Sliders */
+    /* Sliders */
     div[data-testid="stSlider"] {
         direction: rtl !important;
         text-align: right !important;
         margin-top: 6px !important;
         margin-bottom: 16px !important;
     }
-    div[data-testid="stSlider"] label {
-        direction: rtl !important;
-        text-align: right !important;
-        font-size: 0.92rem !important;
-        font-weight: 700 !important;
-        display: block !important;
-        margin-bottom: 6px !important;
-        line-height: 1.4 !important;
-    }
-    div[data-testid="stSlider"] div[data-baseweb="slider"] {
-        direction: ltr !important;
-    }
-    div[data-testid="stSlider"] [data-testid="stThumbValue"] {
-        direction: ltr !important;
-        font-family: 'Segoe UI', Tahoma, monospace, sans-serif !important;
-        font-weight: 800 !important;
-        font-size: 0.95rem !important;
-        display: block !important;
-        visibility: visible !important;
-        opacity: 1 !important;
-    }
-
+    
     .en-badge {
         direction: ltr !important;
-        unicode-bidi: isolate !important;
         display: inline-block;
         font-family: 'Segoe UI', Tahoma, sans-serif !important;
         font-weight: 700;
         padding: 2px 8px;
         border-radius: 6px;
-        border: 1px solid #CBD5E1;
         font-size: 0.84em;
         margin: 0 4px;
         line-height: 1.3 !important;
@@ -410,102 +387,80 @@ st.markdown("""
     
     .en-subtext {
         direction: ltr !important;
-        unicode-bidi: isolate !important;
-        display: block;
-        font-family: 'Segoe UI', Tahoma, sans-serif !important;
-        font-size: 0.78rem;
         text-align: left;
         margin-top: 3px;
         line-height: 1.3 !important;
     }
 
-    /* الهيدر وبطاقات المؤشرات المتطورة */
+    /* Component Structure */
     .main-header {
-        background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
-        padding: 24px 30px;
+        padding: 22px 28px;
         border-radius: 16px;
-        color: white;
         margin-bottom: 20px;
-        border-right: 6px solid #3B82F6;
         box-shadow: 0 6px 20px rgba(0,0,0,0.12);
         direction: rtl;
         text-align: right;
     }
     
     .kpi-card {
-        background: #FFFFFF;
         padding: 18px 16px;
         border-radius: 14px;
-        border: 1px solid #E2E8F0;
-        box-shadow: 0 4px 14px rgba(0,0,0,0.03);
         text-align: center;
         direction: rtl;
         min-height: 130px;
         display: flex;
         flex-direction: column;
         justify-content: center;
-        transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
     .kpi-card:hover {
         transform: translateY(-3px);
-        box-shadow: 0 8px 22px rgba(0,0,0,0.08);
-        border-color: #CBD5E1;
     }
     .kpi-title {
         font-size: 0.88rem;
-        font-weight: 700;
-        color: #64748B;
+        font-weight: 800;
         margin-bottom: 6px;
         line-height: 1.4 !important;
     }
     .kpi-value {
         font-size: 1.78rem;
         font-weight: 900;
-        color: #0F172A;
         direction: ltr !important;
         display: block;
         margin: 4px 0;
         line-height: 1.2 !important;
     }
-    .kpi-sub {
+    .kpi-desc {
         font-size: 0.82rem;
-        color: #059669;
         font-weight: 700;
         margin-top: 4px;
         line-height: 1.3 !important;
     }
 
-    /* حقول الإدخال المحسنة */
-    div[data-testid="stTextInput"] label,
-    div[data-testid="stSelectbox"] label,
-    div[data-testid="stNumberInput"] label,
-    div[data-testid="stTextArea"] label {
-        font-weight: 700 !important;
-        font-size: 0.92rem !important;
-        margin-bottom: 6px !important;
-        direction: rtl !important;
-        text-align: right !important;
-        color: #1E293B !important;
+    .active-project-card {
+        border-radius: 14px;
+        padding: 16px 14px;
+        text-align: center;
+        direction: rtl;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .active-proj-lbl {
+        font-size: 0.8rem;
+        font-weight: 700;
+        display: block;
+        margin-bottom: 4px;
+    }
+    .active-proj-val {
+        font-size: 0.95rem;
+        font-weight: 900;
+        line-height: 1.5;
+        display: block;
     }
 
-    input, textarea, select {
-        direction: rtl !important;
-        text-align: right !important;
-        font-family: 'Cairo', sans-serif !important;
-        border-radius: 10px !important;
-        border: 1px solid #CBD5E1 !important;
-    }
-    
-    div[data-testid="stNumberInput"] input {
-        direction: ltr !important;
-        text-align: center !important;
-        font-family: 'Segoe UI', Tahoma, monospace, sans-serif !important;
-        font-weight: 700 !important;
-    }
-
-    /* شريط المعلومات التنفيذي للواجهة العصرية المضيئة */
     .modern-topbar {
-        background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
         border-radius: 14px;
         padding: 14px 22px;
         margin-bottom: 16px;
@@ -514,8 +469,6 @@ st.markdown("""
         align-items: center;
         flex-wrap: wrap;
         gap: 12px;
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        box-shadow: 0 6px 24px rgba(0,0,0,0.15);
         direction: rtl;
     }
     .topbar-item {
@@ -525,36 +478,23 @@ st.markdown("""
         font-size: 0.9rem;
     }
     .topbar-label {
-        color: #94A3B8;
-        font-weight: 600;
+        font-weight: 700;
     }
     .topbar-val {
-        color: #F8FAFC;
-        font-weight: 800;
+        font-weight: 900;
         font-family: 'Cairo', sans-serif;
     }
     .mode-badge-modern {
         background: linear-gradient(135deg, #2563EB 0%, #0284C7 100%);
-        color: white;
+        color: white !important;
         padding: 5px 12px;
         border-radius: 8px;
         font-size: 0.78rem;
         font-weight: 800;
         box-shadow: 0 2px 8px rgba(37,99,235,0.3);
     }
-    .mode-badge-classic {
-        background: #475569;
-        color: white;
-        padding: 5px 12px;
-        border-radius: 8px;
-        font-size: 0.78rem;
-        font-weight: 800;
-    }
 
-    /* شريط سير العمل الهندسي الموجه (Workflow Breadcrumb Bar) */
     .workflow-bar {
-        background: #FFFFFF;
-        border: 1px solid #E2E8F0;
         border-radius: 12px;
         padding: 10px 16px;
         margin-bottom: 16px;
@@ -563,7 +503,6 @@ st.markdown("""
         align-items: center;
         flex-wrap: wrap;
         gap: 8px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.02);
         direction: rtl;
     }
     .workflow-step {
@@ -571,19 +510,36 @@ st.markdown("""
         align-items: center;
         gap: 6px;
         font-size: 0.82rem;
-        font-weight: 700;
-        color: #64748B;
         padding: 4px 8px;
         border-radius: 6px;
     }
-    .workflow-step.active {
-        color: #1D4ED8;
-        background: #EFF6FF;
-        font-weight: 800;
-    }
     .workflow-arrow {
-        color: #CBD5E1;
         font-size: 0.85rem;
+    }
+
+    .sidebar-user-card {
+        border-radius: 10px;
+        padding: 8px 12px;
+        margin-top: 8px;
+        margin-bottom: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        direction: rtl;
+    }
+    .sidebar-user-lbl {
+        font-size: 0.72rem;
+        font-weight: 700;
+    }
+    .sidebar-user-val {
+        font-size: 0.85rem;
+        font-weight: 900;
+    }
+    .sidebar-user-badge {
+        padding: 2px 8px;
+        border-radius: 6px;
+        font-size: 0.72rem;
+        font-weight: 700;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -594,392 +550,120 @@ def render_dynamic_theme_engine():
     
     if current_theme == "ROYAL":
         theme_css = """
-        /* ================= 🏛️ THEME 1: ROYAL EXECUTIVE (ULTRA HIGH CONTRAST) ================= */
-        :root {
-            --primary-color: #2563EB;
-            --background-color: #F8FAFC;
-            --secondary-background-color: #FFFFFF;
-            --text-color: #0F172A;
-        }
+        /* ================= 🏛️ THEME 1: ROYAL EXECUTIVE ================= */
         .stApp, div[data-testid="stAppViewContainer"], .main {
             background-color: #F8FAFC !important;
             color: #0F172A !important;
         }
-        
-        /* Main Page Typography - 100% Solid Dark Text */
-        .stApp [data-testid="stMarkdownContainer"] p,
-        .stApp [data-testid="stMarkdownContainer"] span,
-        .stApp [data-testid="stMarkdownContainer"] li,
-        .stApp [data-testid="stMarkdownContainer"] div,
-        .stApp [data-testid="stWidgetLabel"] label,
-        .stApp [data-testid="stWidgetLabel"] p,
-        .stApp [data-testid="stWidgetLabel"] span,
-        .stApp div[data-testid="stRadio"] label p,
-        .stApp div[data-testid="stRadio"] span,
-        .stApp div[data-testid="stSelectbox"] label,
-        .stApp div[data-testid="stSlider"] label,
-        .stApp div[data-testid="stSlider"] p,
-        .stApp div[data-testid="stTextInput"] label,
-        .stApp div[data-testid="stNumberInput"] label,
-        .stApp div[data-testid="stExpander"] summary p,
-        .stApp div[data-testid="stExpanderDetails"] p,
-        .stApp div[data-testid="stAlert"] p,
-        .stApp p, .stApp li, .stApp label, .stApp td, .stApp th {
-            color: #0F172A !important;
-            font-weight: 700 !important;
-            opacity: 1 !important;
+
+        .main-header {
+            background: linear-gradient(135deg, #0F172A 0%, #1E3A8A 100%) !important;
+            border-right: 6px solid #3B82F6 !important;
         }
-        
-        .stApp h1, .stApp h2, .stApp h3, .stApp h4, .stApp h5, .stApp h6,
-        .stApp [data-testid="stMarkdownContainer"] h1,
-        .stApp [data-testid="stMarkdownContainer"] h2,
-        .stApp [data-testid="stMarkdownContainer"] h3,
-        .stApp [data-testid="stMarkdownContainer"] h4 {
-            color: #0B132B !important;
-            font-weight: 900 !important;
-            opacity: 1 !important;
-        }
-        
-        /* Sidebar Styling - 100% Deep Navy with Pure White Text */
-        section[data-testid="stSidebar"],
-        div[data-testid="stSidebarUserContent"] {
-            background-color: #0B132B !important;
-            border-left: 2px solid #1E293B !important;
-        }
-        
-        section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p,
-        section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] span,
-        section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] li,
-        section[data-testid="stSidebar"] [data-testid="stWidgetLabel"] label,
-        section[data-testid="stSidebar"] [data-testid="stWidgetLabel"] p,
-        section[data-testid="stSidebar"] [data-testid="stWidgetLabel"] span,
-        section[data-testid="stSidebar"] div[data-testid="stRadio"] label,
-        section[data-testid="stSidebar"] div[data-testid="stRadio"] label p,
-        section[data-testid="stSidebar"] div[data-testid="stRadio"] span,
-        section[data-testid="stSidebar"] div[data-testid="stSelectbox"] label,
-        section[data-testid="stSidebar"] div[data-testid="stSlider"] label,
-        section[data-testid="stSidebar"] p,
-        section[data-testid="stSidebar"] label,
-        section[data-testid="stSidebar"] span {
+        .main-header h2, .main-header p, .main-header span, .main-header b {
             color: #FFFFFF !important;
-            font-weight: 800 !important;
-            opacity: 1 !important;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.8) !important;
         }
-        
-        section[data-testid="stSidebar"] h1, 
-        section[data-testid="stSidebar"] h2, 
-        section[data-testid="stSidebar"] h3, 
-        section[data-testid="stSidebar"] h4, 
-        section[data-testid="stSidebar"] h5,
-        section[data-testid="stSidebar"] h6 {
-            color: #FFFFFF !important;
-            font-weight: 900 !important;
-            text-shadow: 0 2px 6px rgba(0,0,0,0.9) !important;
-        }
-        
-        section[data-testid="stSidebar"] .en-subtext {
-            color: #93C5FD !important;
-            font-weight: 800 !important;
-            opacity: 1 !important;
-        }
-        
-        section[data-testid="stSidebar"] hr {
-            border-color: #334155 !important;
-        }
-        
-        /* Cards, Tables and Containers */
-        .kpi-card, .metric-card, .chart-card, div[data-testid="stMetric"], div[data-testid="stExpander"], .workflow-bar {
+
+        .active-project-card {
             background: #FFFFFF !important;
             border: 2px solid #CBD5E1 !important;
-            box-shadow: 0 4px 20px rgba(15, 23, 42, 0.07) !important;
-            border-radius: 12px !important;
         }
-        .kpi-title {
-            color: #1E3A8A !important;
-            font-weight: 900 !important;
-        }
-        .kpi-value {
-            color: #0F172A !important;
-            font-weight: 900 !important;
-        }
-        .kpi-desc {
-            color: #334155 !important;
-            font-weight: 800 !important;
-        }
-        .workflow-step {
-            color: #0F172A !important;
-            font-weight: 800 !important;
-        }
-        .workflow-arrow {
-            color: #64748B !important;
-            font-weight: 800 !important;
-        }
+        .active-proj-lbl { color: #64748B !important; }
+        .active-proj-val { color: #0F172A !important; font-weight: 900 !important; }
+
         .modern-topbar {
             background: #FFFFFF !important;
             border: 2px solid #CBD5E1 !important;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05) !important;
         }
-        .modern-topbar .topbar-label {
-            color: #334155 !important;
-            font-weight: 800 !important;
+        .topbar-label { color: #475569 !important; font-weight: 700 !important; }
+        .topbar-val { color: #0F172A !important; font-weight: 900 !important; }
+
+        .workflow-bar {
+            background: #FFFFFF !important;
+            border: 2px solid #CBD5E1 !important;
         }
-        .modern-topbar .topbar-val {
-            color: #0F172A !important;
+        .workflow-step { color: #334155 !important; font-weight: 700 !important; }
+        .workflow-step.active {
+            background: #EFF6FF !important;
+            color: #1D4ED8 !important;
             font-weight: 900 !important;
+            border: 1px solid #93C5FD !important;
         }
+
+        .kpi-card, .metric-card, .chart-card, div[data-testid="stMetric"], div[data-testid="stExpander"] {
+            background: #FFFFFF !important;
+            border: 2px solid #CBD5E1 !important;
+        }
+        .kpi-title { color: #1E3A8A !important; font-weight: 800 !important; }
+        .kpi-value { color: #0F172A !important; font-weight: 900 !important; }
+        .kpi-desc { color: #475569 !important; font-weight: 700 !important; }
+
+        .stTabs [data-baseweb="tab-list"] { border-bottom: 2px solid #CBD5E1 !important; }
         .stTabs [data-baseweb="tab"] {
             background: #FFFFFF !important;
             color: #0F172A !important;
             border: 2px solid #CBD5E1 !important;
-            font-weight: 800 !important;
         }
         .stTabs [aria-selected="true"] {
             background: linear-gradient(135deg, #1E3A8A, #2563EB) !important;
             color: #FFFFFF !important;
-            border-color: #1D4ED8 !important;
+        }
+
+        section[data-testid="stSidebar"], div[data-testid="stSidebarUserContent"] {
+            background-color: #0B132B !important;
+            border-left: 2px solid #1E293B !important;
+        }
+        section[data-testid="stSidebar"] h1, section[data-testid="stSidebar"] h2, section[data-testid="stSidebar"] h3, section[data-testid="stSidebar"] h4, section[data-testid="stSidebar"] h5, section[data-testid="stSidebar"] h6 {
+            color: #FFFFFF !important;
             font-weight: 900 !important;
-            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3) !important;
+        }
+        section[data-testid="stSidebar"] p, section[data-testid="stSidebar"] label, section[data-testid="stSidebar"] span {
+            color: #FFFFFF !important;
+            font-weight: 700 !important;
         }
         """
     elif current_theme == "LIGHT":
         theme_css = """
-        /* ================= 🏢 THEME 2: MODERN LIGHT (ULTRA HIGH CONTRAST) ================= */
-        :root {
-            --primary-color: #1D4ED8;
-            --background-color: #FFFFFF;
-            --secondary-background-color: #F8FAFC;
-            --text-color: #0F172A;
-        }
+        /* ================= 🏢 THEME 2: MODERN LIGHT ================= */
         .stApp, div[data-testid="stAppViewContainer"], .main {
             background-color: #FFFFFF !important;
             color: #0F172A !important;
         }
-        
-        .stApp [data-testid="stMarkdownContainer"] p,
-        .stApp [data-testid="stMarkdownContainer"] span,
-        .stApp [data-testid="stMarkdownContainer"] li,
-        .stApp [data-testid="stWidgetLabel"] label,
-        .stApp [data-testid="stWidgetLabel"] p,
-        .stApp [data-testid="stWidgetLabel"] span,
-        .stApp div[data-testid="stRadio"] label p,
-        .stApp div[data-testid="stRadio"] span,
-        .stApp div[data-testid="stSelectbox"] label,
-        .stApp div[data-testid="stSlider"] label,
-        .stApp div[data-testid="stSlider"] p,
-        .stApp div[data-testid="stExpander"] summary p,
-        .stApp div[data-testid="stExpanderDetails"] p,
-        .stApp div[data-testid="stAlert"] p,
-        .stApp p, .stApp li, .stApp label, .stApp td, .stApp th {
-            color: #0F172A !important;
-            font-weight: 700 !important;
-            opacity: 1 !important;
+        .main-header {
+            background: linear-gradient(135deg, #0F172A 0%, #1E3A8A 100%) !important;
         }
-        
-        .stApp h1, .stApp h2, .stApp h3, .stApp h4, .stApp h5, .stApp h6 {
-            color: #0F172A !important;
-            font-weight: 900 !important;
-            opacity: 1 !important;
+        .kpi-card, .metric-card {
+            background: #F8FAFC !important;
+            border: 2px solid #CBD5E1 !important;
         }
-        
-        section[data-testid="stSidebar"],
-        div[data-testid="stSidebarUserContent"] {
+        .kpi-title { color: #1E40AF !important; font-weight: 800 !important; }
+        .kpi-value { color: #0F172A !important; font-weight: 900 !important; }
+        .kpi-desc { color: #334155 !important; font-weight: 700 !important; }
+        section[data-testid="stSidebar"], div[data-testid="stSidebarUserContent"] {
             background-color: #F1F5F9 !important;
-            border-left: 2px solid #CBD5E1 !important;
-        }
-        
-        section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p,
-        section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] span,
-        section[data-testid="stSidebar"] [data-testid="stWidgetLabel"] label,
-        section[data-testid="stSidebar"] [data-testid="stWidgetLabel"] p,
-        section[data-testid="stSidebar"] div[data-testid="stRadio"] label,
-        section[data-testid="stSidebar"] div[data-testid="stRadio"] label p,
-        section[data-testid="stSidebar"] div[data-testid="stRadio"] span,
-        section[data-testid="stSidebar"] div[data-testid="stSelectbox"] label,
-        section[data-testid="stSidebar"] div[data-testid="stSlider"] label,
-        section[data-testid="stSidebar"] p,
-        section[data-testid="stSidebar"] label,
-        section[data-testid="stSidebar"] span {
-            color: #0F172A !important;
-            font-weight: 800 !important;
-            opacity: 1 !important;
-        }
-        
-        section[data-testid="stSidebar"] h1, 
-        section[data-testid="stSidebar"] h2, 
-        section[data-testid="stSidebar"] h3, 
-        section[data-testid="stSidebar"] h4, 
-        section[data-testid="stSidebar"] h5,
-        section[data-testid="stSidebar"] h6 {
-            color: #0F172A !important;
-            font-weight: 900 !important;
-        }
-        
-        section[data-testid="stSidebar"] .en-subtext {
-            color: #1E40AF !important;
-            font-weight: 800 !important;
-        }
-        
-        section[data-testid="stSidebar"] hr {
-            border-color: #CBD5E1 !important;
-        }
-        
-        .kpi-card, .metric-card, .chart-card, div[data-testid="stMetric"], div[data-testid="stExpander"], .workflow-bar {
-            background: #F8FAFC !important;
-            border: 2px solid #CBD5E1 !important;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03) !important;
-            border-radius: 12px !important;
-        }
-        .kpi-title {
-            color: #1E40AF !important;
-            font-weight: 900 !important;
-        }
-        .kpi-value {
-            color: #0F172A !important;
-            font-weight: 900 !important;
-        }
-        .kpi-desc {
-            color: #334155 !important;
-            font-weight: 800 !important;
-        }
-        .workflow-step {
-            color: #0F172A !important;
-            font-weight: 800 !important;
-        }
-        .workflow-arrow {
-            color: #64748B !important;
-        }
-        .modern-topbar {
-            background: #F8FAFC !important;
-            border: 2px solid #CBD5E1 !important;
-        }
-        .modern-topbar .topbar-label {
-            color: #334155 !important;
-            font-weight: 800 !important;
-        }
-        .modern-topbar .topbar-val {
-            color: #0F172A !important;
-            font-weight: 900 !important;
-        }
-        .stTabs [data-baseweb="tab"] {
-            background: #F8FAFC !important;
-            color: #0F172A !important;
-            border: 2px solid #CBD5E1 !important;
-            font-weight: 800 !important;
-        }
-        .stTabs [aria-selected="true"] {
-            background: #1D4ED8 !important;
-            color: #FFFFFF !important;
-            border-color: #1E40AF !important;
-            font-weight: 900 !important;
-            box-shadow: 0 4px 12px rgba(29, 78, 216, 0.25) !important;
         }
         """
     else:  # DARK
         theme_css = """
-        /* ================= 🧊 THEME 3: DIGITAL TWIN DARK (ULTRA HIGH CONTRAST) ================= */
-        :root {
-            --primary-color: #38BDF8;
-            --background-color: #060A14;
-            --secondary-background-color: #0E1626;
-            --text-color: #FFFFFF;
-        }
+        /* ================= 🧊 THEME 3: DIGITAL TWIN DARK ================= */
         .stApp, div[data-testid="stAppViewContainer"], .main {
             background-color: #060A14 !important;
             color: #FFFFFF !important;
         }
-        
-        .stApp [data-testid="stMarkdownContainer"] p,
-        .stApp [data-testid="stMarkdownContainer"] span,
-        .stApp [data-testid="stMarkdownContainer"] li,
-        .stApp [data-testid="stMarkdownContainer"] div,
-        .stApp [data-testid="stWidgetLabel"] label,
-        .stApp [data-testid="stWidgetLabel"] p,
-        .stApp [data-testid="stWidgetLabel"] span,
-        .stApp div[data-testid="stRadio"] label p,
-        .stApp div[data-testid="stRadio"] span,
-        .stApp div[data-testid="stSelectbox"] label,
-        .stApp div[data-testid="stSlider"] label,
-        .stApp div[data-testid="stSlider"] p,
-        .stApp div[data-testid="stExpander"] summary p,
-        .stApp div[data-testid="stExpanderDetails"] p,
-        .stApp div[data-testid="stAlert"] p,
-        .stApp p, .stApp li, .stApp label, .stApp td, .stApp th {
-            color: #FFFFFF !important;
-            font-weight: 700 !important;
-            opacity: 1 !important;
+        .main-header {
+            background: linear-gradient(135deg, #0A1128 0%, #101E3D 100%) !important;
+            border-right: 6px solid #38BDF8 !important;
         }
-        
-        .stApp h1, .stApp h2, .stApp h3, .stApp h4, .stApp h5, .stApp h6 {
-            color: #FFFFFF !important;
-            font-weight: 900 !important;
-            text-shadow: 0 1px 8px rgba(0,0,0,0.9) !important;
-            opacity: 1 !important;
-        }
-        
-        section[data-testid="stSidebar"],
-        div[data-testid="stSidebarUserContent"] {
-            background-color: #03060D !important;
-            border-left: 2px solid #1E293B !important;
-        }
-        
-        section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p,
-        section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] span,
-        section[data-testid="stSidebar"] [data-testid="stWidgetLabel"] label,
-        section[data-testid="stSidebar"] [data-testid="stWidgetLabel"] p,
-        section[data-testid="stSidebar"] div[data-testid="stRadio"] label,
-        section[data-testid="stSidebar"] div[data-testid="stRadio"] label p,
-        section[data-testid="stSidebar"] div[data-testid="stRadio"] span,
-        section[data-testid="stSidebar"] div[data-testid="stSelectbox"] label,
-        section[data-testid="stSidebar"] div[data-testid="stSlider"] label,
-        section[data-testid="stSidebar"] p,
-        section[data-testid="stSidebar"] label,
-        section[data-testid="stSidebar"] span {
-            color: #FFFFFF !important;
-            font-weight: 800 !important;
-            opacity: 1 !important;
-            text-shadow: 0 1px 4px rgba(0,0,0,0.8) !important;
-        }
-        
-        section[data-testid="stSidebar"] h1, 
-        section[data-testid="stSidebar"] h2, 
-        section[data-testid="stSidebar"] h3, 
-        section[data-testid="stSidebar"] h4, 
-        section[data-testid="stSidebar"] h5,
-        section[data-testid="stSidebar"] h6 {
-            color: #FFFFFF !important;
-            font-weight: 900 !important;
-            text-shadow: 0 2px 6px rgba(0,0,0,0.9) !important;
-        }
-        
-        section[data-testid="stSidebar"] .en-subtext {
-            color: #38BDF8 !important;
-            font-weight: 800 !important;
-            opacity: 1 !important;
-        }
-        
-        section[data-testid="stSidebar"] hr {
-            border-color: #1E293B !important;
-        }
-        
-        .kpi-card, .metric-card, .chart-card, div[data-testid="stMetric"], div[data-testid="stExpander"], .workflow-bar {
+        .kpi-card, .metric-card {
             background: #0E1626 !important;
             border: 2px solid #1E293B !important;
             color: #FFFFFF !important;
-            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.5) !important;
-            border-radius: 12px !important;
         }
-        .kpi-title {
-            color: #38BDF8 !important;
-            font-weight: 900 !important;
-        }
-        .kpi-value {
-            color: #FFFFFF !important;
-            font-weight: 900 !important;
-        }
-        .kpi-desc {
-            color: #94A3B8 !important;
-            font-weight: 700 !important;
+        .kpi-title { color: #38BDF8 !important; font-weight: 800 !important; }
+        .kpi-value { color: #FFFFFF !important; font-weight: 900 !important; }
+        .kpi-desc { color: #94A3B8 !important; font-weight: 700 !important; }
+        section[data-testid="stSidebar"], div[data-testid="stSidebarUserContent"] {
+            background-color: #03060D !important;
         }
         .workflow-step {
             color: #E2E8F0 !important;
@@ -1566,12 +1250,12 @@ with st.sidebar:
             st.image("https://img.icons8.com/isometric/512/crane.png", width=65)
 
     st.markdown(f"""
-    <div style="background: #F8FAFC; border-radius: 10px; padding: 8px 12px; border: 1px solid #E2E8F0; margin-top: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; direction: rtl;">
+    <div class="sidebar-user-card">
         <div>
-            <div style="font-size: 0.72rem; color: #64748B; font-weight: 600;">المستخدم النشط:</div>
-            <div style="font-size: 0.85rem; color: #0F172A; font-weight: 800;">👤 {st.session_state.get('logged_user', 'Admin')}</div>
+            <div class="sidebar-user-lbl">المستخدم النشط:</div>
+            <div class="sidebar-user-val">👤 {st.session_state.get('logged_user', 'Admin')}</div>
         </div>
-        <span style="background: #DCFCE7; color: #166534; padding: 2px 8px; border-radius: 6px; font-size: 0.72rem; font-weight: 700; border: 1px solid #BBF7D0;">🟢 مصرح</span>
+        <span class="sidebar-user-badge">🟢 مصرح</span>
     </div>
     """, unsafe_allow_html=True)
     if st.button("🔒 تسجيل الخروج (Lock)", key="btn_auth_logout", use_container_width=True):
@@ -1899,18 +1583,18 @@ col_hdr_1, col_hdr_2 = st.columns([3.5, 1.2])
 with col_hdr_1:
     st.markdown(f"""
     <div class="main-header">
-        <h2 style="margin:0; font-size:1.55rem; color:#F8FAFC;">🏗️ ICRAT 2.0 | المنصة الهندسية المتكاملة لتقييم المخاطر والمطالبات</h2>
-        <p style="margin:8px 0 0 0; color:#94A3B8; font-size:0.92rem; line-height:1.6;">
-            محاكاة مونت كارلو <span class='en-badge'>QSRA/QCRA</span> • التنسيق <span class='en-badge'>ISO 31000</span> • مطالبات التمديد <span class='en-badge'>EOT</span> • استيراد <span class='en-badge'>Primavera P6 & BIM</span>
+        <h2 style="margin:0; font-size:1.55rem; color:#FFFFFF !important; font-weight:900;">🏗️ ICRAT 2.0 | المنصة الهندسية المتكاملة لتقييم المخاطر والمطالبات</h2>
+        <p style="margin:8px 0 0 0; color:#E2E8F0 !important; font-size:0.92rem; line-height:1.6; font-weight:700;">
+            محاكاة مونت كارلو <span class='en-badge-hdr'>QSRA/QCRA</span> • التنسيق <span class='en-badge-hdr'>ISO 31000</span> • مطالبات التمديد <span class='en-badge-hdr'>EOT</span> • استيراد <span class='en-badge-hdr'>Primavera P6 & BIM</span>
         </p>
     </div>
     """, unsafe_allow_html=True)
 
 with col_hdr_2:
     st.markdown(f"""
-    <div style="background:#F1F5F9; border-radius:12px; padding:16px 14px; text-align:center; border:1px solid #CBD5E1; direction:rtl;">
-        <span style="font-size:0.8rem; color:#64748B; font-weight:700;">المشروع المفعّل حالياً:</span><br/>
-        <b style="font-size:0.95rem; color:#1E293B; line-height:1.5; display:block; margin-top:4px;">{active_meta['name_ar']}</b>
+    <div class="active-project-card">
+        <span class="active-proj-lbl">المشروع المفعّل حالياً:</span>
+        <b class="active-proj-val">{active_meta['name_ar']}</b>
     </div>
     """, unsafe_allow_html=True)
 
