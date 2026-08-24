@@ -965,6 +965,64 @@ def render_login_portal():
     """بوابة الأمان والتحقق الرقمي المدمجة لحماية المنصة على الإنترنت"""
     col_pad1, col_center, col_pad2 = st.columns([1, 2.2, 1])
     with col_center:
+        floating_notice_html = """<style>
+@keyframes pulseGlow {
+    0% {
+        box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4);
+        border-color: #F59E0B;
+    }
+    50% {
+        box-shadow: 0 0 16px 4px rgba(245, 158, 11, 0.6);
+        border-color: #D97706;
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4);
+        border-color: #F59E0B;
+    }
+}
+@keyframes blinkDot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.3; transform: scale(0.85); }
+}
+.research-floating-badge {
+    animation: pulseGlow 2.5s infinite ease-in-out;
+    background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%);
+    border: 2px solid #F59E0B;
+    border-radius: 30px;
+    padding: 7px 20px;
+    margin: 10px auto 14px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    direction: rtl;
+    text-align: center;
+    width: fit-content;
+}
+.blinking-dot {
+    width: 10px;
+    height: 10px;
+    background-color: #DC2626;
+    border-radius: 50%;
+    display: inline-block;
+    animation: blinkDot 1.2s infinite ease-in-out;
+    box-shadow: 0 0 8px #DC2626;
+}
+.research-badge-text {
+    font-family: 'Cairo', 'Segoe UI', sans-serif;
+    font-size: 0.86rem;
+    font-weight: 800;
+    color: #92400E;
+}
+</style>
+<div style="text-align: center; width: 100%;">
+<div class="research-floating-badge">
+<span class="blinking-dot"></span>
+<span class="research-badge-text">هذه المنصة تجريبية وفي مرحلة التطوير والاختبار لأغراض بحثية</span>
+</div>
+</div>"""
+        st.markdown(floating_notice_html, unsafe_allow_html=True)
+
         banner_path = os.path.join(os.path.dirname(__file__), "icrat_login_banner.jpg")
         if not os.path.exists(banner_path):
             banner_path = "icrat_login_banner.jpg"
