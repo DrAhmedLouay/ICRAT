@@ -1672,7 +1672,7 @@ def render_dynamic_theme_engine():
     else:  # DARK
         theme_css = """
         /* ================= 🧊 THEME 3: DIGITAL TWIN DARK (التوأم الرقمي الليلي) ================= */
-        :root {
+        :root, .stApp, div[data-testid="stAppViewContainer"] {
             --bg-page: #060A14;
             --bg-card: #0E1626;
             --text-primary: #FFFFFF;
@@ -1682,6 +1682,10 @@ def render_dynamic_theme_engine():
             --border-secondary: #334155;
             --accent-primary: #38BDF8;
             --accent-secondary: #2563EB;
+            --secondary-background-color: #0E1626 !important;
+            --background-color: #060A14 !important;
+            --text-color: #FFFFFF !important;
+            --primary-color: #2563EB !important;
         }
 
         .stApp, div[data-testid="stAppViewContainer"], .main {
