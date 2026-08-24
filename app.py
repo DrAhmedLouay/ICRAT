@@ -217,9 +217,9 @@ def render_iso31000_matrix_html(issues):
     html += '</tbody></table></div>'
 
     html += '<div style="display:flex; justify-content:center; gap:16px; margin-top:14px; flex-wrap:wrap; font-size:0.82rem; font-weight:700;">'
-    html += '<div style="display:flex; align-items:center; gap:6px;"><span style="width:14px; height:14px; background:#EF4444; border-radius:4px; display:inline-block;"></span> <span style="color:#991B1B;">🔴 حرج غير مقبول (15 - 25): ورشة حسم فورية</span></div>'
-    html += '<div style="display:flex; align-items:center; gap:6px;"><span style="width:14px; height:14px; background:#F59E0B; border-radius:4px; display:inline-block;"></span> <span style="color:#92400E;">🟡 متوسط ALARP (8 - 14): خطة تخفيف مسبقة</span></div>'
-    html += '<div style="display:flex; align-items:center; gap:6px;"><span style="width:14px; height:14px; background:#10B981; border-radius:4px; display:inline-block;"></span> <span style="color:#166534;">🟢 مقبول (1 - 6): رصد ومتابعة موقعية</span></div>'
+    html += '<div style="display:flex; align-items:center; gap:6px;"><span style="width:14px; height:14px; background:#EF4444; border-radius:4px; display:inline-block;"></span> <span class="matrix-legend-high">🔴 حرج غير مقبول (15 - 25): ورشة حسم فورية</span></div>'
+    html += '<div style="display:flex; align-items:center; gap:6px;"><span style="width:14px; height:14px; background:#F59E0B; border-radius:4px; display:inline-block;"></span> <span class="matrix-legend-med">🟡 متوسط ALARP (8 - 14): خطة تخفيف مسبقة</span></div>'
+    html += '<div style="display:flex; align-items:center; gap:6px;"><span style="width:14px; height:14px; background:#10B981; border-radius:4px; display:inline-block;"></span> <span class="matrix-legend-low">🟢 مقبول (1 - 6): رصد ومتابعة موقعية</span></div>'
     html += '</div></div>'
     st.markdown(html, unsafe_allow_html=True)
 
@@ -939,6 +939,80 @@ def render_dynamic_theme_engine():
         }
         .en-subtext { color: #1E40AF !important; font-weight: 800 !important; }
         .en-badge { background: #EFF6FF !important; color: #1E40AF !important; border: 1px solid #BFDBFE !important; }
+
+        /* 14. Semantic Utilities (Royal) */
+        .subtext-muted { color: #475569 !important; font-weight: 700 !important; font-size: 0.84rem !important; }
+        .kpi-unit-sub { color: #64748B !important; font-size: 0.78rem !important; font-weight: 700 !important; }
+        .glossary-card {
+            background: #FFFFFF !important;
+            border: 2px solid #CBD5E1 !important;
+            border-radius: 12px !important;
+            padding: 14px 18px !important;
+            margin-bottom: 10px !important;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03) !important;
+        }
+        .glossary-title-en { color: #1D4ED8 !important; font-weight: 800 !important; font-size: 1.1rem !important; font-family: 'Segoe UI', Tahoma, sans-serif !important; }
+        .glossary-title-ar { color: #0F172A !important; font-weight: 800 !important; font-size: 0.95rem !important; margin: 6px 0 4px 0 !important; }
+        .glossary-desc-text { color: #334155 !important; line-height: 1.6 !important; font-size: 0.85rem !important; font-weight: 600 !important; }
+        .global-footer {
+            text-align: center !important;
+            padding: 28px 10px 35px 10px !important;
+            margin-top: 40px !important;
+            border-top: 2px solid #CBD5E1 !important;
+            direction: ltr !important;
+        }
+        .footer-dev-text { font-size: 1.05rem !important; font-weight: 800 !important; color: #1E293B !important; letter-spacing: 0.3px !important; margin-bottom: 6px !important; }
+        .footer-author-highlight { color: #2563EB !important; font-weight: 900 !important; }
+        .footer-subtext { font-size: 0.82rem !important; color: #475569 !important; direction: rtl !important; font-weight: 700 !important; }
+        .login-card-header {
+            background: #FFFFFF !important;
+            border-radius: 16px !important;
+            padding: 14px 18px !important;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05) !important;
+            border: 2px solid #CBD5E1 !important;
+            text-align: center !important;
+            direction: rtl !important;
+            margin-top: -6px !important;
+            margin-bottom: 14px !important;
+        }
+        .login-badge-platform {
+            display: inline-block !important;
+            background: #EFF6FF !important;
+            color: #1E3A8A !important;
+            font-size: 0.82rem !important;
+            font-weight: 800 !important;
+            padding: 4px 14px !important;
+            border-radius: 20px !important;
+            border: 1px solid #BFDBFE !important;
+            margin-bottom: 8px !important;
+            font-family: 'Segoe UI', Tahoma, sans-serif !important;
+            direction: ltr !important;
+        }
+        .login-banner-portal { color: #1D4ED8 !important; font-size: 0.88rem !important; font-weight: 800 !important; margin-bottom: 8px !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important; }
+        .login-desc-box { background: #F8FAFC !important; border-radius: 10px !important; padding: 8px 12px !important; border: 1px solid #CBD5E1 !important; font-size: 0.80rem !important; color: #334155 !important; line-height: 1.5 !important; font-weight: 700 !important; }
+        .login-footer-text { font-size: 0.88rem !important; font-weight: 800 !important; color: #1E293B !important; margin-bottom: 4px !important; }
+        .login-footer-sub { font-size: 0.82rem !important; font-weight: 700 !important; color: #2563EB !important; }
+        .risk-stat-card-high { background: #FEF2F2 !important; border: 2px solid #FCA5A5 !important; border-radius: 10px !important; padding: 12px 16px !important; margin-bottom: 10px !important; display: flex !important; justify-content: space-between !important; align-items: center !important; direction: rtl !important; }
+        .risk-stat-card-high .stat-title { font-weight: 800 !important; color: #991B1B !important; font-size: 0.92rem !important; }
+        .risk-stat-card-high .stat-num { font-size: 1.25rem !important; color: #DC2626 !important; font-family: 'Segoe UI', Tahoma, sans-serif !important; direction: ltr !important; font-weight: 900 !important; }
+        .risk-stat-card-med { background: #FFFBEB !important; border: 2px solid #FCD34D !important; border-radius: 10px !important; padding: 12px 16px !important; margin-bottom: 10px !important; display: flex !important; justify-content: space-between !important; align-items: center !important; direction: rtl !important; }
+        .risk-stat-card-med .stat-title { font-weight: 800 !important; color: #92400E !important; font-size: 0.92rem !important; }
+        .risk-stat-card-med .stat-num { font-size: 1.25rem !important; color: #D97706 !important; font-family: 'Segoe UI', Tahoma, sans-serif !important; direction: ltr !important; font-weight: 900 !important; }
+        .risk-stat-card-low { background: #F0FDF4 !important; border: 2px solid #86EFAC !important; border-radius: 10px !important; padding: 12px 16px !important; margin-bottom: 10px !important; display: flex !important; justify-content: space-between !important; align-items: center !important; direction: rtl !important; }
+        .risk-stat-card-low .stat-title { font-weight: 800 !important; color: #166534 !important; font-size: 0.92rem !important; }
+        .risk-stat-card-low .stat-num { font-size: 1.25rem !important; color: #059669 !important; font-family: 'Segoe UI', Tahoma, sans-serif !important; direction: ltr !important; font-weight: 900 !important; }
+        .matrix-legend-high { color: #991B1B !important; font-weight: 800 !important; }
+        .matrix-legend-med { color: #92400E !important; font-weight: 800 !important; }
+        .matrix-legend-low { color: #166534 !important; font-weight: 800 !important; }
+        .guidance-box { background: #EFF6FF !important; border: 2px solid #BFDBFE !important; border-radius: 10px !important; padding: 10px 14px !important; margin-bottom: 12px !important; color: #1E3A8A !important; }
+        .guidance-title { font-weight: 800 !important; font-size: 0.95rem !important; color: #1E40AF !important; }
+        .guidance-hl-1 { color: #1D4ED8 !important; }
+        .guidance-hl-2 { color: #0284C7 !important; }
+        .guidance-hl-3 { color: #D97706 !important; }
+        .guidance-hl-4 { color: #059669 !important; }
+        .guidance-hl-3 { color: #D97706 !important; }
+        .guidance-hl-4 { color: #059669 !important; }
+        .geo-stat-badge { background: #FEF2F2 !important; border: 1px solid #FECACA !important; color: #DC2626 !important; padding: 3px 8px; border-radius: 6px; font-weight: 800; }
         """
     elif current_theme == "LIGHT":
         theme_css = """
@@ -1280,6 +1354,76 @@ def render_dynamic_theme_engine():
         }
         .en-subtext { color: #1E40AF !important; font-weight: 800 !important; }
         .en-badge { background: #F1F5F9 !important; color: #1D4ED8 !important; border: 1px solid #CBD5E1 !important; }
+
+        /* 14. Semantic Utilities (Light) */
+        .subtext-muted { color: #475569 !important; font-weight: 700 !important; font-size: 0.84rem !important; }
+        .kpi-unit-sub { color: #64748B !important; font-size: 0.78rem !important; font-weight: 700 !important; }
+        .glossary-card {
+            background: #FFFFFF !important;
+            border: 2px solid #CBD5E1 !important;
+            border-radius: 12px !important;
+            padding: 14px 18px !important;
+            margin-bottom: 10px !important;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02) !important;
+        }
+        .glossary-title-en { color: #1D4ED8 !important; font-weight: 800 !important; font-size: 1.1rem !important; font-family: 'Segoe UI', Tahoma, sans-serif !important; }
+        .glossary-title-ar { color: #0F172A !important; font-weight: 800 !important; font-size: 0.95rem !important; margin: 6px 0 4px 0 !important; }
+        .glossary-desc-text { color: #334155 !important; line-height: 1.6 !important; font-size: 0.85rem !important; font-weight: 600 !important; }
+        .global-footer {
+            text-align: center !important;
+            padding: 28px 10px 35px 10px !important;
+            margin-top: 40px !important;
+            border-top: 2px solid #CBD5E1 !important;
+            direction: ltr !important;
+        }
+        .footer-dev-text { font-size: 1.05rem !important; font-weight: 800 !important; color: #1E293B !important; letter-spacing: 0.3px !important; margin-bottom: 6px !important; }
+        .footer-author-highlight { color: #2563EB !important; font-weight: 900 !important; }
+        .footer-subtext { font-size: 0.82rem !important; color: #475569 !important; direction: rtl !important; font-weight: 700 !important; }
+        .login-card-header {
+            background: #F8FAFC !important;
+            border-radius: 16px !important;
+            padding: 14px 18px !important;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05) !important;
+            border: 2px solid #CBD5E1 !important;
+            text-align: center !important;
+            direction: rtl !important;
+            margin-top: -6px !important;
+            margin-bottom: 14px !important;
+        }
+        .login-badge-platform {
+            display: inline-block !important;
+            background: #F1F5F9 !important;
+            color: #1E293B !important;
+            font-size: 0.82rem !important;
+            font-weight: 800 !important;
+            padding: 4px 14px !important;
+            border-radius: 20px !important;
+            border: 1px solid #CBD5E1 !important;
+            margin-bottom: 8px !important;
+            font-family: 'Segoe UI', Tahoma, sans-serif !important;
+            direction: ltr !important;
+        }
+        .login-banner-portal { color: #2563EB !important; font-size: 0.88rem !important; font-weight: 800 !important; margin-bottom: 8px !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important; }
+        .login-desc-box { background: #FFFFFF !important; border-radius: 10px !important; padding: 8px 12px !important; border: 1px solid #CBD5E1 !important; font-size: 0.80rem !important; color: #475569 !important; line-height: 1.5 !important; font-weight: 700 !important; }
+        .login-footer-text { font-size: 0.88rem !important; font-weight: 800 !important; color: #1E293B !important; margin-bottom: 4px !important; }
+        .login-footer-sub { font-size: 0.82rem !important; font-weight: 700 !important; color: #2563EB !important; }
+        .risk-stat-card-high { background: #FEF2F2 !important; border: 2px solid #FCA5A5 !important; border-radius: 10px !important; padding: 12px 16px !important; margin-bottom: 10px !important; display: flex !important; justify-content: space-between !important; align-items: center !important; direction: rtl !important; }
+        .risk-stat-card-high .stat-title { font-weight: 800 !important; color: #991B1B !important; font-size: 0.92rem !important; }
+        .risk-stat-card-high .stat-num { font-size: 1.25rem !important; color: #DC2626 !important; font-family: 'Segoe UI', Tahoma, sans-serif !important; direction: ltr !important; font-weight: 900 !important; }
+        .risk-stat-card-med { background: #FFFBEB !important; border: 2px solid #FCD34D !important; border-radius: 10px !important; padding: 12px 16px !important; margin-bottom: 10px !important; display: flex !important; justify-content: space-between !important; align-items: center !important; direction: rtl !important; }
+        .risk-stat-card-med .stat-title { font-weight: 800 !important; color: #92400E !important; font-size: 0.92rem !important; }
+        .risk-stat-card-med .stat-num { font-size: 1.25rem !important; color: #D97706 !important; font-family: 'Segoe UI', Tahoma, sans-serif !important; direction: ltr !important; font-weight: 900 !important; }
+        .risk-stat-card-low { background: #F0FDF4 !important; border: 2px solid #86EFAC !important; border-radius: 10px !important; padding: 12px 16px !important; margin-bottom: 10px !important; display: flex !important; justify-content: space-between !important; align-items: center !important; direction: rtl !important; }
+        .risk-stat-card-low .stat-title { font-weight: 800 !important; color: #166534 !important; font-size: 0.92rem !important; }
+        .risk-stat-card-low .stat-num { font-size: 1.25rem !important; color: #059669 !important; font-family: 'Segoe UI', Tahoma, sans-serif !important; direction: ltr !important; font-weight: 900 !important; }
+        .matrix-legend-high { color: #991B1B !important; font-weight: 800 !important; }
+        .matrix-legend-med { color: #92400E !important; font-weight: 800 !important; }
+        .matrix-legend-low { color: #166534 !important; font-weight: 800 !important; }
+        .guidance-box { background: #F8FAFC !important; border: 2px solid #CBD5E1 !important; border-radius: 10px !important; padding: 10px 14px !important; margin-bottom: 12px !important; color: #0F172A !important; }
+        .guidance-title { font-weight: 800 !important; font-size: 0.95rem !important; color: #1D4ED8 !important; }
+        .guidance-hl-1 { color: #1D4ED8 !important; }
+        .guidance-hl-2 { color: #0284C7 !important; }
+        .geo-stat-badge { background: #FEF2F2 !important; border: 1px solid #FECACA !important; color: #DC2626 !important; padding: 3px 8px; border-radius: 6px; font-weight: 800; }
         """
     else:  # DARK
         theme_css = """
@@ -1648,6 +1792,78 @@ def render_dynamic_theme_engine():
         }
         .en-subtext { color: #38BDF8 !important; font-weight: 800 !important; }
         .en-badge { background: #1E293B !important; color: #38BDF8 !important; border: 1px solid #334155 !important; }
+
+        /* 14. Semantic Utilities (Dark) */
+        .subtext-muted { color: #94A3B8 !important; font-weight: 700 !important; font-size: 0.84rem !important; }
+        .kpi-unit-sub { color: #94A3B8 !important; font-size: 0.78rem !important; font-weight: 700 !important; }
+        .glossary-card {
+            background: #0E1626 !important;
+            border: 2px solid #1E293B !important;
+            border-radius: 12px !important;
+            padding: 14px 18px !important;
+            margin-bottom: 10px !important;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.4) !important;
+        }
+        .glossary-title-en { color: #38BDF8 !important; font-weight: 800 !important; font-size: 1.1rem !important; font-family: 'Segoe UI', Tahoma, sans-serif !important; }
+        .glossary-title-ar { color: #FFFFFF !important; font-weight: 800 !important; font-size: 0.95rem !important; margin: 6px 0 4px 0 !important; }
+        .glossary-desc-text { color: #E2E8F0 !important; line-height: 1.6 !important; font-size: 0.85rem !important; font-weight: 600 !important; }
+        .global-footer {
+            text-align: center !important;
+            padding: 28px 10px 35px 10px !important;
+            margin-top: 40px !important;
+            border-top: 2px solid #1E293B !important;
+            direction: ltr !important;
+        }
+        .footer-dev-text { font-size: 1.05rem !important; font-weight: 800 !important; color: #FFFFFF !important; letter-spacing: 0.3px !important; margin-bottom: 6px !important; }
+        .footer-author-highlight { color: #38BDF8 !important; font-weight: 900 !important; }
+        .footer-subtext { font-size: 0.82rem !important; color: #94A3B8 !important; direction: rtl !important; font-weight: 700 !important; }
+        .login-card-header {
+            background: #0E1626 !important;
+            border-radius: 16px !important;
+            padding: 14px 18px !important;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4) !important;
+            border: 2px solid #1E293B !important;
+            text-align: center !important;
+            direction: rtl !important;
+            margin-top: -6px !important;
+            margin-bottom: 14px !important;
+        }
+        .login-badge-platform {
+            display: inline-block !important;
+            background: #131E35 !important;
+            color: #38BDF8 !important;
+            font-size: 0.82rem !important;
+            font-weight: 800 !important;
+            padding: 4px 14px !important;
+            border-radius: 20px !important;
+            border: 1px solid #1E293B !important;
+            margin-bottom: 8px !important;
+            font-family: 'Segoe UI', Tahoma, sans-serif !important;
+            direction: ltr !important;
+        }
+        .login-banner-portal { color: #38BDF8 !important; font-size: 0.88rem !important; font-weight: 800 !important; margin-bottom: 8px !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important; }
+        .login-desc-box { background: #131E35 !important; border-radius: 10px !important; padding: 8px 12px !important; border: 1px solid #1E293B !important; font-size: 0.80rem !important; color: #E2E8F0 !important; line-height: 1.5 !important; font-weight: 700 !important; }
+        .login-footer-text { font-size: 0.88rem !important; font-weight: 800 !important; color: #FFFFFF !important; margin-bottom: 4px !important; }
+        .login-footer-sub { font-size: 0.82rem !important; font-weight: 700 !important; color: #38BDF8 !important; }
+        .risk-stat-card-high { background: #2A0E12 !important; border: 2px solid #EF4444 !important; border-radius: 10px !important; padding: 12px 16px !important; margin-bottom: 10px !important; display: flex !important; justify-content: space-between !important; align-items: center !important; direction: rtl !important; }
+        .risk-stat-card-high .stat-title { font-weight: 800 !important; color: #FCA5A5 !important; font-size: 0.92rem !important; }
+        .risk-stat-card-high .stat-num { font-size: 1.25rem !important; color: #EF4444 !important; font-family: 'Segoe UI', Tahoma, sans-serif !important; direction: ltr !important; font-weight: 900 !important; }
+        .risk-stat-card-med { background: #2A1D08 !important; border: 2px solid #F59E0B !important; border-radius: 10px !important; padding: 12px 16px !important; margin-bottom: 10px !important; display: flex !important; justify-content: space-between !important; align-items: center !important; direction: rtl !important; }
+        .risk-stat-card-med .stat-title { font-weight: 800 !important; color: #FDE68A !important; font-size: 0.92rem !important; }
+        .risk-stat-card-med .stat-num { font-size: 1.25rem !important; color: #F59E0B !important; font-family: 'Segoe UI', Tahoma, sans-serif !important; direction: ltr !important; font-weight: 900 !important; }
+        .risk-stat-card-low { background: #082618 !important; border: 2px solid #10B981 !important; border-radius: 10px !important; padding: 12px 16px !important; margin-bottom: 10px !important; display: flex !important; justify-content: space-between !important; align-items: center !important; direction: rtl !important; }
+        .risk-stat-card-low .stat-title { font-weight: 800 !important; color: #A7F3D0 !important; font-size: 0.92rem !important; }
+        .risk-stat-card-low .stat-num { font-size: 1.25rem !important; color: #10B981 !important; font-family: 'Segoe UI', Tahoma, sans-serif !important; direction: ltr !important; font-weight: 900 !important; }
+        .matrix-legend-high { color: #F87171 !important; font-weight: 800 !important; }
+        .matrix-legend-med { color: #FBBF24 !important; font-weight: 800 !important; }
+        .matrix-legend-low { color: #34D399 !important; font-weight: 800 !important; }
+        .guidance-box { background: #101E3D !important; border: 2px solid #1E3A8A !important; border-radius: 10px !important; padding: 10px 14px !important; margin-bottom: 12px !important; color: #E2E8F0 !important; }
+        .guidance-title { font-weight: 800 !important; font-size: 0.95rem !important; color: #38BDF8 !important; }
+        .guidance-hl-1 { color: #60A5FA !important; }
+        .guidance-hl-2 { color: #38BDF8 !important; }
+        .guidance-hl-3 { color: #FBBF24 !important; }
+        .guidance-hl-4 { color: #34D399 !important; }
+        .geo-stat-badge { background: #2A0E12 !important; border: 1px solid #EF4444 !important; color: #FCA5A5 !important; padding: 3px 8px; border-radius: 6px; font-weight: 800; }
         """
     st.markdown(f"<style>{theme_css}</style>", unsafe_allow_html=True)
 
@@ -2187,14 +2403,14 @@ def render_login_portal():
         if os.path.exists(banner_path):
             st.image(banner_path, use_container_width=True)
             
-        header_info_html = """<div style="background: #FFFFFF; border-radius: 16px; padding: 14px 18px; box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05); border: 1px solid #E2E8F0; text-align: center; direction: rtl; margin-top: -6px; margin-bottom: 14px;">
-<div style="display: inline-block; background: #F1F5F9; color: #1E293B; font-size: 0.82rem; font-weight: 700; padding: 4px 14px; border-radius: 20px; border: 1px solid #CBD5E1; margin-bottom: 8px; font-family: 'Segoe UI', Tahoma, sans-serif; direction: ltr;">
+        header_info_html = """<div class="login-card-header">
+<div class="login-badge-platform">
 Iraqi Construction Risk Assessment & Decision Support Platform (ICRAT 2.0)
 </div>
-<div style="color: #2563EB; font-size: 0.88rem; font-weight: 800; margin-bottom: 8px; display: flex; align-items: center; justify-content: center; gap: 6px;">
+<div class="login-banner-portal">
 <span>🔒</span> <span>بوابة الدخول المعتمدة للمهندسين والمشرفين</span>
 </div>
-<div style="background: #F8FAFC; border-radius: 10px; padding: 8px 12px; border: 1px solid #E2E8F0; font-size: 0.80rem; color: #475569; line-height: 1.5;">
+<div class="login-desc-box">
 هذه المنصة محمية بنظام التحقق الرقمي المشفر. يرجى إدخال بيانات الاعتماد المصرح بها للوصول إلى أدوات ومحركات المشروع.
 </div>
 </div>"""
@@ -2254,11 +2470,11 @@ Iraqi Construction Risk Assessment & Decision Support Platform (ICRAT 2.0)
                 else:
                     st.error("❌ اسم المستخدم أو كلمة المرور غير صحيحة! يرجى التحقق وإعادة المحاولة.")
 
-        login_footer_html = """<div style="text-align: center; margin-top: 24px; padding-top: 14px; border-top: 1px solid #E2E8F0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; direction: ltr;">
-<div style="font-size: 0.88rem; font-weight: 700; color: #1E293B; margin-bottom: 4px; letter-spacing: 0.2px;">
+        login_footer_html = """<div style="text-align: center; margin-top: 24px; padding-top: 14px; border-top: 1px solid var(--border-secondary, #CBD5E1); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; direction: ltr;">
+<div class="login-footer-text">
 Iraqi Construction Risk Assessment & Decision Support Platform
 </div>
-<div style="font-size: 0.82rem; font-weight: 600; color: #2563EB;">
+<div class="login-footer-sub">
 Designed and Developed by Dr Ahmed Louay Ahmed
 </div>
 </div>"""
@@ -2620,7 +2836,7 @@ with st.sidebar:
 
     # 📥 قسم استيراد Primavera P6 و BIM IFC و JSON و Navisworks في القائمة الجانبية
     with st.expander("📥 استيراد مشروع (P6 / IFC / JSON / Navisworks)", expanded=False):
-        st.markdown("<div style='font-size:0.8rem; color:#64748B; margin-bottom:6px;'>استيراد مباشر وسريع لملفات المشروع:</div>", unsafe_allow_html=True)
+        st.markdown("<div class="subtext-muted" style="margin-bottom:6px;">استيراد مباشر وسريع لملفات المشروع:</div>", unsafe_allow_html=True)
         sb_import_type = st.radio(
             "اختر صيغة الملف:",
             options=["1️⃣ جدول Primavera P6 (.xer)", "2️⃣ نموذج BIM (.ifc)", "3️⃣ تعارضات Navisworks (.xml / .csv)", "4️⃣ نسخة احتياطية (.json)"],
@@ -2680,7 +2896,7 @@ with st.sidebar:
                     res = process_universal_json_upload(data, sb_up_json.name)
                     if res["success"]:
                         st.success(f"✅ {res['title']}")
-                        st.markdown(f"<div style='font-size:0.78rem; color:#475569; margin-bottom:6px;'>💡 {res['msg']}</div>", unsafe_allow_html=True)
+                        st.markdown(f"<div class="subtext-muted" style="margin-bottom:6px;">💡 {res['msg']}</div>", unsafe_allow_html=True)
                         if st.button("🚀 تفعيل واستيراد البيانات الآن", type="primary", key="sb_btn_apply_json", use_container_width=True):
                             if res["type"] in ["FULL_PROJECT", "ACTIVITIES_LIST"]:
                                 load_clean_project_state(
@@ -3144,7 +3360,7 @@ else:
     # النمط الكلاسيكي الأصلي
     st.markdown("""
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-        <span style="font-size:0.85rem; color:#64748B; font-weight:700;">تنقل بين شاشات وأدوات المنصة (الواجهة الكلاسيكية):</span>
+        <span class="subtext-muted">تنقل بين شاشات وأدوات المنصة (الواجهة الكلاسيكية):</span>
         <span class="mode-badge-classic">🏛️ الواجهة الكلاسيكية 12-Tabs</span>
     </div>
     """, unsafe_allow_html=True)
@@ -3648,7 +3864,7 @@ elif selected_tab == "🧩 التنسيق (ISO 31000)":
         </div>
         <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:12px;">
             <div class="guide-subcard" style="border-top:4px solid #3B82F6;">
-                <div style="font-weight:800; font-size:0.92rem; color:#2563EB; margin-bottom:6px;">
+                <div class="guidance-hl-1" style="font-weight:800; font-size:0.92rem; margin-bottom:6px;">
                     1️⃣ تحديد الخطر <span class='en-badge'>Identification</span>
                 </div>
                 <div style="font-size:0.84rem; line-height:1.55;">
@@ -3656,7 +3872,7 @@ elif selected_tab == "🧩 التنسيق (ISO 31000)":
                 </div>
             </div>
             <div class="guide-subcard" style="border-top:4px solid #0284C7;">
-                <div style="font-weight:800; font-size:0.92rem; color:#0284C7; margin-bottom:6px;">
+                <div class="guidance-hl-2" style="font-weight:800; font-size:0.92rem; margin-bottom:6px;">
                     2️⃣ تحليل الخطر <span class='en-badge'>Analysis</span>
                 </div>
                 <div style="font-size:0.84rem; line-height:1.55;">
@@ -3664,7 +3880,7 @@ elif selected_tab == "🧩 التنسيق (ISO 31000)":
                 </div>
             </div>
             <div class="guide-subcard" style="border-top:4px solid #D97706;">
-                <div style="font-weight:800; font-size:0.92rem; color:#D97706; margin-bottom:6px;">
+                <div class="guidance-hl-3" style="font-weight:800; font-size:0.92rem; margin-bottom:6px;">
                     3️⃣ تقييم الخطر <span class='en-badge'>Evaluation</span>
                 </div>
                 <div style="font-size:0.84rem; line-height:1.55;">
@@ -3672,7 +3888,7 @@ elif selected_tab == "🧩 التنسيق (ISO 31000)":
                 </div>
             </div>
             <div class="guide-subcard" style="border-top:4px solid #10B981;">
-                <div style="font-weight:800; font-size:0.92rem; color:#10B981; margin-bottom:6px;">
+                <div class="guidance-hl-4" style="font-weight:800; font-size:0.92rem; margin-bottom:6px;">
                     4️⃣ معالجة الخطر <span class='en-badge'>Treatment</span>
                 </div>
                 <div style="font-size:0.84rem; line-height:1.55;">
@@ -3713,7 +3929,7 @@ elif selected_tab == "🧩 التنسيق (ISO 31000)":
         st.markdown(f"""
         <div class="kpi-card" style="padding:12px;">
             <div class="kpi-title" style="font-size:0.78rem;">📌 إجمالي التعارضات</div>
-            <div class="kpi-value" style="font-size:1.4rem;">{ai_hub_res['total_clashes']} <span style="font-size:0.75rem; color:#64748B;">تعارض</span></div>
+            <div class="kpi-value" style="font-size:1.4rem;">{ai_hub_res['total_clashes']} <span class="kpi-unit-sub">تعارض</span></div>
             <div class="kpi-sub">مرصودة في النماذج</div>
         </div>
         """, unsafe_allow_html=True)
@@ -3731,7 +3947,7 @@ elif selected_tab == "🧩 التنسيق (ISO 31000)":
         st.markdown(f"""
         <div class="kpi-card" style="padding:12px;">
             <div class="kpi-title" style="font-size:0.78rem;">🚨 تهديد المسار الحرج P6</div>
-            <div class="kpi-value" style="font-size:1.4rem; color:#DC2626;">{ai_hub_res['critical_clashes_count']} <span style="font-size:0.75rem; color:#64748B;">تعارض</span></div>
+            <div class="kpi-value" style="font-size:1.4rem; color:#DC2626;">{ai_hub_res['critical_clashes_count']} <span class="kpi-unit-sub">تعارض</span></div>
             <div class="kpi-sub">يمس أنشطة حرجة (Float=0)</div>
         </div>
         """, unsafe_allow_html=True)
@@ -3740,7 +3956,7 @@ elif selected_tab == "🧩 التنسيق (ISO 31000)":
         st.markdown(f"""
         <div class="kpi-card" style="padding:12px;">
             <div class="kpi-title" style="font-size:0.78rem;">⏳ التأخير التنبؤي المتوقع</div>
-            <div class="kpi-value" style="font-size:1.4rem; color:#D97706;">+{ai_hub_res['total_critical_path_delay_days']} <span style="font-size:0.75rem; color:#64748B;">يوم</span></div>
+            <div class="kpi-value" style="font-size:1.4rem; color:#D97706;">+{ai_hub_res['total_critical_path_delay_days']} <span class="kpi-unit-sub">يوم</span></div>
             <div class="kpi-sub">أثر مباشر قبل الحسم</div>
         </div>
         """, unsafe_allow_html=True)
@@ -3749,7 +3965,7 @@ elif selected_tab == "🧩 التنسيق (ISO 31000)":
         st.markdown(f"""
         <div class="kpi-card" style="padding:12px;">
             <div class="kpi-title" style="font-size:0.78rem;">💰 كلفة إعادة العمل 5D</div>
-            <div class="kpi-value" style="font-size:1.4rem; color:#7C3AED;">{ai_hub_res['total_projected_rework_cost_usd']:,.0f} <span style="font-size:0.75rem; color:#64748B;">{curr_sym}</span></div>
+            <div class="kpi-value" style="font-size:1.4rem; color:#7C3AED;">{ai_hub_res['total_projected_rework_cost_usd']:,.0f} <span class="kpi-unit-sub">{curr_sym}</span></div>
             <div class="kpi-sub">توفير مضمون بالحسم المبكر</div>
         </div>
         """, unsafe_allow_html=True)
@@ -3846,7 +4062,7 @@ elif selected_tab == "🧩 التنسيق (ISO 31000)":
 
     # 3. جدول محطة دعم القرار الذكية وتحديد الأولويات والتفسير (Decision Hub Prioritization Table)
     st.markdown("#### 🧠 مصفوفة القرارات الذكية وتحديد الأولويات والتفسير (AI-BIM Decision Hub & Triage Matrix)")
-    st.markdown("<div style='font-size:0.85rem; color:#64748B; margin-bottom:12px;'>ترتيب الأولويات متعدد المعايير (نموذج Bitaraf 2024)، الربط بجدول P6، التفسير بالذكاء الاصطناعي، واستراتيجيات ISO 31000:</div>", unsafe_allow_html=True)
+    st.markdown("<div class="subtext-muted" style="margin-bottom:12px;">ترتيب الأولويات متعدد المعايير (نموذج Bitaraf 2024)، الربط بجدول P6، التفسير بالذكاء الاصطناعي، واستراتيجيات ISO 31000:</div>", unsafe_allow_html=True)
 
     hub_rows = []
     for ac in ai_hub_res["analyzed_clashes"]:
@@ -3911,7 +4127,7 @@ elif selected_tab == "🧩 التنسيق (ISO 31000)":
 
         col_pag1, col_pag2 = st.columns([2.2, 1.2])
         with col_pag1:
-            st.markdown(f"<div style='font-size:0.83rem; color:#475569; padding-top:8px; font-weight:600;'>النتائج المعروضة: <b style='color:#0284C7;'>{len(df_hub_filtered)}</b> من أصل <b>{len(df_hub_full)}</b> تعارض</div>", unsafe_allow_html=True)
+            st.markdown(f"<div class="subtext-muted" style="padding-top:8px; font-weight:600;">النتائج المعروضة: <b style='color:#0284C7;'>{len(df_hub_filtered)}</b> من أصل <b>{len(df_hub_full)}</b> تعارض</div>", unsafe_allow_html=True)
         with col_pag2:
             t_page_size = st.selectbox("📄 عدد التعارضات بالصفحة:", options=[50, 100, 200, "الكل"], index=0, key="triage_page_sz")
 
@@ -3923,7 +4139,7 @@ elif selected_tab == "🧩 التنسيق (ISO 31000)":
             with col_pg_btn1:
                 cur_page = st.number_input(f"📑 رقم الصفحة (من {total_pages}):", min_value=1, max_value=total_pages, value=1, step=1, key="triage_cur_pg")
             with col_pg_btn2:
-                st.markdown(f"<div style='font-size:0.80rem; color:#64748B; padding-top:28px;'>عرض التعارضات من {(cur_page-1)*psize + 1} إلى {min(cur_page*psize, len(display_df))}</div>", unsafe_allow_html=True)
+                st.markdown(f"<div class="subtext-muted" style="padding-top:28px;">عرض التعارضات من {(cur_page-1)*psize + 1} إلى {min(cur_page*psize, len(display_df))}</div>", unsafe_allow_html=True)
             start_i = (cur_page - 1) * psize
             end_i = start_i + psize
             display_df = display_df.iloc[start_i:end_i]
@@ -3974,7 +4190,7 @@ elif selected_tab == "🧩 التنسيق (ISO 31000)":
 
     with col_fb2:
         st.markdown("##### 📤 تصدير تقرير التنسيق المفتوح (OpenBIM BCF 2.1):")
-        st.markdown("<div style='font-size:0.8rem; color:#64748B; margin-bottom:10px;'>تصدير مخرجات القرارات ومصفوفة ISO 31000 بتنسيق BCF المعتمد للفتح في Autodesk Revit و Navisworks:</div>", unsafe_allow_html=True)
+        st.markdown("<div class="subtext-muted" style="margin-bottom:10px;">تصدير مخرجات القرارات ومصفوفة ISO 31000 بتنسيق BCF المعتمد للفتح في Autodesk Revit و Navisworks:</div>", unsafe_allow_html=True)
         bcf_json_payload = ai_bim_decision_hub.export_clash_triage_to_bcf_json(
             analyzed_clashes=ai_hub_res["analyzed_clashes"],
             project_name=active_meta.get("name_ar", "CBI Tower Project")
@@ -4007,7 +4223,7 @@ elif selected_tab == "⚖️ المطالبات والتمديد (EOT)":
         st.markdown(f"""
         <div class="kpi-card">
             <div class="kpi-title">⏳ التمديد الزمني المستحق (EOT)</div>
-            <div class="kpi-value" style="color:#2563EB;">+{eot_calc_res['total_entitled_eot_days']} <span style="font-size:1rem; color:#64748B;">يوم</span></div>
+            <div class="kpi-value" style="color:#2563EB;">+{eot_calc_res['total_entitled_eot_days']} <span class="kpi-unit-sub">يوم</span></div>
             <div class="kpi-sub">المادة (44) من الشروط العامة</div>
         </div>
         """, unsafe_allow_html=True)
@@ -4016,7 +4232,7 @@ elif selected_tab == "⚖️ المطالبات والتمديد (EOT)":
         st.markdown(f"""
         <div class="kpi-card">
             <div class="kpi-title">💵 مطالبة تكاليف استمرار الموقع</div>
-            <div class="kpi-value" style="color:#059669;">+{eot_calc_res['total_prolongation_claim']:,.0f} <span style="font-size:1rem; color:#64748B;">{curr_sym}</span></div>
+            <div class="kpi-value" style="color:#059669;">+{eot_calc_res['total_prolongation_claim']:,.0f} <span class="kpi-unit-sub">{curr_sym}</span></div>
             <div class="kpi-sub">عن {eot_calc_res['total_compensable_days']} يوم تأخير معوّض</div>
         </div>
         """, unsafe_allow_html=True)
@@ -4025,7 +4241,7 @@ elif selected_tab == "⚖️ المطالبات والتمديد (EOT)":
         st.markdown(f"""
         <div class="kpi-card">
             <div class="kpi-title">⚠️ الغرامات التأخيرية المحسوبة</div>
-            <div class="kpi-value" style="color:#DC2626;">-{eot_calc_res['total_liquidated_damages']:,.0f} <span style="font-size:1rem; color:#64748B;">{curr_sym}</span></div>
+            <div class="kpi-value" style="color:#DC2626;">-{eot_calc_res['total_liquidated_damages']:,.0f} <span class="kpi-unit-sub">{curr_sym}</span></div>
             <div class="kpi-sub">عن {eot_calc_res['total_contractor_delay_days']} يوم غير مبرر (م47)</div>
         </div>
         """, unsafe_allow_html=True)
@@ -4034,7 +4250,7 @@ elif selected_tab == "⚖️ المطالبات والتمديد (EOT)":
         st.markdown(f"""
         <div class="kpi-card">
             <div class="kpi-title">💰 صافي الرصيد المالي للمطالبة</div>
-            <div class="kpi-value" style="color:#D97706;">{eot_calc_res['net_contractual_balance']:+,.0f} <span style="font-size:1rem; color:#64748B;">{curr_sym}</span></div>
+            <div class="kpi-value" style="color:#D97706;">{eot_calc_res['net_contractual_balance']:+,.0f} <span class="kpi-unit-sub">{curr_sym}</span></div>
             <div class="kpi-sub">الاستحقاق المالي الصافي للمقاول</div>
         </div>
         """, unsafe_allow_html=True)
@@ -4124,7 +4340,7 @@ elif selected_tab == "🔮 مقارن السيناريوهات (What-If)":
         st.markdown(f"""
         <div class="kpi-card" style="border-top:4px solid #3B82F6;">
             <div class="kpi-title">⏱️ الأيام الزمنية التي تم إنقاذها</div>
-            <div class="kpi-value" style="color:#2563EB;">+{whatif_res['days_saved']:,.0f} <span style="font-size:1rem; color:#64748B;">يوم</span></div>
+            <div class="kpi-value" style="color:#2563EB;">+{whatif_res['days_saved']:,.0f} <span class="kpi-unit-sub">يوم</span></div>
             <div class="kpi-sub">توفير {whatif_res['days_saved_pct']:.1f}% من مدة المشروع الكلية</div>
         </div>
         """, unsafe_allow_html=True)
@@ -4133,7 +4349,7 @@ elif selected_tab == "🔮 مقارن السيناريوهات (What-If)":
         st.markdown(f"""
         <div class="kpi-card" style="border-top:4px solid #10B981;">
             <div class="kpi-title">💰 الوفر المالي المحقق من المعالجة</div>
-            <div class="kpi-value" style="color:#059669;">+{whatif_res['cost_saved']:,.0f} <span style="font-size:1rem; color:#64748B;">{curr_sym}</span></div>
+            <div class="kpi-value" style="color:#059669;">+{whatif_res['cost_saved']:,.0f} <span class="kpi-unit-sub">{curr_sym}</span></div>
             <div class="kpi-sub">تقليل تضخم التكاليف والمصاريف الإدارية</div>
         </div>
         """, unsafe_allow_html=True)
@@ -4281,28 +4497,28 @@ elif selected_tab == "🧊 عارض BIM 3D التفاعلي":
             st.markdown(f"""
             <div class="kpi-card" style="padding:10px;">
                 <div class="kpi-title" style="font-size:0.75rem;">🟢 الأساسات والقواعد</div>
-                <div class="kpi-value" style="font-size:1.25rem; color:#059669;">{elem_summary.get('الأساسات والقواعد (Footings)', 0)} <span style="font-size:0.75rem; color:#64748B;">عنصر</span></div>
+                <div class="kpi-value" style="font-size:1.25rem; color:#059669;">{elem_summary.get('الأساسات والقواعد (Footings)', 0)} <span class="kpi-unit-sub">عنصر</span></div>
             </div>
             """, unsafe_allow_html=True)
         with col_b2:
             st.markdown(f"""
             <div class="kpi-card" style="padding:10px;">
                 <div class="kpi-title" style="font-size:0.75rem;">⚪ الأعمدة الخرسانية</div>
-                <div class="kpi-value" style="font-size:1.25rem; color:#0284C7;">{elem_summary.get('الأعمدة الخرسانية (Columns)', 0)} <span style="font-size:0.75rem; color:#64748B;">عمود</span></div>
+                <div class="kpi-value" style="font-size:1.25rem; color:#0284C7;">{elem_summary.get('الأعمدة الخرسانية (Columns)', 0)} <span class="kpi-unit-sub">عمود</span></div>
             </div>
             """, unsafe_allow_html=True)
         with col_b3:
             st.markdown(f"""
             <div class="kpi-card" style="padding:10px;">
                 <div class="kpi-title" style="font-size:0.75rem;">🔵 الجسور والأسقف</div>
-                <div class="kpi-value" style="font-size:1.25rem; color:#2563EB;">{elem_summary.get('الجسور والأعتاب (Beams)', 0) + elem_summary.get('البلاطات والأسقف (Slabs)', 0)} <span style="font-size:0.75rem; color:#64748B;">عنصر</span></div>
+                <div class="kpi-value" style="font-size:1.25rem; color:#2563EB;">{elem_summary.get('الجسور والأعتاب (Beams)', 0) + elem_summary.get('البلاطات والأسقف (Slabs)', 0)} <span class="kpi-unit-sub">عنصر</span></div>
             </div>
             """, unsafe_allow_html=True)
         with col_b4:
             st.markdown(f"""
             <div class="kpi-card" style="padding:10px;">
                 <div class="kpi-title" style="font-size:0.75rem;">💨 شبكات MEP والتكييف</div>
-                <div class="kpi-value" style="font-size:1.25rem; color:#D97706;">{elem_summary.get('دكتات التكييف (Ducts)', 0) + elem_summary.get('شبكات الأنابيب (Pipes)', 0)} <span style="font-size:0.75rem; color:#64748B;">مسار</span></div>
+                <div class="kpi-value" style="font-size:1.25rem; color:#D97706;">{elem_summary.get('دكتات التكييف (Ducts)', 0) + elem_summary.get('شبكات الأنابيب (Pipes)', 0)} <span class="kpi-unit-sub">مسار</span></div>
             </div>
             """, unsafe_allow_html=True)
 
@@ -4469,7 +4685,7 @@ elif selected_tab == "📅 مخطط جانت وبريمافيرا (Gantt)":
             st.markdown(f"""
             <div class="kpi-card" style="padding:10px; min-height:85px;">
                 <div class="kpi-title" style="font-size:0.78rem;">⏳ مدة المسار الحرج CPM</div>
-                <div class="kpi-value" style="font-size:1.3rem; color:#2563EB;">{cpm_project_duration} <span style="font-size:0.8rem; color:#64748B;">يوم</span></div>
+                <div class="kpi-value" style="font-size:1.3rem; color:#2563EB;">{cpm_project_duration} <span class="kpi-unit-sub">يوم</span></div>
             </div>
             """, unsafe_allow_html=True)
 
@@ -4477,7 +4693,7 @@ elif selected_tab == "📅 مخطط جانت وبريمافيرا (Gantt)":
             st.markdown(f"""
             <div class="kpi-card" style="padding:10px; min-height:85px;">
                 <div class="kpi-title" style="font-size:0.78rem;">🔴 الأنشطة الحرجة</div>
-                <div class="kpi-value" style="font-size:1.3rem; color:#DC2626;">{critical_count} <span style="font-size:0.8rem; color:#64748B;">أنشطة</span></div>
+                <div class="kpi-value" style="font-size:1.3rem; color:#DC2626;">{critical_count} <span class="kpi-unit-sub">أنشطة</span></div>
             </div>
             """, unsafe_allow_html=True)
 
@@ -4485,7 +4701,7 @@ elif selected_tab == "📅 مخطط جانت وبريمافيرا (Gantt)":
             st.markdown(f"""
             <div class="kpi-card" style="padding:10px; min-height:85px;">
                 <div class="kpi-title" style="font-size:0.78rem;">💰 كلفة الأنشطة المباشرة</div>
-                <div class="kpi-value" style="font-size:1.3rem; color:#D97706;">{total_direct_cost:,.0f} <span style="font-size:0.8rem; color:#64748B;">{curr_sym}</span></div>
+                <div class="kpi-value" style="font-size:1.3rem; color:#D97706;">{total_direct_cost:,.0f} <span class="kpi-unit-sub">{curr_sym}</span></div>
             </div>
             """, unsafe_allow_html=True)
 
@@ -4605,7 +4821,7 @@ elif selected_tab == "📅 مخطط جانت وبريمافيرا (Gantt)":
             filtered_sched.sort(key=lambda x: x.get("start_dt"))
 
         st.markdown(
-            f"<div style='margin-bottom:8px; font-size:0.85rem; color:#64748B;'>📊 عرض <b>{len(filtered_sched)}</b> من أصل <b>{len(cpm_sched)}</b> نشاط</div>",
+            f"<div class="subtext-muted" style="margin-bottom:8px;">📊 عرض <b>{len(filtered_sched)}</b> من أصل <b>{len(cpm_sched)}</b> نشاط</div>",
             unsafe_allow_html=True
         )
 
@@ -4746,17 +4962,17 @@ elif selected_tab == "🛡️ مصفوفة المخاطر":
         low_cnt = sum(1 for r in st.session_state.risk_register if r["probability"] * r["impact"] < 8)
 
         st.markdown(f"""
-        <div style="background:#FEF2F2; border:1px solid #FCA5A5; border-radius:10px; padding:12px 16px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; direction:rtl;">
-            <span style="font-weight:700; color:#991B1B; font-size:0.92rem;">🔴 مخاطر عالية وحرجة (Score ≥ 15)</span>
-            <b style="font-size:1.25rem; color:#DC2626; font-family:'Segoe UI', Tahoma, sans-serif; direction:ltr;">{high_cnt} مخاطر</b>
+        <div class="risk-stat-card-high">
+            <span class="stat-title">🔴 مخاطر عالية وحرجة (Score ≥ 15)</span>
+            <b class="stat-num">{high_cnt} مخاطر</b>
         </div>
-        <div style="background:#FFFBEB; border:1px solid #FCD34D; border-radius:10px; padding:12px 16px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; direction:rtl;">
-            <span style="font-weight:700; color:#92400E; font-size:0.92rem;">🟡 مخاطر متوسطة (Score 8 - 14)</span>
-            <b style="font-size:1.25rem; color:#D97706; font-family:'Segoe UI', Tahoma, sans-serif; direction:ltr;">{med_cnt} مخاطر</b>
+        <div class="risk-stat-card-med">
+            <span class="stat-title">🟡 مخاطر متوسطة (Score 8 - 14)</span>
+            <b class="stat-num">{med_cnt} مخاطر</b>
         </div>
-        <div style="background:#F0FDF4; border:1px solid #86EFAC; border-radius:10px; padding:12px 16px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; direction:rtl;">
-            <span style="font-weight:700; color:#166534; font-size:0.92rem;">🟢 مخاطر منخفضة (Score < 8)</span>
-            <b style="font-size:1.25rem; color:#059669; font-family:'Segoe UI', Tahoma, sans-serif; direction:ltr;">{low_cnt} مخاطر</b>
+        <div class="risk-stat-card-low">
+            <span class="stat-title">🟢 مخاطر منخفضة (Score < 8)</span>
+            <b class="stat-num">{low_cnt} مخاطر</b>
         </div>
         """, unsafe_allow_html=True)
 
@@ -5027,7 +5243,7 @@ elif selected_tab == "🏢 استيراد (P6 / IFC / JSON)":
     # ------------------ SUB-TAB 3: MULTI-SOURCE INGESTION HUB ------------------
     with tab_setup_import:
         st.markdown("#### 📥 مركز استيراد الجداول والنماذج والتعارضات والنسخ الاحتياطي:")
-        st.markdown("<div style='font-size:0.85rem; color:#64748B; margin-bottom:16px;'>استيراد وتحديث كافة مصادر البيانات الهندسية في مسار متناسق موحد أفقياً:</div>", unsafe_allow_html=True)
+        st.markdown("<div class="subtext-muted" style="margin-bottom:16px;">استيراد وتحديث كافة مصادر البيانات الهندسية في مسار متناسق موحد أفقياً:</div>", unsafe_allow_html=True)
         
         col_imp_p6, col_imp_ifc, col_imp_navis, col_imp_json = st.columns(4)
 
@@ -5116,7 +5332,7 @@ elif selected_tab == "🏢 استيراد (P6 / IFC / JSON)":
                     res_tab = process_universal_json_upload(loaded_data, uploaded_json.name)
                     if res_tab["success"]:
                         st.success(f"✅ {res_tab['title']}")
-                        st.markdown(f"<div style='font-size:0.82rem; color:#475569; margin-bottom:6px;'>💡 {res_tab['msg']}</div>", unsafe_allow_html=True)
+                        st.markdown(f"<div class="subtext-muted" style="margin-bottom:6px;">💡 {res_tab['msg']}</div>", unsafe_allow_html=True)
                         if st.button("🚀 استعادة وتفعيل بيانات JSON", type="primary", key="btn_apply_json_tab11", use_container_width=True):
                             if res_tab["type"] in ["FULL_PROJECT", "ACTIVITIES_LIST"]:
                                 load_clean_project_state(
@@ -5251,25 +5467,25 @@ elif selected_tab == "📄 التقرير والتصدير":
         )
 
     glossary_items = glossary_data.search_glossary(query=search_query_tab12, category=cat_filter_tab12)
-    st.markdown(f"<div style='font-size:0.85rem; color:#475569; margin-bottom:14px;'>إجمالي المصطلحات المطابقة: <b>{len(glossary_items)}</b> مصطلح</div>", unsafe_allow_html=True)
+    st.markdown(f"<div class="subtext-muted" style="margin-bottom:14px;">إجمالي المصطلحات المطابقة: <b>{len(glossary_items)}</b> مصطلح</div>", unsafe_allow_html=True)
 
     # عرض بطاقات المصطلحات
     for g_item in glossary_items:
         st.markdown(f"""
-        <div style="background:#FFFFFF; border:1px solid #E2E8F0; border-radius:12px; padding:14px 18px; margin-bottom:10px; box-shadow:0 2px 8px rgba(0,0,0,0.02);">
+        <div class="glossary-card">
             <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
                 <div>
-                    <span style="font-size:1.1rem; font-weight:800; color:#1D4ED8; font-family:'Segoe UI', Tahoma, sans-serif;">{g_item['term_en']}</span>
-                    <span style="font-size:0.85rem; color:#64748B; margin-right:8px;">({g_item['full_en']})</span>
+                    <span class="glossary-title-en">{g_item['term_en']}</span>
+                    <span class="subtext-muted" style="margin-right:8px;">({g_item['full_en']})</span>
                 </div>
-                <span style="background:#EFF6FF; color:#1E40AF; border:1px solid #BFDBFE; font-size:0.75rem; font-weight:700; padding:3px 10px; border-radius:20px;">
+                <span class="en-badge">
                     {g_item['category_ar']}
                 </span>
             </div>
-            <div style="font-size:0.95rem; font-weight:700; color:#0F172A; margin:6px 0 4px 0;">
+            <div class="glossary-title-ar">
                 🏷️ {g_item['term_ar']}
             </div>
-            <div style="font-size:0.85rem; color:#334155; line-height:1.6;">
+            <div class="glossary-desc-text">
                 {g_item['definition_ar']}
             </div>
         </div>
@@ -5277,11 +5493,11 @@ elif selected_tab == "📄 التقرير والتصدير":
 
 # ----------------- GLOBAL FOOTER (ALL PAGES) -----------------
 st.markdown("""
-<div style="text-align:center; padding: 28px 10px 35px 10px; margin-top: 40px; border-top: 2px solid #E2E8F0; direction: ltr;">
-    <div style="font-size: 1.05rem; font-weight: 700; color: #1E293B; letter-spacing: 0.3px; margin-bottom: 6px;">
-        Designed and developed by <span style="color: #2563EB;">Dr Ahmed Louay Ahmed</span>
+<div class="global-footer">
+    <div class="footer-dev-text">
+        Designed and developed by <span class="footer-author-highlight">Dr Ahmed Louay Ahmed</span>
     </div>
-    <div style="font-size: 0.82rem; color: #64748B; direction: rtl;">
+    <div class="footer-subtext">
         Iraqi Construction Risk Assessment & Decision Support Platform (ICRAT 2.0) • متوافق مع معيار إدارة المخاطر الدولي ISO 31000:2018 والشروط العامة لمقاولات أعمال الهندسة المدنية
     </div>
 </div>
