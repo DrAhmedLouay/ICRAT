@@ -2836,7 +2836,7 @@ with st.sidebar:
 
     # 📥 قسم استيراد Primavera P6 و BIM IFC و JSON و Navisworks في القائمة الجانبية
     with st.expander("📥 استيراد مشروع (P6 / IFC / JSON / Navisworks)", expanded=False):
-        st.markdown("<div class="subtext-muted" style="margin-bottom:6px;">استيراد مباشر وسريع لملفات المشروع:</div>", unsafe_allow_html=True)
+        st.markdown('<div class="subtext-muted" style="margin-bottom:6px;">استيراد مباشر وسريع لملفات المشروع:</div>', unsafe_allow_html=True)
         sb_import_type = st.radio(
             "اختر صيغة الملف:",
             options=["1️⃣ جدول Primavera P6 (.xer)", "2️⃣ نموذج BIM (.ifc)", "3️⃣ تعارضات Navisworks (.xml / .csv)", "4️⃣ نسخة احتياطية (.json)"],
@@ -4062,7 +4062,7 @@ elif selected_tab == "🧩 التنسيق (ISO 31000)":
 
     # 3. جدول محطة دعم القرار الذكية وتحديد الأولويات والتفسير (Decision Hub Prioritization Table)
     st.markdown("#### 🧠 مصفوفة القرارات الذكية وتحديد الأولويات والتفسير (AI-BIM Decision Hub & Triage Matrix)")
-    st.markdown("<div class="subtext-muted" style="margin-bottom:12px;">ترتيب الأولويات متعدد المعايير (نموذج Bitaraf 2024)، الربط بجدول P6، التفسير بالذكاء الاصطناعي، واستراتيجيات ISO 31000:</div>", unsafe_allow_html=True)
+    st.markdown('<div class="subtext-muted" style="margin-bottom:12px;">ترتيب الأولويات متعدد المعايير (نموذج Bitaraf 2024)، الربط بجدول P6، التفسير بالذكاء الاصطناعي، واستراتيجيات ISO 31000:</div>', unsafe_allow_html=True)
 
     hub_rows = []
     for ac in ai_hub_res["analyzed_clashes"]:
@@ -4190,7 +4190,7 @@ elif selected_tab == "🧩 التنسيق (ISO 31000)":
 
     with col_fb2:
         st.markdown("##### 📤 تصدير تقرير التنسيق المفتوح (OpenBIM BCF 2.1):")
-        st.markdown("<div class="subtext-muted" style="margin-bottom:10px;">تصدير مخرجات القرارات ومصفوفة ISO 31000 بتنسيق BCF المعتمد للفتح في Autodesk Revit و Navisworks:</div>", unsafe_allow_html=True)
+        st.markdown('<div class="subtext-muted" style="margin-bottom:10px;">تصدير مخرجات القرارات ومصفوفة ISO 31000 بتنسيق BCF المعتمد للفتح في Autodesk Revit و Navisworks:</div>', unsafe_allow_html=True)
         bcf_json_payload = ai_bim_decision_hub.export_clash_triage_to_bcf_json(
             analyzed_clashes=ai_hub_res["analyzed_clashes"],
             project_name=active_meta.get("name_ar", "CBI Tower Project")
@@ -5243,7 +5243,7 @@ elif selected_tab == "🏢 استيراد (P6 / IFC / JSON)":
     # ------------------ SUB-TAB 3: MULTI-SOURCE INGESTION HUB ------------------
     with tab_setup_import:
         st.markdown("#### 📥 مركز استيراد الجداول والنماذج والتعارضات والنسخ الاحتياطي:")
-        st.markdown("<div class="subtext-muted" style="margin-bottom:16px;">استيراد وتحديث كافة مصادر البيانات الهندسية في مسار متناسق موحد أفقياً:</div>", unsafe_allow_html=True)
+        st.markdown('<div class="subtext-muted" style="margin-bottom:16px;">استيراد وتحديث كافة مصادر البيانات الهندسية في مسار متناسق موحد أفقياً:</div>', unsafe_allow_html=True)
         
         col_imp_p6, col_imp_ifc, col_imp_navis, col_imp_json = st.columns(4)
 
