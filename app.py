@@ -1029,6 +1029,20 @@ def render_dynamic_theme_engine():
         .en-subtext { color: #1E40AF !important; font-weight: 800 !important; }
         .en-badge { background: #EFF6FF !important; color: #1E40AF !important; border: 1px solid #BFDBFE !important; }
 
+        
+        .stApp table.decision-hub-table th,
+        .stApp div.decision-hub-container th,
+        .stApp .decision-hub-table th,
+        .stApp .custom-table th,
+        table.decision-hub-table th {
+            color: #FFFFFF !important;
+            background: #1E3A8A !important;
+            font-weight: 800 !important;
+            border-bottom: 2px solid #3B82F6 !important;
+            border-left: 1px solid #334155 !important;
+            padding: 12px 10px !important;
+        }
+
         /* 14. Semantic Utilities (Royal) */
         .subtext-muted { color: #475569 !important; font-weight: 700 !important; font-size: 0.84rem !important; }
         .kpi-unit-sub { color: #64748B !important; font-size: 0.78rem !important; font-weight: 700 !important; }
@@ -1477,12 +1491,26 @@ def render_dynamic_theme_engine():
             color: #0F172A !important;
             font-weight: 900 !important;
         }
-        .stApp p, .stApp li, .stApp label, .stApp td, .stApp th {
+        .stApp p, .stApp li, .stApp label, .stApp td {
             color: #0F172A !important;
             font-weight: 700 !important;
         }
         .en-subtext { color: #1E40AF !important; font-weight: 800 !important; }
         .en-badge { background: #F1F5F9 !important; color: #1D4ED8 !important; border: 1px solid #CBD5E1 !important; }
+
+        
+        .stApp table.decision-hub-table th,
+        .stApp div.decision-hub-container th,
+        .stApp .decision-hub-table th,
+        .stApp .custom-table th,
+        table.decision-hub-table th {
+            color: #FFFFFF !important;
+            background: #1E3A8A !important;
+            font-weight: 800 !important;
+            border-bottom: 2px solid #3B82F6 !important;
+            border-left: 1px solid #334155 !important;
+            padding: 12px 10px !important;
+        }
 
         /* 14. Semantic Utilities (Light) */
         .subtext-muted { color: #475569 !important; font-weight: 700 !important; font-size: 0.84rem !important; }
@@ -1982,12 +2010,26 @@ def render_dynamic_theme_engine():
             font-weight: 900 !important;
             text-shadow: 0 1px 8px rgba(0,0,0,0.8) !important;
         }
-        .stApp p, .stApp li, .stApp label, .stApp td, .stApp th {
+        .stApp p, .stApp li, .stApp label, .stApp td {
             color: #FFFFFF !important;
             font-weight: 700 !important;
         }
         .en-subtext { color: #38BDF8 !important; font-weight: 800 !important; }
         .en-badge { background: #1E293B !important; color: #38BDF8 !important; border: 1px solid #334155 !important; }
+
+        
+        .stApp table.decision-hub-table th,
+        .stApp div.decision-hub-container th,
+        .stApp .decision-hub-table th,
+        .stApp .custom-table th,
+        table.decision-hub-table th {
+            color: #38BDF8 !important;
+            background: #101E3D !important;
+            font-weight: 900 !important;
+            border-bottom: 2px solid #1E3A8A !important;
+            border-left: 1px solid #1E293B !important;
+            padding: 12px 10px !important;
+        }
 
         /* 14. Semantic Utilities (Dark) */
         .subtext-muted { color: #94A3B8 !important; font-weight: 700 !important; font-size: 0.84rem !important; }
