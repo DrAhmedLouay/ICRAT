@@ -993,6 +993,34 @@ def render_login_portal():
         </div>
     </div>
     """, unsafe_allow_html=True)
+
+    # تفعيل ميزة الحفظ التلقائي في مديري كلمات المرور بالمتصفح (Chrome, Safari, Edge, Keychain)
+    st.components.v1.html("""
+    <script>
+    setTimeout(function() {
+        try {
+            const doc = window.parent.document;
+            const form = doc.querySelector('form');
+            if (form) {
+                form.setAttribute('autocomplete', 'on');
+            }
+            const inputs = doc.querySelectorAll('input');
+            inputs.forEach(function(inp) {
+                if (inp.type === 'password') {
+                    inp.setAttribute('name', 'password');
+                    inp.setAttribute('autocomplete', 'current-password');
+                    inp.setAttribute('id', 'current-password');
+                } else if (inp.type === 'text') {
+                    inp.setAttribute('name', 'username');
+                    inp.setAttribute('autocomplete', 'username');
+                    inp.setAttribute('id', 'username');
+                }
+            });
+        } catch(e) {}
+    }, 250);
+    </script>
+    """, height=0, width=0)
+
     st.stop()
 
 if not st.session_state.get("authenticated", False):
