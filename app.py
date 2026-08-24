@@ -953,12 +953,24 @@ AUTHORIZED_CREDENTIALS = {
 def render_login_portal():
     """بوابة الأمان والتحقق الرقمي المدمجة لحماية المنصة على الإنترنت"""
     st.markdown("""
-    <div style="max-width: 500px; margin: 30px auto 16px auto; background: #FFFFFF; border-radius: 18px; padding: 28px 32px; box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08); border: 1px solid #E2E8F0; text-align: center; direction: rtl;">
-        <div style="font-size: 2.8rem; margin-bottom: 6px;">🏛️</div>
-        <h2 style="color: #0F172A; font-weight: 800; font-size: 1.35rem; margin-bottom: 4px;">منصة تقييم المخاطر الإنشائية (ICRAT 2.0)</h2>
-        <div style="color: #2563EB; font-size: 0.86rem; margin-bottom: 6px; font-weight: 700;">🔒 بوابة الدخول المعتمدة للمهندسين والمشرفين</div>
-        <div style="font-size: 0.78rem; color: #64748B; margin-bottom: 16px; font-weight: 600; font-family: 'Segoe UI', Tahoma, sans-serif; direction: ltr;">Iraqi Construction Risk Assessment & Decision Support Platform</div>
-        <div style="background: #F8FAFC; border-radius: 10px; padding: 10px 14px; border: 1px solid #E2E8F0; font-size: 0.82rem; color: #475569; margin-bottom: 12px; line-height: 1.5;">
+    <div style="max-width: 560px; margin: 25px auto 16px auto; background: #FFFFFF; border-radius: 20px; padding: 32px 36px; box-shadow: 0 18px 45px rgba(15, 23, 42, 0.09); border: 1px solid #E2E8F0; text-align: center; direction: rtl;">
+        <div style="display: inline-block; background: linear-gradient(135deg, #EFF6FF, #DBEAFE); border: 1px solid #BFDBFE; border-radius: 50%; padding: 14px; margin-bottom: 12px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);">
+            <div style="font-size: 2.6rem; line-height: 1;">🏛️</div>
+        </div>
+        
+        <h1 style="background: linear-gradient(135deg, #1E3A8A 0%, #1D4ED8 50%, #2563EB 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; font-size: 1.5rem; line-height: 1.45; margin-bottom: 10px; font-family: 'Cairo', 'Segoe UI', sans-serif;">
+            المنصة العراقية لتقييم مخاطر البناء ودعم اتخاذ القرارات في المشاريع البنائية
+        </h1>
+        
+        <div style="display: inline-block; background: #F1F5F9; color: #334155; font-size: 0.82rem; font-weight: 700; padding: 4px 12px; border-radius: 20px; border: 1px solid #CBD5E1; margin-bottom: 10px; font-family: 'Segoe UI', Tahoma, sans-serif; direction: ltr;">
+            Iraqi Construction Risk Assessment & Decision Support Platform (ICRAT 2.0)
+        </div>
+        
+        <div style="color: #2563EB; font-size: 0.88rem; font-weight: 700; margin-bottom: 14px; display: flex; align-items: center; justify-content: center; gap: 6px;">
+            <span>🔒</span> <span>بوابة الدخول المعتمدة للمهندسين والمشرفين</span>
+        </div>
+        
+        <div style="background: #F8FAFC; border-radius: 10px; padding: 10px 14px; border: 1px solid #E2E8F0; font-size: 0.82rem; color: #475569; margin-bottom: 8px; line-height: 1.5;">
             هذه المنصة محمية بنظام التحقق الرقمي المشفر. يرجى إدخال بيانات الاعتماد المصرح بها للوصول إلى أدوات ومحركات المشروع.
         </div>
     </div>
