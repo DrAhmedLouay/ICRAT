@@ -1254,10 +1254,13 @@ with st.sidebar:
             if sb_up_navis is not None:
                 sb_navis_res = navisworks_parser.parse_navisworks_clash_bytes(sb_up_navis.getvalue(), sb_up_navis.name)
                 if sb_navis_res.get("success"):
-                    st.success(f"✅ تم تحليل التقرير: ({sb_navis_res['total_clashes']} تعارض / {sb_navis_res['critical_clashes_count']} حرج)")
+                    if sb_navis_res.get("is_big_data_triaged"):
+                        st.success(f"⚡ تم بنجاح معالجة {sb_navis_res['total_clashes']:,} تعارض ({sb_navis_res['critical_clashes_count']:,} حرج)، وفرز أخطر {sb_navis_res['retained_clashes_count']:,} تعارض للسرعة الفائقة!")
+                    else:
+                        st.success(f"✅ تم تحليل التقرير: ({sb_navis_res['total_clashes']} تعارض / {sb_navis_res['critical_clashes_count']} حرج)")
                     if st.button("🚀 دمج وتفعيل تعارضات Navisworks", type="primary", key="sb_btn_apply_navis", use_container_width=True):
                         st.session_state.coordination_issues = sb_navis_res["coordination_issues"]
-                        st.session_state.last_import_msg = f"🎉 تم بنجاح استيراد وتفعيل {sb_navis_res['total_clashes']} تعارض من تقرير Navisworks وتحديث مصفوفة ISO 31000!"
+                        st.session_state.last_import_msg = f"🎉 تم بنجاح استيراد تقرير Navisworks ({sb_navis_res['total_clashes']:,} تعارض) وتحديث مصفوفة ISO 31000!"
                         st.rerun()
 
         else:
@@ -2246,10 +2249,13 @@ elif selected_tab == "🧩 التنسيق (ISO 31000)":
             if up_t4_navis is not None:
                 res_t4 = navisworks_parser.parse_navisworks_clash_bytes(up_t4_navis.getvalue(), up_t4_navis.name)
                 if res_t4.get("success"):
-                    st.success(f"✅ تم قراءة {res_t4['total_clashes']} تعارض ({res_t4['critical_clashes_count']} حرج)")
+                    if res_t4.get("is_big_data_triaged"):
+                        st.success(f"⚡ تم بنجاح معالجة {res_t4['total_clashes']:,} تعارض ({res_t4['critical_clashes_count']:,} حرج)، وفرز أخطر {res_t4['retained_clashes_count']:,} تعارض للسرعة الفائقة!")
+                    else:
+                        st.success(f"✅ تم قراءة {res_t4['total_clashes']} تعارض ({res_t4['critical_clashes_count']} حرج)")
                     if st.button("🚀 تحديث مصفوفة ISO 31000", type="primary", key="btn_apply_tab4_navis", use_container_width=True):
                         st.session_state.coordination_issues = res_t4["coordination_issues"]
-                        st.session_state.last_import_msg = f"🎉 تم بنجاح استيراد {res_t4['total_clashes']} تعارض من تقرير Navisworks وتحديث مصفوفة ISO 31000!"
+                        st.session_state.last_import_msg = f"🎉 تم بنجاح استيراد تقرير Navisworks ({res_t4['total_clashes']:,} تعارض) وتحديث مصفوفة ISO 31000 بأعلى أداء!"
                         st.rerun()
                 else:
                     st.error(res_t4.get("error", "فشل تحليل الملف"))
@@ -2487,7 +2493,7 @@ elif selected_tab == "🧩 التنسيق (ISO 31000)":
 
     with col_fb1:
         st.markdown("##### ✍️ استوديو فحص وتصحيح الخبير في الحلقة (Human-in-the-Loop Studio):")
-        clash_options = [c["id"] for c in st.session_state.coordination_issues]
+        clash_options = [c["id"] for c in st.session_state.coordination_issues[:1000]]
         if clash_options:
             sel_c_id = st.selectbox("1️⃣ اختر كود التعارض الهندسي للمراجعة والفحص:", options=clash_options, key="hitl_clash_sel")
             sel_clash_data = next((c for c in st.session_state.coordination_issues if c["id"] == sel_c_id), None)
@@ -3630,10 +3636,13 @@ elif selected_tab == "🏢 استيراد (P6 / IFC / JSON)":
             if uploaded_navis is not None:
                 navis_res = navisworks_parser.parse_navisworks_clash_bytes(uploaded_navis.getvalue(), uploaded_navis.name)
                 if navis_res.get("success"):
-                    st.success(f"✅ تم تحليل التقرير: ({navis_res['total_clashes']} تعارض)")
+                    if navis_res.get("is_big_data_triaged"):
+                        st.success(f"⚡ تم بنجاح معالجة {navis_res['total_clashes']:,} تعارض ({navis_res['critical_clashes_count']:,} حرج)، وفرز أخطر {navis_res['retained_clashes_count']:,} تعارض للسرعة الفائقة!")
+                    else:
+                        st.success(f"✅ تم تحليل التقرير: ({navis_res['total_clashes']} تعارض)")
                     if st.button("🚀 دمج تعارضات Navisworks", type="primary", key="btn_apply_navis_tab11", use_container_width=True):
                         st.session_state.coordination_issues = navis_res["coordination_issues"]
-                        st.session_state.last_import_msg = f"🎉 تم بنجاح استيراد وتفعيل {navis_res['total_clashes']} تعارض من تقرير Navisworks وترجمتها لمصفوفة ISO 31000!"
+                        st.session_state.last_import_msg = f"🎉 تم بنجاح استيراد تقرير Navisworks ({navis_res['total_clashes']:,} تعارض) وترجمتها لمصفوفة ISO 31000 بأعلى أداء!"
                         st.rerun()
 
         with col_imp_json:

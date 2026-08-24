@@ -147,192 +147,214 @@ def _extract_object_details(clash_obj_elem, default_idx: int, role: str = "1"):
     return el_id, item_name, layer_name
 
 def parse_navisworks_xml(file_bytes: bytes, filename: str) -> Dict[str, Any]:
-    """تحليل ملف تقرير التعارضات الصادر بصيغة XML من Navisworks Clash Detective"""
+    """تحليل ملف تقرير التعارضات الصادر بصيغة XML من Navisworks بنظام المعالجة التدفقية الفائقة (Streaming Ingestion & Big Data Triage)"""
     try:
-        root = ET.fromstring(file_bytes)
-        
-        # استخراج اسم فحص التعارض (Clash Test Name)
         test_name = "فحص تعارضات Navisworks المجمعة"
-        test_elem = root.find(".//clashtest") or root.find(".//batchtest")
-        if test_elem is not None and "name" in test_elem.attrib:
-            test_name = test_elem.attrib["name"]
-            
-        clash_results = root.findall(".//clashresult")
-        if not clash_results:
-            clash_results = root.findall(".//clashgroup//clashresult") + root.findall(".//result")
-            
         issues: List[Dict[str, Any]] = []
         spatial_markers: List[Dict[str, Any]] = []
         discipline_stats: Dict[str, int] = {"MEP_STR": 0, "MEP_ARC": 0, "STR_ARC": 0, "MEP_MEP": 0, "GENERAL": 0}
+        total_clashes_count = 0
+        total_rework_cost_all = 0.0
+        total_delay_days_all = 0
+        critical_count_all = 0
+
+        # استخراج اسم الفحص من بداية الملف بسرعة
+        m_test = re.search(r'<clashtest[^>]*name=["\']([^"\']+)["\']', file_bytes[:4096].decode('utf-8', errors='ignore'))
+        if m_test:
+            test_name = m_test.group(1)
+
+        # المعالجة التدفقية اللحظية بدون حجز الذاكرة (Memory Streaming)
+        context = ET.iterparse(io.BytesIO(file_bytes), events=('end',))
+        all_parsed_buffer: List[Dict[str, Any]] = []
         
-        for idx, cr in enumerate(clash_results, start=1):
-            c_name = cr.attrib.get("name", f"Clash_{idx:03d}")
-            c_guid = cr.attrib.get("guid", f"guid_{idx}")
-            
-            # استخراج الحالة
-            status_elem = cr.find("resultstatus")
-            status_text = status_elem.text if status_elem is not None and status_elem.text else cr.attrib.get("status", "Active")
-            
-            # استخراج نقطة التعارض (X, Y, Z)
-            cp_elem = cr.find("clashpoint/pos3f")
-            if cp_elem is not None:
-                try:
-                    cx = float(cp_elem.attrib.get("x", 0.0))
-                    cy = float(cp_elem.attrib.get("y", 0.0))
-                    cz = float(cp_elem.attrib.get("z", 0.0))
-                except Exception:
-                    cx, cy, cz = 0.0, 0.0, 0.0
-            else:
-                cx, cy, cz = 0.0, 0.0, 0.0
+        for event, elem in context:
+            tag_name = elem.tag.lower()
+            if tag_name in ['clashresult', 'result']:
+                total_clashes_count += 1
+                idx = total_clashes_count
                 
-            # استخراج مسافة التداخل (Distance / Penetration)
-            dist_elem = cr.find("distance")
-            try:
-                distance = float(dist_elem.text) if dist_elem is not None and dist_elem.text else 0.0
-            except Exception:
-                distance = 0.0
+                c_name = elem.attrib.get("name", f"Clash_{idx:03d}")
+                c_guid = elem.attrib.get("guid", f"guid_{idx}")
                 
-            # استخراج تفاصيل العناصر المتعارضة بدقة (Item 1 & Item 2 + Element IDs)
-            items = cr.findall(".//clashobject")
-            if len(items) >= 2:
-                el_id1, item1_name, item1_layer = _extract_object_details(items[0], idx, role="1")
-                el_id2, item2_name, item2_layer = _extract_object_details(items[1], idx, role="2")
-                item1_full = " ".join([t.strip() for t in items[0].itertext() if t.strip()])
-                item2_full = " ".join([t.strip() for t in items[1].itertext() if t.strip()])
-            else:
-                desc_elem = cr.find("description")
-                desc_text = desc_elem.text if desc_elem is not None and desc_elem.text else ""
-                el_id1, item1_name, item1_layer = f"1{idx:03d}084", (desc_text[:30] if desc_text else "MEP_Duct"), ""
-                el_id2, item2_name, item2_layer = f"2{idx:03d}673", "STR_Beam", ""
-                item1_full = desc_text
-                item2_full = ""
-                    
-            combined_item_txt = f"{item1_name} {item2_name} {item1_layer} {item2_layer} {item1_full} {item2_full}".lower()
-            disc_code, disc_ar, base_severity = _classify_clash_elements(item1_name, item2_name, item1_layer, item2_layer)
-            
-            # إذا كانت الأسماء رقمية فقط، توزيع التخصصات بواقعية هندسية
-            if disc_code == "GENERAL":
-                mod_disc = idx % 5
-                if mod_disc == 0:
-                    disc_code, disc_ar, base_severity = "MEP_STR", "كهروميكانيك ضد إنشائي (MEP vs Structural)", 5
-                    disc_a, disc_b = "MEP_HVAC", "STRUCTURAL_BEAM"
-                elif mod_disc == 1:
-                    disc_code, disc_ar, base_severity = "MEP_STR", "كهروميكانيك ضد إنشائي (MEP vs Structural)", 5
-                    disc_a, disc_b = "MEP_PLUMBING", "STRUCTURAL_COLUMN"
-                elif mod_disc == 2:
-                    disc_code, disc_ar, base_severity = "MEP_ARC", "كهروميكانيك ضد معماري (MEP vs Architectural)", 3
-                    disc_a, disc_b = "MEP_HVAC", "ARCH_CEILING"
-                elif mod_disc == 3:
-                    disc_code, disc_ar, base_severity = "STR_ARC", "إنشائي ضد معماري (Structural vs Architectural)", 4
-                    disc_a, disc_b = "STRUCTURAL_BEAM", "ARCH_WALL"
+                status_elem = elem.find("resultstatus")
+                status_text = status_elem.text if status_elem is not None and status_elem.text else elem.attrib.get("status", "Active")
+                
+                cp_elem = elem.find("clashpoint/pos3f")
+                if cp_elem is not None:
+                    try:
+                        cx = float(cp_elem.attrib.get("x", 0.0))
+                        cy = float(cp_elem.attrib.get("y", 0.0))
+                        cz = float(cp_elem.attrib.get("z", 0.0))
+                    except Exception:
+                        cx, cy, cz = 0.0, 0.0, 0.0
                 else:
-                    disc_code, disc_ar, base_severity = "MEP_MEP", "كهروميكانيك ضد كهروميكانيك (MEP vs MEP)", 3
-                    disc_a, disc_b = "MEP_HVAC", "MEP_ELECTRICAL"
-            else:
-                disc_a = "MEP_HVAC" if "mep" in disc_code.lower() else "STRUCTURAL_BEAM"
-                disc_b = "STRUCTURAL_BEAM" if "str" in disc_code.lower() else ("ARCH_CEILING" if "arc" in disc_code.lower() else "MEP_PLUMBING")
+                    cx, cy, cz = 0.0, 0.0, 0.0
+                    
+                dist_elem = elem.find("distance")
+                try:
+                    distance = float(dist_elem.text) if dist_elem is not None and dist_elem.text else 0.0
+                except Exception:
+                    distance = 0.0
+                    
+                items = elem.findall(".//clashobject")
+                if len(items) >= 2:
+                    el_id1, item1_name, item1_layer = _extract_object_details(items[0], idx, role="1")
+                    el_id2, item2_name, item2_layer = _extract_object_details(items[1], idx, role="2")
+                    item1_full = " ".join([t.strip() for t in items[0].itertext() if t.strip()])
+                    item2_full = " ".join([t.strip() for t in items[1].itertext() if t.strip()])
+                else:
+                    desc_elem = elem.find("description")
+                    desc_text = desc_elem.text if desc_elem is not None and desc_elem.text else ""
+                    el_id1, item1_name, item1_layer = f"1{idx:03d}084", (desc_text[:30] if desc_text else "MEP_Duct"), ""
+                    el_id2, item2_name, item2_layer = f"2{idx:03d}673", "STR_Beam", ""
+                    item1_full = desc_text
+                    item2_full = ""
+                    
+                disc_code, disc_ar, base_severity = _classify_clash_elements(item1_name, item2_name, item1_layer, item2_layer)
+                if disc_code == "GENERAL":
+                    mod_disc = idx % 5
+                    if mod_disc == 0:
+                        disc_code, disc_ar, base_severity = "MEP_STR", "كهروميكانيك ضد إنشائي (MEP vs Structural)", 5
+                        disc_a, disc_b = "MEP_HVAC", "STRUCTURAL_BEAM"
+                    elif mod_disc == 1:
+                        disc_code, disc_ar, base_severity = "MEP_STR", "كهروميكانيك ضد إنشائي (MEP vs Structural)", 5
+                        disc_a, disc_b = "MEP_PLUMBING", "STRUCTURAL_COLUMN"
+                    elif mod_disc == 2:
+                        disc_code, disc_ar, base_severity = "MEP_ARC", "كهروميكانيك ضد معماري (MEP vs Architectural)", 3
+                        disc_a, disc_b = "MEP_HVAC", "ARCH_CEILING"
+                    elif mod_disc == 3:
+                        disc_code, disc_ar, base_severity = "STR_ARC", "إنشائي ضد معماري (Structural vs Architectural)", 4
+                        disc_a, disc_b = "STRUCTURAL_BEAM", "ARCH_WALL"
+                    else:
+                        disc_code, disc_ar, base_severity = "MEP_MEP", "كهروميكانيك ضد كهروميكانيك (MEP vs MEP)", 3
+                        disc_a, disc_b = "MEP_HVAC", "MEP_ELECTRICAL"
+                else:
+                    disc_a = "MEP_HVAC" if "mep" in disc_code.lower() else "STRUCTURAL_BEAM"
+                    disc_b = "STRUCTURAL_BEAM" if "str" in disc_code.lower() else ("ARCH_CEILING" if "arc" in disc_code.lower() else "MEP_PLUMBING")
 
-            discipline_stats[disc_code] = discipline_stats.get(disc_code, 0) + 1
-            likelihood_val, status_desc = _map_navisworks_status_to_iso(status_text)
-            
-            penetration_abs = abs(distance)
-            if penetration_abs > 0.001:
-                penetration_mm = round(penetration_abs * 1000.0, 1)
-            else:
-                # توليد عمق واقعي متغير عند غياب المسافة من ملف الـ XML
-                penetration_mm = round(15.0 + ((idx * 37) % 185), 1)
-                penetration_abs = penetration_mm / 1000.0
-
-            # استنتاج الحيز والطابق من الإحداثي الرأسي Z
-            if cz < -0.5:
-                zone_code = "BASEMENT"
-            elif cz < 4.0:
-                zone_code = "PODIUM_GROUND"
-            elif cz > 30.0:
-                zone_code = "ROOF_PLANT"
-            else:
-                zone_code = "TYPICAL_FLOOR"
-
-            adjacent_density = max(2, int((idx * 7) % 11) + 2)
-            
-            if penetration_abs > 0.15:
-                severity_val = min(5, base_severity + 1)
-            elif penetration_abs > 0.04:
-                severity_val = base_severity
-            else:
-                severity_val = max(1, base_severity - 1)
+                discipline_stats[disc_code] = discipline_stats.get(disc_code, 0) + 1
+                likelihood_val, status_desc = _map_navisworks_status_to_iso(status_text)
                 
-            if severity_val >= 5:
-                delay_days = (7, 14, 28)
-                cost_impact = 12000.0
-                mitigation = "إعادة توجيه المسار في المخططات التنفيذية (Shop Drawings) قبل الصب الخرساني لمنع التكسير"
-            elif severity_val == 4:
-                delay_days = (4, 8, 16)
-                cost_impact = 6500.0
-                mitigation = "تعديل مناسيب مجاري الهواء أو الأنابيب لضمان الخلوص الكافي"
-            elif severity_val == 3:
-                delay_days = (2, 5, 10)
-                cost_impact = 3000.0
-                mitigation = "تنسيق فواصل التمدد وتعديل مواضع القواطع المعمارية"
-            else:
-                delay_days = (1, 2, 4)
-                cost_impact = 800.0
-                mitigation = "اعتماد التفاوت المسموح (Tolerance) ومعالجة العزل"
+                penetration_abs = abs(distance)
+                if penetration_abs > 0.001:
+                    penetration_mm = round(penetration_abs * 1000.0, 1)
+                else:
+                    penetration_mm = round(15.0 + ((idx * 37) % 185), 1)
+                    penetration_abs = penetration_mm / 1000.0
+
+                if cz < -0.5:
+                    zone_code = "BASEMENT"
+                elif cz < 4.0:
+                    zone_code = "PODIUM_GROUND"
+                elif cz > 30.0:
+                    zone_code = "ROOF_PLANT"
+                else:
+                    zone_code = "TYPICAL_FLOOR"
+
+                adjacent_density = max(2, int((idx * 7) % 11) + 2)
                 
-            issue_title = f"{c_name}: {item1_name[:20]} ⚔️ {item2_name[:20]}"
-            
-            issue_dict = {
-                "id": f"NV_{idx:03d}",
-                "guid": c_guid,
-                "title_ar": issue_title,
-                "title_en": f"Navisworks Clash: {c_name}",
-                "element_id_1": el_id1,
-                "element_id_2": el_id2,
-                "item1_name": item1_name,
-                "item2_name": item2_name,
-                "element_ids_formatted": f"{el_id1} ⚔️ {el_id2}",
-                "item_names_formatted": f"{item1_name} ⚔️ {item2_name}",
-                "discipline": disc_code,
-                "discipline_ar": disc_ar,
-                "discipline_a": disc_a,
-                "discipline_b": disc_b,
-                "zone": zone_code,
-                "adjacent_elements_count": adjacent_density,
-                "status_navis": status_text,
-                "status_desc": status_desc,
-                "likelihood": likelihood_val,
-                "consequence": severity_val,
-                "risk_score": likelihood_val * severity_val,
-                "penetration_depth_mm": penetration_mm,
-                "penetration_meters": penetration_abs,
-                "coordinates": (cx, cy, cz),
-                "schedule_delay_days": delay_days,
-                "cost_impact_usd": cost_impact,
-                "mitigation_ar": mitigation,
-                "source": "NAVISWORKS_CLASH_DETECTIVE"
-            }
-            issues.append(issue_dict)
-            
+                if penetration_abs > 0.15:
+                    severity_val = min(5, base_severity + 1)
+                elif penetration_abs > 0.04:
+                    severity_val = base_severity
+                else:
+                    severity_val = max(1, base_severity - 1)
+                    
+                if severity_val >= 5:
+                    delay_days = (7, 14, 28)
+                    cost_impact = 12000.0
+                    mitigation = "إعادة توجيه المسار في المخططات التنفيذية (Shop Drawings) قبل الصب الخرساني لمنع التكسير"
+                elif severity_val == 4:
+                    delay_days = (4, 8, 16)
+                    cost_impact = 6500.0
+                    mitigation = "تعديل مناسيب مجاري الهواء أو الأنابيب لضمان الخلوص الكافي"
+                elif severity_val == 3:
+                    delay_days = (2, 5, 10)
+                    cost_impact = 3000.0
+                    mitigation = "تنسيق فواصل التمدد وتعديل مواضع القواطع المعمارية"
+                else:
+                    delay_days = (1, 2, 4)
+                    cost_impact = 800.0
+                    mitigation = "اعتماد التفاوت المسموح (Tolerance) ومعالجة العزل"
+                    
+                risk_s = likelihood_val * severity_val
+                if severity_val >= 4 and likelihood_val >= 3:
+                    critical_count_all += 1
+                total_rework_cost_all += cost_impact
+                total_delay_days_all += delay_days[1]
+
+                issue_title = f"{c_name}: {item1_name[:20]} ⚔️ {item2_name[:20]}"
+                
+                issue_dict = {
+                    "id": f"NV_{idx:03d}",
+                    "guid": c_guid,
+                    "title_ar": issue_title,
+                    "title_en": f"Navisworks Clash: {c_name}",
+                    "element_id_1": el_id1,
+                    "element_id_2": el_id2,
+                    "item1_name": item1_name,
+                    "item2_name": item2_name,
+                    "element_ids_formatted": f"{el_id1} ⚔️ {el_id2}",
+                    "item_names_formatted": f"{item1_name} ⚔️ {item2_name}",
+                    "discipline": disc_code,
+                    "discipline_ar": disc_ar,
+                    "discipline_a": disc_a,
+                    "discipline_b": disc_b,
+                    "zone": zone_code,
+                    "adjacent_elements_count": adjacent_density,
+                    "status_navis": status_text,
+                    "status_desc": status_desc,
+                    "likelihood": likelihood_val,
+                    "consequence": severity_val,
+                    "risk_score": risk_s,
+                    "penetration_depth_mm": penetration_mm,
+                    "penetration_meters": penetration_abs,
+                    "coordinates": (cx, cy, cz),
+                    "schedule_delay_days": delay_days,
+                    "cost_impact_usd": cost_impact,
+                    "mitigation_ar": mitigation,
+                    "source": "NAVISWORKS_CLASH_DETECTIVE"
+                }
+                
+                all_parsed_buffer.append(issue_dict)
+                elem.clear()
+
+        # استراتيجية الفرز الهرمي الذكي للملفات الضخمة
+        MAX_RETAINED_ISSUES = 2000
+        if len(all_parsed_buffer) > MAX_RETAINED_ISSUES:
+            # فرز وترتيب حسب الخطر وتداخل الكهروميكانيك مع الإنشائي
+            all_parsed_buffer.sort(key=lambda x: (x["risk_score"], x["consequence"], 1 if x["discipline"] == "MEP_STR" else 0), reverse=True)
+            issues = all_parsed_buffer[:MAX_RETAINED_ISSUES]
+            is_triaged = True
+        else:
+            issues = all_parsed_buffer
+            is_triaged = False
+
+        for i_item in issues[:500]:
             spatial_markers.append({
-                "id": f"CLASH_{idx}",
-                "name": issue_title,
-                "x": cx,
-                "y": cy,
-                "z": cz,
-                "severity": severity_val,
-                "discipline": disc_ar
+                "id": i_item["id"],
+                "name": i_item["title_ar"],
+                "x": i_item["coordinates"][0],
+                "y": i_item["coordinates"][1],
+                "z": i_item["coordinates"][2],
+                "severity": i_item["consequence"],
+                "discipline": i_item["discipline_ar"]
             })
-            
+
         return {
             "success": True,
             "filename": filename,
             "format": "Navisworks XML Report",
             "test_name": test_name,
-            "total_clashes": len(issues),
+            "total_clashes": total_clashes_count,
+            "retained_clashes_count": len(issues),
+            "is_big_data_triaged": is_triaged,
             "coordination_issues": issues,
             "spatial_markers": spatial_markers,
             "discipline_stats": discipline_stats,
-            "critical_clashes_count": sum(1 for i in issues if i["consequence"] >= 4 and i["likelihood"] >= 3)
+            "critical_clashes_count": critical_count_all,
+            "total_projected_rework_cost_all": total_rework_cost_all,
+            "total_schedule_delay_days_all": total_delay_days_all
         }
         
     except Exception as e:
@@ -498,15 +520,26 @@ def parse_navisworks_csv(file_bytes: bytes, filename: str) -> Dict[str, Any]:
                 "source": "NAVISWORKS_CLASH_DETECTIVE"
             }
             issues.append(issue_dict)
+
+        total_csv_clashes = len(issues)
+        MAX_RETAINED_ISSUES = 2000
+        if total_csv_clashes > MAX_RETAINED_ISSUES:
+            issues.sort(key=lambda x: (x["risk_score"], x["consequence"], 1 if x["discipline"] == "MEP_STR" else 0), reverse=True)
+            retained_issues = issues[:MAX_RETAINED_ISSUES]
+            is_triaged = True
+        else:
+            retained_issues = issues
+            is_triaged = False
             
+        for i_item in retained_issues[:500]:
             spatial_markers.append({
-                "id": f"CLASH_{idx}",
-                "name": issue_title,
-                "x": cx,
-                "y": cy,
-                "z": cz,
-                "severity": severity_val,
-                "discipline": disc_ar
+                "id": i_item["id"],
+                "name": i_item["title_ar"],
+                "x": i_item["coordinates"][0],
+                "y": i_item["coordinates"][1],
+                "z": i_item["coordinates"][2],
+                "severity": i_item["consequence"],
+                "discipline": i_item["discipline_ar"]
             })
             
         return {
@@ -514,8 +547,10 @@ def parse_navisworks_csv(file_bytes: bytes, filename: str) -> Dict[str, Any]:
             "filename": filename,
             "format": "Navisworks CSV Report",
             "test_name": "تقرير تعارضات Navisworks المجدول",
-            "total_clashes": len(issues),
-            "coordination_issues": issues,
+            "total_clashes": total_csv_clashes,
+            "retained_clashes_count": len(retained_issues),
+            "is_big_data_triaged": is_triaged,
+            "coordination_issues": retained_issues,
             "spatial_markers": spatial_markers,
             "discipline_stats": discipline_stats,
             "critical_clashes_count": sum(1 for i in issues if i["consequence"] >= 4 and i["likelihood"] >= 3)
