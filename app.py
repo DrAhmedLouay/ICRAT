@@ -946,7 +946,8 @@ if "map_lat" in st.query_params and "map_lon" in st.query_params:
 AUTHORIZED_CREDENTIALS = {
     "admin": "ICRAT2026@Secure",
     "drahmed": "IraqRisk#2026",
-    "engineer": "Bim@2026"
+    "engineer": "Bim@2026",
+    "ruba": "Ruba@2026"
 }
 
 def render_login_portal():
@@ -972,10 +973,11 @@ def render_login_portal():
             if submit_btn:
                 u_val = u_input.strip()
                 p_val = p_input.strip()
-                if u_val in AUTHORIZED_CREDENTIALS and AUTHORIZED_CREDENTIALS[u_val] == p_val:
+                u_key = u_val.lower()
+                if u_key in AUTHORIZED_CREDENTIALS and AUTHORIZED_CREDENTIALS[u_key] == p_val:
                     st.session_state["authenticated"] = True
                     st.session_state["logged_user"] = u_val
-                    st.success(f"✅ تم التحقق بنجاح! مرحباً بك المهندس {u_val}")
+                    st.success(f"✅ تم التحقق بنجاح! مرحباً بك {u_val}")
                     st.rerun()
                 else:
                     st.error("❌ اسم المستخدم أو كلمة المرور غير صحيحة! يرجى التحقق وإعادة المحاولة.")
