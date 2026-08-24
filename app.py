@@ -952,43 +952,36 @@ AUTHORIZED_CREDENTIALS = {
 
 def render_login_portal():
     """بوابة الأمان والتحقق الرقمي المدمجة لحماية المنصة على الإنترنت"""
-    st.markdown("""
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@700&family=Amiri:ital,wght@0,700;1,700&family=Scheherazade+New:wght@700&display=swap');
-        .thuluth-title {
-            font-family: 'Aref Ruqaa', 'Amiri', 'Thuluth', 'DecoType Thuluth', 'Traditional Arabic', serif !important;
-            background: linear-gradient(135deg, #1E3A8A 0%, #1D4ED8 50%, #2563EB 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 700;
-            font-size: 1.95rem;
-            line-height: 1.55;
-            margin-bottom: 12px;
-            letter-spacing: 0.3px;
-        }
-    </style>
-    <div style="max-width: 580px; margin: 25px auto 16px auto; background: #FFFFFF; border-radius: 20px; padding: 32px 36px; box-shadow: 0 18px 45px rgba(15, 23, 42, 0.09); border: 1px solid #E2E8F0; text-align: center; direction: rtl;">
-        <div style="display: inline-block; background: linear-gradient(135deg, #EFF6FF, #DBEAFE); border: 1px solid #BFDBFE; border-radius: 50%; padding: 14px; margin-bottom: 12px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);">
-            <div style="font-size: 2.6rem; line-height: 1;">🏛️</div>
-        </div>
-        
-        <h1 class="thuluth-title">
-            المنصة العراقية لتقييم مخاطر البناء ودعم اتخاذ القرارات في المشاريع البنائية
-        </h1>
-        
-        <div style="display: inline-block; background: #F1F5F9; color: #334155; font-size: 0.82rem; font-weight: 700; padding: 4px 12px; border-radius: 20px; border: 1px solid #CBD5E1; margin-bottom: 10px; font-family: 'Segoe UI', Tahoma, sans-serif; direction: ltr;">
-            Iraqi Construction Risk Assessment & Decision Support Platform (ICRAT 2.0)
-        </div>
-        
-        <div style="color: #2563EB; font-size: 0.88rem; font-weight: 700; margin-bottom: 14px; display: flex; align-items: center; justify-content: center; gap: 6px;">
-            <span>🔒</span> <span>بوابة الدخول المعتمدة للمهندسين والمشرفين</span>
-        </div>
-        
-        <div style="background: #F8FAFC; border-radius: 10px; padding: 10px 14px; border: 1px solid #E2E8F0; font-size: 0.82rem; color: #475569; margin-bottom: 8px; line-height: 1.5;">
-            هذه المنصة محمية بنظام التحقق الرقمي المشفر. يرجى إدخال بيانات الاعتماد المصرح بها للوصول إلى أدوات ومحركات المشروع.
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
+    login_card_html = """<style>
+@import url('https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@700&family=Amiri:ital,wght@0,700;1,700&family=Scheherazade+New:wght@700&display=swap');
+.thuluth-title {
+    font-family: 'Aref Ruqaa', 'Amiri', 'Thuluth', 'DecoType Thuluth', 'Traditional Arabic', serif !important;
+    background: linear-gradient(135deg, #1E3A8A 0%, #1D4ED8 50%, #2563EB 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 700;
+    font-size: 1.95rem;
+    line-height: 1.55;
+    margin-bottom: 12px;
+    letter-spacing: 0.3px;
+}
+</style>
+<div style="max-width: 580px; margin: 25px auto 16px auto; background: #FFFFFF; border-radius: 20px; padding: 32px 36px; box-shadow: 0 18px 45px rgba(15, 23, 42, 0.09); border: 1px solid #E2E8F0; text-align: center; direction: rtl;">
+<div style="display: inline-block; background: linear-gradient(135deg, #EFF6FF, #DBEAFE); border: 1px solid #BFDBFE; border-radius: 50%; padding: 14px; margin-bottom: 12px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);">
+<div style="font-size: 2.6rem; line-height: 1;">🏛️</div>
+</div>
+<h1 class="thuluth-title">المنصة العراقية لتقييم مخاطر البناء ودعم اتخاذ القرارات في المشاريع البنائية</h1>
+<div style="display: inline-block; background: #F1F5F9; color: #334155; font-size: 0.82rem; font-weight: 700; padding: 4px 12px; border-radius: 20px; border: 1px solid #CBD5E1; margin-bottom: 10px; font-family: 'Segoe UI', Tahoma, sans-serif; direction: ltr;">
+Iraqi Construction Risk Assessment & Decision Support Platform (ICRAT 2.0)
+</div>
+<div style="color: #2563EB; font-size: 0.88rem; font-weight: 700; margin-bottom: 14px; display: flex; align-items: center; justify-content: center; gap: 6px;">
+<span>🔒</span> <span>بوابة الدخول المعتمدة للمهندسين والمشرفين</span>
+</div>
+<div style="background: #F8FAFC; border-radius: 10px; padding: 10px 14px; border: 1px solid #E2E8F0; font-size: 0.82rem; color: #475569; margin-bottom: 8px; line-height: 1.5;">
+هذه المنصة محمية بنظام التحقق الرقمي المشفر. يرجى إدخال بيانات الاعتماد المصرح بها للوصول إلى أدوات ومحركات المشروع.
+</div>
+</div>"""
+    st.markdown(login_card_html, unsafe_allow_html=True)
 
     col_pad1, col_form, col_pad2 = st.columns([1, 1.8, 1])
     with col_form:
@@ -1009,43 +1002,40 @@ def render_login_portal():
                 else:
                     st.error("❌ اسم المستخدم أو كلمة المرور غير صحيحة! يرجى التحقق وإعادة المحاولة.")
 
-    st.markdown("""
-    <div style="text-align: center; margin-top: 28px; padding-top: 16px; border-top: 1px solid #E2E8F0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; direction: ltr;">
-        <div style="font-size: 0.88rem; font-weight: 700; color: #1E293B; margin-bottom: 4px; letter-spacing: 0.2px;">
-            Iraqi Construction Risk Assessment & Decision Support Platform
-        </div>
-        <div style="font-size: 0.82rem; font-weight: 600; color: #2563EB;">
-            Designed and Developed by Dr Ahmed Louay Ahmed
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
+    login_footer_html = """<div style="text-align: center; margin-top: 28px; padding-top: 16px; border-top: 1px solid #E2E8F0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; direction: ltr;">
+<div style="font-size: 0.88rem; font-weight: 700; color: #1E293B; margin-bottom: 4px; letter-spacing: 0.2px;">
+Iraqi Construction Risk Assessment & Decision Support Platform
+</div>
+<div style="font-size: 0.82rem; font-weight: 600; color: #2563EB;">
+Designed and Developed by Dr Ahmed Louay Ahmed
+</div>
+</div>"""
+    st.markdown(login_footer_html, unsafe_allow_html=True)
 
     # تفعيل ميزة الحفظ التلقائي في مديري كلمات المرور بالمتصفح (Chrome, Safari, Edge, Keychain)
-    st.components.v1.html("""
-    <script>
-    setTimeout(function() {
-        try {
-            const doc = window.parent.document;
-            const form = doc.querySelector('form');
-            if (form) {
-                form.setAttribute('autocomplete', 'on');
+    st.components.v1.html("""<script>
+setTimeout(function() {
+    try {
+        const doc = window.parent.document;
+        const form = doc.querySelector('form');
+        if (form) {
+            form.setAttribute('autocomplete', 'on');
+        }
+        const inputs = doc.querySelectorAll('input');
+        inputs.forEach(function(inp) {
+            if (inp.type === 'password') {
+                inp.setAttribute('name', 'password');
+                inp.setAttribute('autocomplete', 'current-password');
+                inp.setAttribute('id', 'current-password');
+            } else if (inp.type === 'text') {
+                inp.setAttribute('name', 'username');
+                inp.setAttribute('autocomplete', 'username');
+                inp.setAttribute('id', 'username');
             }
-            const inputs = doc.querySelectorAll('input');
-            inputs.forEach(function(inp) {
-                if (inp.type === 'password') {
-                    inp.setAttribute('name', 'password');
-                    inp.setAttribute('autocomplete', 'current-password');
-                    inp.setAttribute('id', 'current-password');
-                } else if (inp.type === 'text') {
-                    inp.setAttribute('name', 'username');
-                    inp.setAttribute('autocomplete', 'username');
-                    inp.setAttribute('id', 'username');
-                }
-            });
-        } catch(e) {}
-    }, 250);
-    </script>
-    """, height=0, width=0)
+        });
+    } catch(e) {}
+}, 250);
+</script>""", height=0, width=0)
 
     st.stop()
 
