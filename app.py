@@ -1026,6 +1026,35 @@ def render_dynamic_theme_engine():
         .guidance-hl-3 { color: #D97706 !important; }
         .guidance-hl-4 { color: #059669 !important; }
         .geo-stat-badge { background: #FEF2F2 !important; border: 1px solid #FECACA !important; color: #DC2626 !important; padding: 3px 8px; border-radius: 6px; font-weight: 800; }
+
+        /* Ultra-High Priority Main Header Override */
+        .main-header,
+        .main-header *,
+        .main-header div,
+        .main-header p,
+        .main-header span,
+        .main-header b,
+        .main-header h2,
+        div.main-header,
+        div.main-header *,
+        div.main-header div,
+        div.main-header p,
+        div.main-header span,
+        div[data-testid="stMarkdownContainer"] .main-header,
+        div[data-testid="stMarkdownContainer"] .main-header * {
+            color: #FFFFFF !important;
+        }
+        .main-header .en-badge-hdr,
+        div.main-header .en-badge-hdr {
+            background: rgba(255, 255, 255, 0.22) !important;
+            color: #FFFFFF !important;
+            border: 1.5px solid rgba(255, 255, 255, 0.45) !important;
+            padding: 2px 10px !important;
+            border-radius: 6px !important;
+            font-size: 0.82rem !important;
+            font-weight: 800 !important;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15) !important;
+        }
         """
     elif current_theme == "LIGHT":
         theme_css = """
@@ -1955,6 +1984,35 @@ def render_dynamic_theme_engine():
         .guidance-hl-3 { color: #FBBF24 !important; }
         .guidance-hl-4 { color: #34D399 !important; }
         .geo-stat-badge { background: #2A0E12 !important; border: 1px solid #EF4444 !important; color: #FCA5A5 !important; padding: 3px 8px; border-radius: 6px; font-weight: 800; }
+
+        /* Ultra-High Priority Main Header Override */
+        .main-header,
+        .main-header *,
+        .main-header div,
+        .main-header p,
+        .main-header span,
+        .main-header b,
+        .main-header h2,
+        div.main-header,
+        div.main-header *,
+        div.main-header div,
+        div.main-header p,
+        div.main-header span,
+        div[data-testid="stMarkdownContainer"] .main-header,
+        div[data-testid="stMarkdownContainer"] .main-header * {
+            color: #FFFFFF !important;
+        }
+        .main-header .en-badge-hdr,
+        div.main-header .en-badge-hdr {
+            background: rgba(255, 255, 255, 0.22) !important;
+            color: #FFFFFF !important;
+            border: 1.5px solid rgba(255, 255, 255, 0.45) !important;
+            padding: 2px 10px !important;
+            border-radius: 6px !important;
+            font-size: 0.82rem !important;
+            font-weight: 800 !important;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15) !important;
+        }
         """
     st.markdown(f"<style>{theme_css}</style>", unsafe_allow_html=True)
 
@@ -3098,10 +3156,16 @@ col_hdr_1, col_hdr_2 = st.columns([3.5, 1.2])
 with col_hdr_1:
     st.markdown(f"""
     <div class="main-header">
-        <h2 style="margin:0; font-size:1.55rem; color:#FFFFFF !important; font-weight:900;">🏗️ ICRAT 2.0 | المنصة الهندسية المتكاملة لتقييم المخاطر والمطالبات</h2>
-        <p style="margin:8px 0 0 0; color:#E2E8F0 !important; font-size:0.92rem; line-height:1.6; font-weight:700;">
-            محاكاة مونت كارلو <span class='en-badge-hdr'>QSRA/QCRA</span> • التنسيق <span class='en-badge-hdr'>ISO 31000</span> • مطالبات التمديد <span class='en-badge-hdr'>EOT</span> • استيراد <span class='en-badge-hdr'>Primavera P6 & BIM</span>
-        </p>
+        <div style="margin:0; font-size:1.55rem; color:#FFFFFF !important; font-weight:900; letter-spacing:0.2px;">🏗️ ICRAT 2.0 | المنصة الهندسية المتكاملة لتقييم المخاطر والمطالبات</div>
+        <div style="margin-top:8px; font-size:0.92rem; line-height:1.6; font-weight:800; color:#FFFFFF !important;">
+            <span style="color:#FFFFFF !important;">محاكاة مونت كارلو</span> <span class='en-badge-hdr'>QSRA/QCRA</span>
+            <span style="color:#93C5FD !important; margin:0 5px; font-weight:900;">•</span>
+            <span style="color:#FFFFFF !important;">التنسيق</span> <span class='en-badge-hdr'>ISO 31000</span>
+            <span style="color:#93C5FD !important; margin:0 5px; font-weight:900;">•</span>
+            <span style="color:#FFFFFF !important;">مطالبات التمديد</span> <span class='en-badge-hdr'>EOT</span>
+            <span style="color:#93C5FD !important; margin:0 5px; font-weight:900;">•</span>
+            <span style="color:#FFFFFF !important;">استيراد</span> <span class='en-badge-hdr'>Primavera P6 & BIM</span>
+        </div>
     </div>
     """, unsafe_allow_html=True)
 
