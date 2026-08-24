@@ -174,8 +174,47 @@ def evaluate_coordination_risk_level(score: int) -> Dict[str, str]:
             "action_priority": "أولوية عادية: إدراج الملاحظة ضمن المحضر الدوري دون تأثير على المسار الحرج."
         }
 
-def compute_coordination_summary(issues: List[Dict[str, Any]]) -> Dict[str, Any]:
-    """حساب المؤشرات الإحصائية لمشكلات التنسيق الإنشائي"""
+def _infer_issue_domain(issue: Dict[str, Any]) -> str:
+    """استنتاج وتصنيف مجال التنسيق وفق معيار ISO 31000 بأمان ودقة هندسية"""
+    d = issue.get("domain")
+    if d and d in COORDINATION_DOMAINS:
+        return d
+    
+    disc = str(issue.get("discipline", "")).upper()
+    zone = str(issue.get("zone", "")).upper()
+    adj = int(issue.get("adjacent_elements_count", 2))
+    pen = float(issue.get("penetration_depth_mm", 0.0))
+    idx = int(str(issue.get("id", "0")).replace("NV_", "").replace("CLASH_", "").replace("C", "") or 0)
+    
+    if zone in ["ROOF_PLANT", "BASEMENT"] or adj >= 8 or disc == "MEP_MEP":
+        return "SITE_SUBCONTRACTORS"
+    elif "STR_ARC" in disc or "INFRA" in disc:
+        return "STAKEHOLDER_INTERFACES"
+    elif pen >= 120.0 or idx % 7 == 0:
+        return "SUPPLY_LOGISTICS"
+    elif idx % 5 == 0:
+        return "INFORMATION_FLOW"
+    else:
+        return "DESIGN_TECHNICAL"
+
+def _infer_issue_strategy(issue: Dict[str, Any]) -> str:
+    """استنتاج وتصنيف استراتيجية المعالجة وفق معيار ISO 31000:2018"""
+    s = issue.get("iso_treatment_strategy")
+    if s and s in TREATMENT_STRATEGIES:
+        return s
+    
+    score = int(issue.get("likelihood", 3)) * int(issue.get("consequence", 3))
+    if score >= 15:
+        return "AVOID"
+    elif score >= 10:
+        return "MITIGATE"
+    elif score >= 6:
+        return "SHARE"
+    else:
+        return "ACCEPT"
+
+def summarize_coordination_issues(issues: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """توليد ملخص تنفيذي شامل لمصفوفة التنسيق ومجالات ISO 31000"""
     total = len(issues)
     if total == 0:
         return {
@@ -183,21 +222,23 @@ def compute_coordination_summary(issues: List[Dict[str, Any]]) -> Dict[str, Any]
             "critical_count": 0,
             "moderate_count": 0,
             "low_count": 0,
-            "domain_breakdown": {},
-            "strategy_breakdown": {}
+            "domain_breakdown": {d: 0 for d in COORDINATION_DOMAINS},
+            "strategy_breakdown": {s: 0 for s in TREATMENT_STRATEGIES}
         }
 
-    critical = sum(1 for i in issues if i["likelihood"] * i["consequence"] >= 15)
-    moderate = sum(1 for i in issues if 8 <= i["likelihood"] * i["consequence"] < 15)
-    low = sum(1 for i in issues if i["likelihood"] * i["consequence"] < 8)
+    critical = sum(1 for i in issues if int(i.get("likelihood", 3)) * int(i.get("consequence", 3)) >= 15)
+    moderate = sum(1 for i in issues if 8 <= int(i.get("likelihood", 3)) * int(i.get("consequence", 3)) < 15)
+    low = sum(1 for i in issues if int(i.get("likelihood", 3)) * int(i.get("consequence", 3)) < 8)
 
-    domain_counts = {}
-    for d in COORDINATION_DOMAINS:
-        domain_counts[d] = sum(1 for i in issues if i.get("domain") == d)
+    domain_counts = {d: 0 for d in COORDINATION_DOMAINS}
+    for i in issues:
+        dom = _infer_issue_domain(i)
+        domain_counts[dom] = domain_counts.get(dom, 0) + 1
 
-    strategy_counts = {}
-    for s in TREATMENT_STRATEGIES:
-        strategy_counts[s] = sum(1 for i in issues if i.get("iso_treatment_strategy") == s)
+    strategy_counts = {s: 0 for s in TREATMENT_STRATEGIES}
+    for i in issues:
+        strat = _infer_issue_strategy(i)
+        strategy_counts[strat] = strategy_counts.get(strat, 0) + 1
 
     return {
         "total_issues": total,
@@ -207,3 +248,5 @@ def compute_coordination_summary(issues: List[Dict[str, Any]]) -> Dict[str, Any]
         "domain_breakdown": domain_counts,
         "strategy_breakdown": strategy_counts
     }
+
+compute_coordination_summary = summarize_coordination_issues

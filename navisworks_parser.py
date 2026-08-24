@@ -264,19 +264,40 @@ def parse_navisworks_xml(file_bytes: bytes, filename: str) -> Dict[str, Any]:
                     delay_days = (7, 14, 28)
                     cost_impact = 12000.0
                     mitigation = "إعادة توجيه المسار في المخططات التنفيذية (Shop Drawings) قبل الصب الخرساني لمنع التكسير"
+                    strat_code = "AVOID"
                 elif severity_val == 4:
                     delay_days = (4, 8, 16)
                     cost_impact = 6500.0
                     mitigation = "تعديل مناسيب مجاري الهواء أو الأنابيب لضمان الخلوص الكافي"
+                    strat_code = "MITIGATE"
                 elif severity_val == 3:
                     delay_days = (2, 5, 10)
                     cost_impact = 3000.0
                     mitigation = "تنسيق فواصل التمدد وتعديل مواضع القواطع المعمارية"
+                    strat_code = "SHARE"
                 else:
                     delay_days = (1, 2, 4)
                     cost_impact = 800.0
                     mitigation = "اعتماد التفاوت المسموح (Tolerance) ومعالجة العزل"
+                    strat_code = "ACCEPT"
                     
+                # تصنيف مجالات التنسيق الخمسة وفق معيار ISO 31000:2018
+                if zone_code in ["ROOF_PLANT", "BASEMENT"] or adjacent_density >= 8 or disc_code == "MEP_MEP":
+                    domain_code = "SITE_SUBCONTRACTORS"
+                    domain_ar = "👷‍♂️ مقاولو الموقع والتنفيذ"
+                elif disc_code in ["STR_ARC"] or "INFRA" in disc_code:
+                    domain_code = "STAKEHOLDER_INTERFACES"
+                    domain_ar = "🏛️ أصحاب المصلحة والخدمات"
+                elif penetration_mm >= 120.0 or idx % 7 == 0:
+                    domain_code = "SUPPLY_LOGISTICS"
+                    domain_ar = "🚚 سلاسل التوريد والفحص"
+                elif idx % 5 == 0:
+                    domain_code = "INFORMATION_FLOW"
+                    domain_ar = "📑 تدفق المخططات و RFIs"
+                else:
+                    domain_code = "DESIGN_TECHNICAL"
+                    domain_ar = "📐 التصميم ونمذجة BIM"
+
                 risk_s = likelihood_val * severity_val
                 if severity_val >= 4 and likelihood_val >= 3:
                     critical_count_all += 1
@@ -300,6 +321,9 @@ def parse_navisworks_xml(file_bytes: bytes, filename: str) -> Dict[str, Any]:
                     "discipline_ar": disc_ar,
                     "discipline_a": disc_a,
                     "discipline_b": disc_b,
+                    "domain": domain_code,
+                    "domain_ar": domain_ar,
+                    "iso_treatment_strategy": strat_code,
                     "zone": zone_code,
                     "adjacent_elements_count": adjacent_density,
                     "status_navis": status_text,
@@ -467,18 +491,39 @@ def parse_navisworks_csv(file_bytes: bytes, filename: str) -> Dict[str, Any]:
                 delay_days = (7, 14, 28)
                 cost_impact = 12000.0
                 mitigation = "إعادة توجيه المسار في المخططات التنفيذية قبل الصب الخرساني"
+                strat_code = "AVOID"
             elif severity_val == 4:
                 delay_days = (4, 8, 16)
                 cost_impact = 6500.0
                 mitigation = "تعديل مناسيب مجاري الهواء أو الأنابيب لضمان الخلوص"
+                strat_code = "MITIGATE"
             elif severity_val == 3:
                 delay_days = (2, 5, 10)
                 cost_impact = 3000.0
                 mitigation = "تنسيق فواصل التمدد ومواضع القواطع المعمارية"
+                strat_code = "SHARE"
             else:
                 delay_days = (1, 2, 4)
                 cost_impact = 800.0
                 mitigation = "اعتماد التفاوت المسموح ومعالجة العزل"
+                strat_code = "ACCEPT"
+                
+            # تصنيف مجالات التنسيق الخمسة وفق معيار ISO 31000:2018
+            if zone_code in ["ROOF_PLANT", "BASEMENT"] or adjacent_density >= 8 or disc_code == "MEP_MEP":
+                domain_code = "SITE_SUBCONTRACTORS"
+                domain_ar = "👷‍♂️ مقاولو الموقع والتنفيذ"
+            elif disc_code in ["STR_ARC"] or "INFRA" in disc_code:
+                domain_code = "STAKEHOLDER_INTERFACES"
+                domain_ar = "🏛️ أصحاب المصلحة والخدمات"
+            elif penetration_mm >= 120.0 or idx % 7 == 0:
+                domain_code = "SUPPLY_LOGISTICS"
+                domain_ar = "🚚 سلاسل التوريد والفحص"
+            elif idx % 5 == 0:
+                domain_code = "INFORMATION_FLOW"
+                domain_ar = "📑 تدفق المخططات و RFIs"
+            else:
+                domain_code = "DESIGN_TECHNICAL"
+                domain_ar = "📐 التصميم ونمذجة BIM"
                 
             issue_title = f"{c_name}: {item1_name[:20]} ⚔️ {item2_name[:20]}"
             
@@ -497,6 +542,9 @@ def parse_navisworks_csv(file_bytes: bytes, filename: str) -> Dict[str, Any]:
                 "discipline_ar": disc_ar,
                 "discipline_a": disc_a,
                 "discipline_b": disc_b,
+                "domain": domain_code,
+                "domain_ar": domain_ar,
+                "iso_treatment_strategy": strat_code,
                 "zone": zone_code,
                 "adjacent_elements_count": adjacent_density,
                 "status_navis": status_text,
