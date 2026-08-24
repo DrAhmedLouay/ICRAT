@@ -953,12 +953,26 @@ AUTHORIZED_CREDENTIALS = {
 def render_login_portal():
     """بوابة الأمان والتحقق الرقمي المدمجة لحماية المنصة على الإنترنت"""
     st.markdown("""
-    <div style="max-width: 560px; margin: 25px auto 16px auto; background: #FFFFFF; border-radius: 20px; padding: 32px 36px; box-shadow: 0 18px 45px rgba(15, 23, 42, 0.09); border: 1px solid #E2E8F0; text-align: center; direction: rtl;">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@700&family=Amiri:ital,wght@0,700;1,700&family=Scheherazade+New:wght@700&display=swap');
+        .thuluth-title {
+            font-family: 'Aref Ruqaa', 'Amiri', 'Thuluth', 'DecoType Thuluth', 'Traditional Arabic', serif !important;
+            background: linear-gradient(135deg, #1E3A8A 0%, #1D4ED8 50%, #2563EB 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            font-size: 1.95rem;
+            line-height: 1.55;
+            margin-bottom: 12px;
+            letter-spacing: 0.3px;
+        }
+    </style>
+    <div style="max-width: 580px; margin: 25px auto 16px auto; background: #FFFFFF; border-radius: 20px; padding: 32px 36px; box-shadow: 0 18px 45px rgba(15, 23, 42, 0.09); border: 1px solid #E2E8F0; text-align: center; direction: rtl;">
         <div style="display: inline-block; background: linear-gradient(135deg, #EFF6FF, #DBEAFE); border: 1px solid #BFDBFE; border-radius: 50%; padding: 14px; margin-bottom: 12px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);">
             <div style="font-size: 2.6rem; line-height: 1;">🏛️</div>
         </div>
         
-        <h1 style="background: linear-gradient(135deg, #1E3A8A 0%, #1D4ED8 50%, #2563EB 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; font-size: 1.5rem; line-height: 1.45; margin-bottom: 10px; font-family: 'Cairo', 'Segoe UI', sans-serif;">
+        <h1 class="thuluth-title">
             المنصة العراقية لتقييم مخاطر البناء ودعم اتخاذ القرارات في المشاريع البنائية
         </h1>
         
