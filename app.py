@@ -148,6 +148,7 @@ def render_decision_hub_html_grid(df: pd.DataFrame):
 
 def render_iso31000_matrix_html(issues):
     """عرض مصفوفة التنسيق 5x5 ISO 31000 بتصميم هندسي فائق الوضوح مع مناطق الخطورة الملونة والشارات الحية"""
+    is_dark = st.session_state.get("theme_mode", "ROYAL") == "DARK"
     grid = {}
     for l in range(1, 6):
         for c in range(1, 6):
@@ -171,7 +172,7 @@ def render_iso31000_matrix_html(issues):
     html += '<table style="width:100%; border-collapse:separate; border-spacing:6px; font-family:Cairo, sans-serif; text-align:center;">'
     
     html += '<thead><tr>'
-    html += '<th style="background:#0F172A; color:#F8FAFC; padding:10px 8px; border-radius:8px; font-size:0.82rem; min-width:110px;">الاحتمالية ↓ / الشدة ←</th>'
+    html += '<th class="matrix-corner-th">الاحتمالية ↓ / الشدة ←</th>'
     for c in range(1, 6):
         html += f'<th class="matrix-th">{c_labels[c]}</th>'
     html += '</tr></thead><tbody>'
@@ -225,6 +226,7 @@ def render_iso31000_matrix_html(issues):
 
 def render_risk_matrix_html(risks):
     """عرض مصفوفة المخاطر النوعية 5x5 بتصميم هندسي واضح مع الشارات الحية"""
+    is_dark = st.session_state.get("theme_mode", "ROYAL") == "DARK"
     grid = {}
     for l in range(1, 6):
         for c in range(1, 6):
@@ -248,7 +250,7 @@ def render_risk_matrix_html(risks):
     html += '<table style="width:100%; border-collapse:separate; border-spacing:6px; font-family:Cairo, sans-serif; text-align:center;">'
     
     html += '<thead><tr>'
-    html += '<th style="background:#0F172A; color:#F8FAFC; padding:10px 8px; border-radius:8px; font-size:0.82rem; min-width:110px;">الاحتمالية ↓ / التأثير ←</th>'
+    html += '<th class="matrix-corner-th">الاحتمالية ↓ / التأثير ←</th>'
     for i in range(1, 6):
         html += f'<th class="matrix-th">{i_labels[i]}</th>'
     html += '</tr></thead><tbody>'
@@ -732,6 +734,17 @@ def render_dynamic_theme_engine():
         }
         .matrix-hdr-title { font-size: 1.02rem; color: #0F172A !important; font-weight: 800; }
         .matrix-hdr-sub { font-size: 0.8rem; color: #475569 !important; font-weight: 700; }
+        .matrix-corner-th {
+            background: linear-gradient(135deg, #1E3A8A 0%, #2563EB 100%) !important;
+            color: #FFFFFF !important;
+            padding: 10px 8px !important;
+            border-radius: 8px !important;
+            font-size: 0.84rem !important;
+            font-weight: 800 !important;
+            border: 1px solid #1D4ED8 !important;
+            min-width: 115px !important;
+            box-shadow: 0 2px 6px rgba(37,99,235,0.2) !important;
+        }
         .matrix-th {
             background: #F1F5F9 !important;
             color: #0F172A !important;
@@ -1188,6 +1201,17 @@ def render_dynamic_theme_engine():
         }
         .matrix-hdr-title { font-size: 1.02rem; color: #0F172A !important; font-weight: 800; }
         .matrix-hdr-sub { font-size: 0.8rem; color: #475569 !important; font-weight: 700; }
+        .matrix-corner-th {
+            background: linear-gradient(135deg, #1D4ED8 0%, #2563EB 100%) !important;
+            color: #FFFFFF !important;
+            padding: 10px 8px !important;
+            border-radius: 8px !important;
+            font-size: 0.84rem !important;
+            font-weight: 800 !important;
+            border: 1px solid #1E40AF !important;
+            min-width: 115px !important;
+            box-shadow: 0 2px 6px rgba(29,78,216,0.2) !important;
+        }
         .matrix-th {
             background: #F8FAFC !important;
             color: #0F172A !important;
@@ -1608,6 +1632,17 @@ def render_dynamic_theme_engine():
         }
         .matrix-hdr-title { font-size: 1.02rem; color: #FFFFFF !important; font-weight: 800; }
         .matrix-hdr-sub { font-size: 0.8rem; color: #94A3B8 !important; font-weight: 700; }
+        .matrix-corner-th {
+            background: linear-gradient(135deg, #1E3A8A 0%, #101E3D 100%) !important;
+            color: #38BDF8 !important;
+            padding: 10px 8px !important;
+            border-radius: 8px !important;
+            font-size: 0.84rem !important;
+            font-weight: 900 !important;
+            border: 2px solid #38BDF8 !important;
+            min-width: 115px !important;
+            box-shadow: 0 0 12px rgba(56, 189, 248, 0.4) !important;
+        }
         .matrix-th {
             background: #1E293B !important;
             color: #FFFFFF !important;
