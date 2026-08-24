@@ -957,6 +957,19 @@ def render_dynamic_theme_engine():
             background-color: #0B132B !important;
             border-left: 2px solid #1E293B !important;
         }
+        section[data-testid="stSidebar"] div[data-testid="stExpander"] {
+            background: #0E1626 !important;
+            border: 1.5px solid #1E3A8A !important;
+            border-radius: 10px !important;
+        }
+        section[data-testid="stSidebar"] div[data-testid="stExpander"] summary,
+        section[data-testid="stSidebar"] div[data-testid="stExpander"] summary span,
+        section[data-testid="stSidebar"] div[data-testid="stExpander"] summary p,
+        section[data-testid="stSidebar"] div[data-testid="stExpander"] summary svg {
+            color: #FFFFFF !important;
+            fill: #FFFFFF !important;
+            font-weight: 800 !important;
+        }
         section[data-testid="stSidebar"] h1, section[data-testid="stSidebar"] h2, section[data-testid="stSidebar"] h3, section[data-testid="stSidebar"] h4, section[data-testid="stSidebar"] h5, section[data-testid="stSidebar"] h6 {
             color: #FFFFFF !important;
             font-weight: 900 !important;
@@ -1495,6 +1508,19 @@ def render_dynamic_theme_engine():
         section[data-testid="stSidebar"], div[data-testid="stSidebarUserContent"] {
             background-color: #F1F5F9 !important;
             border-left: 2px solid #CBD5E1 !important;
+        }
+        section[data-testid="stSidebar"] div[data-testid="stExpander"] {
+            background: #FFFFFF !important;
+            border: 1.5px solid #CBD5E1 !important;
+            border-radius: 10px !important;
+        }
+        section[data-testid="stSidebar"] div[data-testid="stExpander"] summary,
+        section[data-testid="stSidebar"] div[data-testid="stExpander"] summary span,
+        section[data-testid="stSidebar"] div[data-testid="stExpander"] summary p,
+        section[data-testid="stSidebar"] div[data-testid="stExpander"] summary svg {
+            color: #0F172A !important;
+            fill: #0F172A !important;
+            font-weight: 800 !important;
         }
         section[data-testid="stSidebar"] h1, section[data-testid="stSidebar"] h2, section[data-testid="stSidebar"] h3, section[data-testid="stSidebar"] h4, section[data-testid="stSidebar"] h5, section[data-testid="stSidebar"] h6 {
             color: #0F172A !important;
@@ -3457,23 +3483,46 @@ with st.sidebar:
             key="sidebar_g_cat"
         )
         g_results_side = glossary_data.search_glossary(query=g_search_side, category=g_cat_side)
-        st.markdown(f"<div style='font-size:0.75rem; color:#93C5FD; margin-bottom:8px; font-weight:700;'>عدد المصطلحات المطابقة: <b style='color:#FFFFFF;'>{len(g_results_side)}</b></div>", unsafe_allow_html=True)
-        for item in g_results_side[:10]:
+        
+        is_light = st.session_state.get("theme_mode", "ROYAL") == "LIGHT"
+        
+        count_color = "#1E40AF" if is_light else "#93C5FD"
+        count_val_color = "#0F172A" if is_light else "#FFFFFF"
+        card_bg = "#FFFFFF" if is_light else "#101A30"
+        card_border = "1.5px solid #CBD5E1" if is_light else "1.5px solid #2563EB"
+        term_en_color = "#1D4ED8" if is_light else "#38BDF8"
+        badge_bg = "#DBEAFE" if is_light else "#1E3A8A"
+        badge_color = "#1E40AF" if is_light else "#DBEAFE"
+        badge_border = "1px solid #93C5FD" if is_light else "1px solid #38BDF8"
+        term_ar_color = "#0F172A" if is_light else "#FFFFFF"
+        desc_color = "#1E293B" if is_light else "#F8FAFC"
+        card_shadow = "box-shadow: 0 2px 6px rgba(0,0,0,0.06);" if is_light else "box-shadow: 0 3px 10px rgba(0,0,0,0.3);"
+
+        st.markdown(f"<div style='font-size:0.78rem; color:{count_color}; margin-bottom:8px; font-weight:800;'>عدد المصطلحات المطابقة: <b style='color:{count_val_color};'>{len(g_results_side)}</b></div>", unsafe_allow_html=True)
+        
+        for item in g_results_side[:12]:
             st.markdown(f"""
-            <div style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.15); border-radius:8px; padding:8px 10px; margin-bottom:8px;">
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <b style="color:#60A5FA; font-size:0.85rem;">{item['term_en']}</b>
-                    <span style="font-size:0.7rem; background:#1E3A8A; color:#DBEAFE; padding:2px 6px; border-radius:4px; font-weight:700;">{item['category_ar']}</span>
+            <div style="background:{card_bg}; border:{card_border}; border-radius:8px; padding:9px 12px; margin-bottom:8px; {card_shadow}">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                    <b style="color:{term_en_color}; font-size:0.88rem; font-weight:900; letter-spacing:0.3px;">{item['term_en']}</b>
+                    <span style="font-size:0.70rem; background:{badge_bg}; color:{badge_color}; border:{badge_border}; padding:2px 7px; border-radius:4px; font-weight:800;">{item['category_ar']}</span>
                 </div>
-                <div style="font-size:0.82rem; font-weight:800; color:#FFFFFF; margin:3px 0;">{item['term_ar']}</div>
-                <div style="font-size:0.75rem; color:#CBD5E1; line-height:1.4;">{item['definition_ar']}</div>
+                <div style="font-size:0.85rem; font-weight:900; color:{term_ar_color}; margin:2px 0 4px 0;">🏷️ {item['term_ar']}</div>
+                <div style="font-size:0.78rem; color:{desc_color}; line-height:1.55; font-weight:700;">{item['definition_ar']}</div>
             </div>
             """, unsafe_allow_html=True)
 
     st.divider()
+    
+    summary_bg = "#FFFFFF" if is_light else "#101A30"
+    summary_border = "1.5px solid #CBD5E1" if is_light else "1.5px solid #2563EB"
+    summary_text = "#0F172A" if is_light else "#FFFFFF"
+    summary_title = "#1D4ED8" if is_light else "#38BDF8"
+    summary_shadow = "box-shadow: 0 2px 6px rgba(0,0,0,0.06);" if is_light else "box-shadow: 0 3px 10px rgba(0,0,0,0.3);"
+
     st.markdown(f"""
-    <div style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.12); border-radius:10px; padding:10px 12px; font-size:0.82rem; color:#FFFFFF; line-height:1.7;">
-        <b style="color:#60A5FA; font-size:0.88rem; display:block; margin-bottom:4px;">📌 ملخص المشروع النشط:</b>
+    <div style="background:{summary_bg}; border:{summary_border}; border-radius:10px; padding:12px 14px; font-size:0.82rem; color:{summary_text}; line-height:1.7; {summary_shadow}">
+        <b style="color:{summary_title}; font-size:0.90rem; display:block; margin-bottom:6px; font-weight:900;">📌 ملخص المشروع النشط:</b>
         <div>• <b>المشروع:</b> {active_meta.get('name_ar', '')}</div>
         <div>• <b>الموقع:</b> {active_meta.get('location_ar', '')}</div>
         <div>• <b>العملة:</b> {active_meta.get('currency', 'USD')} ({active_meta.get('currency_symbol', '$')})</div>
@@ -3483,12 +3532,17 @@ with st.sidebar:
     </div>
     """, unsafe_allow_html=True)
     
-    st.markdown("""
-    <div style="text-align:center; font-size:0.78rem; color:#94A3B8; border-top:1px solid rgba(255,255,255,0.15); padding-top:14px; margin-top:20px; direction:ltr;">
+    dev_color = "#1D4ED8" if is_light else "#38BDF8"
+    dev_text_color = "#475569" if is_light else "#E2E8F0"
+    dev_border = "1px solid #CBD5E1" if is_light else "1px solid #1E293B"
+
+    st.markdown(f"""
+    <div style="text-align:center; font-size:0.78rem; color:{dev_text_color}; border-top:{dev_border}; padding-top:14px; margin-top:20px; direction:ltr; font-weight:700;">
         Designed and developed by<br/>
-        <b style="color:#60A5FA; font-size:0.88rem; font-weight:800;">Dr Ahmed Louay Ahmed</b>
+        <b style="color:{dev_color}; font-size:0.90rem; font-weight:900;">Dr Ahmed Louay Ahmed</b>
     </div>
     """, unsafe_allow_html=True)
+
 
 # ----------------- MAIN HEADER -----------------
 col_hdr_1, col_hdr_2 = st.columns([3.5, 1.2])
