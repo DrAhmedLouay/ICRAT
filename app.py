@@ -3787,15 +3787,11 @@ if layout_mode == "MODERN":
     is_dark_theme = st.session_state.get("theme_mode", "ROYAL") == "DARK"
     if is_dark_theme:
         st.markdown("""<style>
-        div[data-testid="stSegmentedControl"], div[data-testid="stPills"], .stApp div[data-testid="stSegmentedControl"], .stApp div[data-testid="stPills"] {
+        .st-key-modern_hub_selector, div[class*="st-key-modern_subtools_"], .stApp .st-key-modern_hub_selector {
             background: transparent !important;
         }
-        div[data-testid="stSegmentedControl"] button, div[data-testid="stPills"] button,
-        .stApp button[data-testid="stBaseButton-pills"], button[data-testid="stBaseButton-pills"],
-        div[data-testid="stSegmentedControl"] [role="radio"], div[data-testid="stPills"] [role="radio"],
-        div[data-testid="stSegmentedControl"] [role="button"], div[data-testid="stPills"] [role="button"],
-        div[data-testid="stPills"] [data-testid="stPillsChip"],
-        div[data-testid="stSegmentedControl"] > div > div > button, div[data-testid="stPills"] > div > div > button {
+        .st-key-modern_hub_selector button, div[class*="st-key-modern_subtools_"] button,
+        .stApp .st-key-modern_hub_selector button, .stApp div[class*="st-key-modern_subtools_"] button {
             background-color: #0E1626 !important;
             background: #0E1626 !important;
             color: #FFFFFF !important;
@@ -3804,28 +3800,26 @@ if layout_mode == "MODERN":
             font-weight: 800 !important;
             font-size: 0.88rem !important;
             box-shadow: 0 2px 8px rgba(0,0,0,0.3) !important;
+            padding: 6px 14px !important;
         }
-        div[data-testid="stSegmentedControl"] button *, div[data-testid="stPills"] button *,
-        .stApp button[data-testid="stBaseButton-pills"] *,
-        div[data-testid="stSegmentedControl"] [data-testid="stMarkdownContainer"] p,
-        div[data-testid="stPills"] [data-testid="stMarkdownContainer"] p {
+        .st-key-modern_hub_selector button *, div[class*="st-key-modern_subtools_"] button *,
+        .stApp .st-key-modern_hub_selector button *, .stApp div[class*="st-key-modern_subtools_"] button * {
             color: #FFFFFF !important;
             font-weight: 800 !important;
         }
-        div[data-testid="stSegmentedControl"] button:hover, div[data-testid="stPills"] button:hover,
-        .stApp button[data-testid="stBaseButton-pills"]:hover {
+        .st-key-modern_hub_selector button:hover, div[class*="st-key-modern_subtools_"] button:hover {
             background-color: #131E35 !important;
             background: #131E35 !important;
             border-color: #38BDF8 !important;
             color: #38BDF8 !important;
         }
-        div[data-testid="stSegmentedControl"] button:hover *, div[data-testid="stPills"] button:hover * {
+        .st-key-modern_hub_selector button:hover *, div[class*="st-key-modern_subtools_"] button:hover * {
             color: #38BDF8 !important;
         }
-        div[data-testid="stSegmentedControl"] button[aria-selected="true"], div[data-testid="stPills"] button[aria-selected="true"],
-        div[data-testid="stSegmentedControl"] button[aria-checked="true"], div[data-testid="stPills"] button[aria-checked="true"],
-        .stApp button[data-testid="stBaseButton-pillsActive"],
-        .stApp button[data-testid="stBaseButton-pills"][aria-selected="true"] {
+        .st-key-modern_hub_selector button[aria-selected="true"], .st-key-modern_hub_selector button[aria-checked="true"],
+        div[class*="st-key-modern_subtools_"] button[aria-selected="true"], div[class*="st-key-modern_subtools_"] button[aria-checked="true"],
+        .stApp .st-key-modern_hub_selector button[aria-selected="true"], .stApp .st-key-modern_hub_selector button[aria-checked="true"],
+        .stApp div[class*="st-key-modern_subtools_"] button[aria-selected="true"], .stApp div[class*="st-key-modern_subtools_"] button[aria-checked="true"] {
             background: linear-gradient(135deg, #1E3A8A 0%, #2563EB 100%) !important;
             background-color: #2563EB !important;
             color: #FFFFFF !important;
@@ -3833,23 +3827,19 @@ if layout_mode == "MODERN":
             box-shadow: 0 0 16px rgba(56, 189, 248, 0.6) !important;
             border-radius: 20px !important;
         }
-        div[data-testid="stSegmentedControl"] button[aria-selected="true"] *, div[data-testid="stPills"] button[aria-selected="true"] *,
-        .stApp button[data-testid="stBaseButton-pillsActive"] * {
+        .st-key-modern_hub_selector button[aria-selected="true"] *, .st-key-modern_hub_selector button[aria-checked="true"] *,
+        div[class*="st-key-modern_subtools_"] button[aria-selected="true"] *, div[class*="st-key-modern_subtools_"] button[aria-checked="true"] * {
             color: #FFFFFF !important;
             font-weight: 900 !important;
         }
         </style>""", unsafe_allow_html=True)
     else:
         st.markdown("""<style>
-        div[data-testid="stSegmentedControl"], div[data-testid="stPills"], .stApp div[data-testid="stSegmentedControl"], .stApp div[data-testid="stPills"] {
+        .st-key-modern_hub_selector, div[class*="st-key-modern_subtools_"], .stApp .st-key-modern_hub_selector {
             background: transparent !important;
         }
-        div[data-testid="stSegmentedControl"] button, div[data-testid="stPills"] button,
-        .stApp button[data-testid="stBaseButton-pills"], button[data-testid="stBaseButton-pills"],
-        div[data-testid="stSegmentedControl"] [role="radio"], div[data-testid="stPills"] [role="radio"],
-        div[data-testid="stSegmentedControl"] [role="button"], div[data-testid="stPills"] [role="button"],
-        div[data-testid="stPills"] [data-testid="stPillsChip"],
-        div[data-testid="stSegmentedControl"] > div > div > button, div[data-testid="stPills"] > div > div > button {
+        .st-key-modern_hub_selector button, div[class*="st-key-modern_subtools_"] button,
+        .stApp .st-key-modern_hub_selector button, .stApp div[class*="st-key-modern_subtools_"] button {
             background-color: #FFFFFF !important;
             background: #FFFFFF !important;
             color: #0F172A !important;
@@ -3858,28 +3848,26 @@ if layout_mode == "MODERN":
             font-weight: 800 !important;
             font-size: 0.88rem !important;
             box-shadow: 0 2px 6px rgba(0,0,0,0.04) !important;
+            padding: 6px 14px !important;
         }
-        div[data-testid="stSegmentedControl"] button *, div[data-testid="stPills"] button *,
-        .stApp button[data-testid="stBaseButton-pills"] *,
-        div[data-testid="stSegmentedControl"] [data-testid="stMarkdownContainer"] p,
-        div[data-testid="stPills"] [data-testid="stMarkdownContainer"] p {
+        .st-key-modern_hub_selector button *, div[class*="st-key-modern_subtools_"] button *,
+        .stApp .st-key-modern_hub_selector button *, .stApp div[class*="st-key-modern_subtools_"] button * {
             color: #0F172A !important;
             font-weight: 800 !important;
         }
-        div[data-testid="stSegmentedControl"] button:hover, div[data-testid="stPills"] button:hover,
-        .stApp button[data-testid="stBaseButton-pills"]:hover {
+        .st-key-modern_hub_selector button:hover, div[class*="st-key-modern_subtools_"] button:hover {
             background-color: #EFF6FF !important;
             background: #EFF6FF !important;
             border-color: #93C5FD !important;
             color: #1D4ED8 !important;
         }
-        div[data-testid="stSegmentedControl"] button:hover *, div[data-testid="stPills"] button:hover * {
+        .st-key-modern_hub_selector button:hover *, div[class*="st-key-modern_subtools_"] button:hover * {
             color: #1D4ED8 !important;
         }
-        div[data-testid="stSegmentedControl"] button[aria-selected="true"], div[data-testid="stPills"] button[aria-selected="true"],
-        div[data-testid="stSegmentedControl"] button[aria-checked="true"], div[data-testid="stPills"] button[aria-checked="true"],
-        .stApp button[data-testid="stBaseButton-pillsActive"],
-        .stApp button[data-testid="stBaseButton-pills"][aria-selected="true"] {
+        .st-key-modern_hub_selector button[aria-selected="true"], .st-key-modern_hub_selector button[aria-checked="true"],
+        div[class*="st-key-modern_subtools_"] button[aria-selected="true"], div[class*="st-key-modern_subtools_"] button[aria-checked="true"],
+        .stApp .st-key-modern_hub_selector button[aria-selected="true"], .stApp .st-key-modern_hub_selector button[aria-checked="true"],
+        .stApp div[class*="st-key-modern_subtools_"] button[aria-selected="true"], .stApp div[class*="st-key-modern_subtools_"] button[aria-checked="true"] {
             background: linear-gradient(135deg, #1E3A8A 0%, #2563EB 100%) !important;
             background-color: #2563EB !important;
             color: #FFFFFF !important;
@@ -3887,8 +3875,8 @@ if layout_mode == "MODERN":
             box-shadow: 0 4px 12px rgba(37,99,235,0.35) !important;
             border-radius: 20px !important;
         }
-        div[data-testid="stSegmentedControl"] button[aria-selected="true"] *, div[data-testid="stPills"] button[aria-selected="true"] *,
-        .stApp button[data-testid="stBaseButton-pillsActive"] * {
+        .st-key-modern_hub_selector button[aria-selected="true"] *, .st-key-modern_hub_selector button[aria-checked="true"] *,
+        div[class*="st-key-modern_subtools_"] button[aria-selected="true"] *, div[class*="st-key-modern_subtools_"] button[aria-checked="true"] * {
             color: #FFFFFF !important;
             font-weight: 900 !important;
         }
@@ -3900,29 +3888,36 @@ if layout_mode == "MODERN":
             current_hub = hub_name
             break
 
+    if st.session_state.get("modern_hub_selector") not in MODERN_HUBS:
+        st.session_state["modern_hub_selector"] = current_hub
+
     selected_hub = st.segmented_control(
         "اختر المحور التشغيلي:",
         options=list(MODERN_HUBS.keys()),
-        default=current_hub,
         key="modern_hub_selector",
         label_visibility="collapsed"
     )
     if not selected_hub:
         selected_hub = current_hub
+        st.session_state["modern_hub_selector"] = selected_hub
 
     # 3. الأدوات داخل المحور
     hub_tools = MODERN_HUBS[selected_hub]
-    sub_default = st.session_state.active_nav_tab if st.session_state.active_nav_tab in hub_tools else hub_tools[0]
+    sub_key = f"modern_subtools_{selected_hub}"
     
+    if st.session_state.get(sub_key) not in hub_tools:
+        st.session_state[sub_key] = st.session_state.active_nav_tab if st.session_state.active_nav_tab in hub_tools else hub_tools[0]
+        
     selected_tab = st.pills(
         "اختر الأداة المتخصصة:",
         options=hub_tools,
-        default=sub_default,
-        key=f"modern_subtools_{selected_hub}",
+        key=sub_key,
         label_visibility="collapsed"
     )
     if not selected_tab:
-        selected_tab = hub_tools[0]
+        selected_tab = st.session_state.get(sub_key, hub_tools[0])
+        st.session_state[sub_key] = selected_tab
+        
     st.session_state.active_nav_tab = selected_tab
     if st.query_params.get("tab") != selected_tab:
         st.query_params["tab"] = selected_tab
@@ -4048,15 +4043,24 @@ else:
     </div>
     """, unsafe_allow_html=True)
     
+    if "active_nav_tab" not in st.session_state:
+        st.session_state.active_nav_tab = "📊 لوحة القيادة"
+        
+    if st.session_state.get("pills_nav_tab") not in TAB_OPTIONS or st.session_state.get("pills_nav_tab") != st.session_state.active_nav_tab:
+        st.session_state.pills_nav_tab = st.session_state.active_nav_tab
+
     selected_tab = st.pills(
         "تنقل بين شاشات وأدوات المنصة:",
         options=TAB_OPTIONS,
-        default=st.session_state.active_nav_tab,
         key="pills_nav_tab",
         label_visibility="collapsed"
     )
+    
+    # 🎯 منع إلغاء التحديد التلقائي (Deselection Protection)
     if not selected_tab:
-        selected_tab = "📊 لوحة القيادة"
+        selected_tab = st.session_state.active_nav_tab
+        st.session_state.pills_nav_tab = selected_tab
+        
     st.session_state.active_nav_tab = selected_tab
     if st.query_params.get("tab") != selected_tab:
         st.query_params["tab"] = selected_tab
