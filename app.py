@@ -665,49 +665,75 @@ def render_dynamic_theme_engine():
         }
         .workflow-arrow { color: #64748B !important; font-weight: 900 !important; }
 
-        /* 5. Navigation Hubs & Tabs (Segmented Control & Pills) */
-        div[data-testid="stSegmentedControl"], div[data-testid="stPills"], div[data-baseweb="segmented-control"] {
+                /* 5. Navigation Hubs & Tabs (Segmented Control & Pills) */
+        .stApp div[data-testid="stSegmentedControl"], .stApp div[data-testid="stPills"], .stApp div[data-baseweb="segmented-control"] {
             background-color: transparent !important;
         }
-        div[data-testid="stSegmentedControl"] > div, div[data-testid="stPills"] > div {
+        .stApp div[data-testid="stSegmentedControl"] > div, .stApp div[data-testid="stPills"] > div {
             background-color: transparent !important;
         }
-        div[data-testid="stSegmentedControl"] [role="radiogroup"] > *,
-        div[data-testid="stSegmentedControl"] button, div[data-testid="stPills"] button,
-        div[data-testid="stSegmentedControl"] [role="radio"], div[data-testid="stPills"] [role="radio"],
-        div[data-baseweb="segmented-control"] [role="radio"], div[data-baseweb="segmented-control"] button,
-        div[data-testid="stSegmentedControl"] label, div[data-testid="stPills"] label {
+        .stApp div[data-testid="stSegmentedControl"] [role="radiogroup"] > *,
+        .stApp div[data-testid="stSegmentedControl"] button,
+        .stApp div[data-testid="stPills"] button,
+        .stApp button[data-testid="stBaseButton-pills"],
+        .stApp div[data-testid="stSegmentedControl"] [role="radio"],
+        .stApp div[data-testid="stPills"] [role="radio"],
+        .stApp div[data-testid="stPills"] [data-testid="stPillsChip"],
+        .stApp div[data-testid="stPills"] [role="button"],
+        .stApp div[data-baseweb="segmented-control"] [role="radio"],
+        .stApp div[data-baseweb="segmented-control"] button,
+        .stApp div[data-testid="stSegmentedControl"] label,
+        .stApp div[data-testid="stPills"] label {
             background-color: #FFFFFF !important;
+            background: #FFFFFF !important;
             color: #0F172A !important;
             border: 2px solid #CBD5E1 !important;
-            border-radius: 10px !important;
+            border-radius: 12px !important;
             font-weight: 800 !important;
             font-size: 0.88rem !important;
             box-shadow: 0 2px 6px rgba(0,0,0,0.04) !important;
         }
-        div[data-testid="stSegmentedControl"] [data-testid="stMarkdownContainer"] p,
-        div[data-testid="stPills"] [data-testid="stMarkdownContainer"] p,
-        div[data-testid="stSegmentedControl"] span, div[data-testid="stPills"] span,
-        div[data-testid="stSegmentedControl"] div, div[data-testid="stPills"] div,
-        div[data-baseweb="segmented-control"] span, div[data-baseweb="segmented-control"] p {
+        .stApp div[data-testid="stSegmentedControl"] [data-testid="stMarkdownContainer"] p,
+        .stApp div[data-testid="stPills"] [data-testid="stMarkdownContainer"] p,
+        .stApp button[data-testid="stBaseButton-pills"] *,
+        .stApp button[data-testid="stBaseButton-pills"] p,
+        .stApp button[data-testid="stBaseButton-pills"] span,
+        .stApp div[data-testid="stSegmentedControl"] span,
+        .stApp div[data-testid="stPills"] span,
+        .stApp div[data-testid="stSegmentedControl"] div,
+        .stApp div[data-testid="stPills"] div,
+        .stApp div[data-baseweb="segmented-control"] span,
+        .stApp div[data-baseweb="segmented-control"] p {
             color: #0F172A !important;
             font-weight: 800 !important;
         }
-        div[data-testid="stSegmentedControl"] button[aria-checked="true"], div[data-testid="stPills"] button[aria-checked="true"],
-        div[data-testid="stSegmentedControl"] [role="radio"][aria-checked="true"], div[data-testid="stPills"] [role="radio"][aria-checked="true"],
-        div[data-baseweb="segmented-control"] [aria-checked="true"],
-        div[data-testid="stSegmentedControl"] label[data-checked="true"], div[data-testid="stPills"] label[data-checked="true"] {
+        .stApp div[data-testid="stSegmentedControl"] button[aria-checked="true"],
+        .stApp div[data-testid="stPills"] button[aria-checked="true"],
+        .stApp div[data-testid="stPills"] button[aria-selected="true"],
+        .stApp button[data-testid="stBaseButton-pillsActive"],
+        .stApp button[data-testid="stBaseButton-pills"][aria-selected="true"],
+        .stApp button[data-testid="stBaseButton-pills"][aria-checked="true"],
+        .stApp div[data-testid="stSegmentedControl"] [role="radio"][aria-checked="true"],
+        .stApp div[data-testid="stPills"] [role="radio"][aria-checked="true"],
+        .stApp div[data-baseweb="segmented-control"] [aria-checked="true"],
+        .stApp div[data-testid="stSegmentedControl"] label[data-checked="true"],
+        .stApp div[data-testid="stPills"] label[data-checked="true"] {
             background: linear-gradient(135deg, #1E3A8A 0%, #2563EB 100%) !important;
+            background-color: #2563EB !important;
             color: #FFFFFF !important;
             border-color: #1D4ED8 !important;
             box-shadow: 0 4px 12px rgba(37,99,235,0.3) !important;
         }
-        div[data-testid="stSegmentedControl"] [aria-checked="true"] [data-testid="stMarkdownContainer"] p,
-        div[data-testid="stPills"] [aria-checked="true"] [data-testid="stMarkdownContainer"] p,
-        div[data-testid="stSegmentedControl"] [aria-checked="true"] span,
-        div[data-testid="stPills"] [aria-checked="true"] span,
-        div[data-baseweb="segmented-control"] [aria-checked="true"] p,
-        div[data-baseweb="segmented-control"] [aria-checked="true"] span {
+        .stApp div[data-testid="stSegmentedControl"] [aria-checked="true"] [data-testid="stMarkdownContainer"] p,
+        .stApp div[data-testid="stPills"] [aria-checked="true"] [data-testid="stMarkdownContainer"] p,
+        .stApp div[data-testid="stPills"] [aria-selected="true"] [data-testid="stMarkdownContainer"] p,
+        .stApp button[data-testid="stBaseButton-pillsActive"] *,
+        .stApp button[data-testid="stBaseButton-pillsActive"] p,
+        .stApp button[data-testid="stBaseButton-pillsActive"] span,
+        .stApp div[data-testid="stSegmentedControl"] [aria-checked="true"] span,
+        .stApp div[data-testid="stPills"] [aria-checked="true"] span,
+        .stApp div[data-baseweb="segmented-control"] [aria-checked="true"] p,
+        .stApp div[data-baseweb="segmented-control"] [aria-checked="true"] span {
             color: #FFFFFF !important;
             font-weight: 900 !important;
         }
