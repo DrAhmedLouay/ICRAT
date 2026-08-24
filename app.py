@@ -1741,18 +1741,27 @@ def render_dynamic_theme_engine():
         }
         .workflow-arrow { color: #64748B !important; font-weight: 900 !important; }
 
-                /* 5. Navigation Hubs & Tabs (Segmented Control & Pills in Dark Theme) */
+                
+        /* 5. Navigation Hubs & Tabs (Key-based targeting in Dark Theme) */
+        .st-key-pills_nav_tab,
+        .st-key-modern_hub_selector,
+        div[class*="st-key-modern_subtools_"],
+        div[class*="st-key-pills"],
         .stApp div[data-testid="stSegmentedControl"],
         .stApp div[data-testid="stPills"],
         .stApp div[data-baseweb="segmented-control"],
         div[data-testid="stPills"] {
             background-color: transparent !important;
+            background: transparent !important;
         }
-        .stApp div[data-testid="stSegmentedControl"] > div,
-        .stApp div[data-testid="stPills"] > div {
-            background-color: transparent !important;
-        }
-        .stApp div[data-testid="stSegmentedControl"] [role="radiogroup"] > *,
+
+        .st-key-pills_nav_tab button,
+        .st-key-modern_hub_selector button,
+        div[class*="st-key-modern_subtools_"] button,
+        div[class*="st-key-pills"] button,
+        div[class*="st-key-pills_nav_tab"] button,
+        .stApp .st-key-pills_nav_tab button,
+        .stApp .st-key-modern_hub_selector button,
         .stApp div[data-testid="stSegmentedControl"] button,
         .stApp div[data-testid="stPills"] button,
         .stApp button[data-testid="stBaseButton-pills"],
@@ -1776,7 +1785,15 @@ def render_dynamic_theme_engine():
             font-weight: 800 !important;
             font-size: 0.88rem !important;
             box-shadow: 0 2px 8px rgba(0,0,0,0.3) !important;
+            padding: 6px 14px !important;
         }
+
+        .st-key-pills_nav_tab button *,
+        .st-key-modern_hub_selector button *,
+        div[class*="st-key-modern_subtools_"] button *,
+        div[class*="st-key-pills"] button *,
+        .stApp .st-key-pills_nav_tab button *,
+        .stApp .st-key-modern_hub_selector button *,
         .stApp div[data-testid="stSegmentedControl"] [data-testid="stMarkdownContainer"] p,
         .stApp div[data-testid="stPills"] [data-testid="stMarkdownContainer"] p,
         .stApp button[data-testid="stBaseButton-pills"] *,
@@ -1798,17 +1815,36 @@ def render_dynamic_theme_engine():
             color: #FFFFFF !important;
             font-weight: 800 !important;
         }
+
+        .st-key-pills_nav_tab button:hover,
+        .st-key-modern_hub_selector button:hover,
+        div[class*="st-key-modern_subtools_"] button:hover,
         .stApp div[data-testid="stPills"] button:hover,
         .stApp button[data-testid="stBaseButton-pills"]:hover,
         div[data-testid="stPills"] button:hover {
             background-color: #131E35 !important;
             background: #131E35 !important;
             border-color: #38BDF8 !important;
+            color: #38BDF8 !important;
         }
+        .st-key-pills_nav_tab button:hover *,
+        .st-key-modern_hub_selector button:hover *,
+        div[class*="st-key-modern_subtools_"] button:hover *,
         .stApp div[data-testid="stPills"] button:hover *,
         .stApp button[data-testid="stBaseButton-pills"]:hover * {
             color: #38BDF8 !important;
         }
+
+        .st-key-pills_nav_tab button[aria-selected="true"],
+        .st-key-pills_nav_tab button[aria-checked="true"],
+        .st-key-modern_hub_selector button[aria-selected="true"],
+        .st-key-modern_hub_selector button[aria-checked="true"],
+        div[class*="st-key-modern_subtools_"] button[aria-selected="true"],
+        div[class*="st-key-modern_subtools_"] button[aria-checked="true"],
+        .stApp .st-key-pills_nav_tab button[aria-selected="true"],
+        .stApp .st-key-pills_nav_tab button[aria-checked="true"],
+        .stApp .st-key-modern_hub_selector button[aria-selected="true"],
+        .stApp .st-key-modern_hub_selector button[aria-checked="true"],
         .stApp div[data-testid="stSegmentedControl"] button[aria-checked="true"],
         .stApp div[data-testid="stPills"] button[aria-checked="true"],
         .stApp div[data-testid="stPills"] button[aria-selected="true"],
@@ -1833,6 +1869,13 @@ def render_dynamic_theme_engine():
             box-shadow: 0 0 16px rgba(56, 189, 248, 0.6) !important;
             border-radius: 20px !important;
         }
+
+        .st-key-pills_nav_tab button[aria-selected="true"] *,
+        .st-key-pills_nav_tab button[aria-checked="true"] *,
+        .st-key-modern_hub_selector button[aria-selected="true"] *,
+        .st-key-modern_hub_selector button[aria-checked="true"] *,
+        div[class*="st-key-modern_subtools_"] button[aria-selected="true"] *,
+        div[class*="st-key-modern_subtools_"] button[aria-checked="true"] *,
         .stApp div[data-testid="stSegmentedControl"] [aria-checked="true"] [data-testid="stMarkdownContainer"] p,
         .stApp div[data-testid="stPills"] [aria-checked="true"] [data-testid="stMarkdownContainer"] p,
         .stApp div[data-testid="stPills"] [aria-selected="true"] [data-testid="stMarkdownContainer"] p,
@@ -1859,6 +1902,7 @@ def render_dynamic_theme_engine():
             font-weight: 800 !important;
             font-size: 0.82rem !important;
         }
+
 
         /* Radio & Checkbox */
         div[data-testid="stRadio"] label, div[data-testid="stRadio"] [data-testid="stMarkdownContainer"] p, div[data-testid="stRadio"] span {
@@ -3888,18 +3932,8 @@ else:
     is_dark_theme = st.session_state.get("theme_mode", "ROYAL") == "DARK"
     if is_dark_theme:
         st.markdown("""<style>
-        div[data-testid="stPills"], .stApp div[data-testid="stPills"] {
-            background: transparent !important;
-        }
-        div[data-testid="stPills"] button,
-        .stApp div[data-testid="stPills"] button,
-        .stApp button[data-testid="stBaseButton-pills"],
-        button[data-testid="stBaseButton-pills"],
-        div[data-testid="stPills"] [role="radio"],
-        div[data-testid="stPills"] [role="button"],
-        div[data-testid="stPills"] [data-testid="stPillsChip"],
-        div[data-testid="stPills"] > div > div > button,
-        div[data-testid="stPills"] > div > button {
+        .st-key-pills_nav_tab, .st-key-pills_nav_tab > div { background: transparent !important; }
+        .st-key-pills_nav_tab button, .stApp .st-key-pills_nav_tab button, div.st-key-pills_nav_tab button {
             background-color: #0E1626 !important;
             background: #0E1626 !important;
             color: #FFFFFF !important;
@@ -3908,31 +3942,25 @@ else:
             font-weight: 800 !important;
             font-size: 0.88rem !important;
             box-shadow: 0 2px 8px rgba(0,0,0,0.3) !important;
+            padding: 6px 14px !important;
         }
-        div[data-testid="stPills"] button *,
-        .stApp button[data-testid="stBaseButton-pills"] *,
-        div[data-testid="stPills"] [data-testid="stMarkdownContainer"] p,
-        div[data-testid="stPills"] button p,
-        div[data-testid="stPills"] button span {
+        .st-key-pills_nav_tab button *, .stApp .st-key-pills_nav_tab button *, div.st-key-pills_nav_tab button * {
             color: #FFFFFF !important;
             font-weight: 800 !important;
         }
-        div[data-testid="stPills"] button:hover,
-        .stApp button[data-testid="stBaseButton-pills"]:hover {
+        .st-key-pills_nav_tab button:hover, .stApp .st-key-pills_nav_tab button:hover {
             background-color: #131E35 !important;
             background: #131E35 !important;
             border-color: #38BDF8 !important;
             color: #38BDF8 !important;
         }
-        div[data-testid="stPills"] button:hover *,
-        .stApp button[data-testid="stBaseButton-pills"]:hover * {
+        .st-key-pills_nav_tab button:hover *, .stApp .st-key-pills_nav_tab button:hover * {
             color: #38BDF8 !important;
         }
-        div[data-testid="stPills"] button[aria-selected="true"],
-        div[data-testid="stPills"] button[aria-checked="true"],
-        .stApp button[data-testid="stBaseButton-pillsActive"],
-        .stApp button[data-testid="stBaseButton-pills"][aria-selected="true"],
-        .stApp button[data-testid="stBaseButton-pills"][aria-checked="true"] {
+        .st-key-pills_nav_tab button[aria-selected="true"],
+        .st-key-pills_nav_tab button[aria-checked="true"],
+        .stApp .st-key-pills_nav_tab button[aria-selected="true"],
+        .stApp .st-key-pills_nav_tab button[aria-checked="true"] {
             background: linear-gradient(135deg, #1E3A8A 0%, #2563EB 100%) !important;
             background-color: #2563EB !important;
             color: #FFFFFF !important;
@@ -3940,11 +3968,10 @@ else:
             box-shadow: 0 0 16px rgba(56, 189, 248, 0.6) !important;
             border-radius: 20px !important;
         }
-        div[data-testid="stPills"] button[aria-selected="true"] *,
-        div[data-testid="stPills"] button[aria-checked="true"] *,
-        .stApp button[data-testid="stBaseButton-pillsActive"] *,
-        .stApp button[data-testid="stBaseButton-pillsActive"] p,
-        .stApp button[data-testid="stBaseButton-pillsActive"] span {
+        .st-key-pills_nav_tab button[aria-selected="true"] *,
+        .st-key-pills_nav_tab button[aria-checked="true"] *,
+        .stApp .st-key-pills_nav_tab button[aria-selected="true"] *,
+        .stApp .st-key-pills_nav_tab button[aria-checked="true"] * {
             color: #FFFFFF !important;
             font-weight: 900 !important;
         }
@@ -3960,18 +3987,8 @@ else:
         </style>""", unsafe_allow_html=True)
     else:
         st.markdown("""<style>
-        div[data-testid="stPills"], .stApp div[data-testid="stPills"] {
-            background: transparent !important;
-        }
-        div[data-testid="stPills"] button,
-        .stApp div[data-testid="stPills"] button,
-        .stApp button[data-testid="stBaseButton-pills"],
-        button[data-testid="stBaseButton-pills"],
-        div[data-testid="stPills"] [role="radio"],
-        div[data-testid="stPills"] [role="button"],
-        div[data-testid="stPills"] [data-testid="stPillsChip"],
-        div[data-testid="stPills"] > div > div > button,
-        div[data-testid="stPills"] > div > button {
+        .st-key-pills_nav_tab, .st-key-pills_nav_tab > div { background: transparent !important; }
+        .st-key-pills_nav_tab button, .stApp .st-key-pills_nav_tab button, div.st-key-pills_nav_tab button {
             background-color: #FFFFFF !important;
             background: #FFFFFF !important;
             color: #0F172A !important;
@@ -3980,31 +3997,25 @@ else:
             font-weight: 800 !important;
             font-size: 0.88rem !important;
             box-shadow: 0 2px 6px rgba(0,0,0,0.04) !important;
+            padding: 6px 14px !important;
         }
-        div[data-testid="stPills"] button *,
-        .stApp button[data-testid="stBaseButton-pills"] *,
-        div[data-testid="stPills"] [data-testid="stMarkdownContainer"] p,
-        div[data-testid="stPills"] button p,
-        div[data-testid="stPills"] button span {
+        .st-key-pills_nav_tab button *, .stApp .st-key-pills_nav_tab button *, div.st-key-pills_nav_tab button * {
             color: #0F172A !important;
             font-weight: 800 !important;
         }
-        div[data-testid="stPills"] button:hover,
-        .stApp button[data-testid="stBaseButton-pills"]:hover {
+        .st-key-pills_nav_tab button:hover, .stApp .st-key-pills_nav_tab button:hover {
             background-color: #EFF6FF !important;
             background: #EFF6FF !important;
             border-color: #93C5FD !important;
             color: #1D4ED8 !important;
         }
-        div[data-testid="stPills"] button:hover *,
-        .stApp button[data-testid="stBaseButton-pills"]:hover * {
+        .st-key-pills_nav_tab button:hover *, .stApp .st-key-pills_nav_tab button:hover * {
             color: #1D4ED8 !important;
         }
-        div[data-testid="stPills"] button[aria-selected="true"],
-        div[data-testid="stPills"] button[aria-checked="true"],
-        .stApp button[data-testid="stBaseButton-pillsActive"],
-        .stApp button[data-testid="stBaseButton-pills"][aria-selected="true"],
-        .stApp button[data-testid="stBaseButton-pills"][aria-checked="true"] {
+        .st-key-pills_nav_tab button[aria-selected="true"],
+        .st-key-pills_nav_tab button[aria-checked="true"],
+        .stApp .st-key-pills_nav_tab button[aria-selected="true"],
+        .stApp .st-key-pills_nav_tab button[aria-checked="true"] {
             background: linear-gradient(135deg, #1E3A8A 0%, #2563EB 100%) !important;
             background-color: #2563EB !important;
             color: #FFFFFF !important;
@@ -4012,11 +4023,10 @@ else:
             box-shadow: 0 4px 12px rgba(37,99,235,0.35) !important;
             border-radius: 20px !important;
         }
-        div[data-testid="stPills"] button[aria-selected="true"] *,
-        div[data-testid="stPills"] button[aria-checked="true"] *,
-        .stApp button[data-testid="stBaseButton-pillsActive"] *,
-        .stApp button[data-testid="stBaseButton-pillsActive"] p,
-        .stApp button[data-testid="stBaseButton-pillsActive"] span {
+        .st-key-pills_nav_tab button[aria-selected="true"] *,
+        .st-key-pills_nav_tab button[aria-checked="true"] *,
+        .stApp .st-key-pills_nav_tab button[aria-selected="true"] *,
+        .stApp .st-key-pills_nav_tab button[aria-checked="true"] * {
             color: #FFFFFF !important;
             font-weight: 900 !important;
         }
