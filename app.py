@@ -57,17 +57,16 @@ def ar(text: str) -> str:
 def render_centered_table(df: pd.DataFrame, max_height: Optional[int] = 480):
     """عرض الجداول بتنسيق HTML فائق الدقة مع تثبيت الهيدر وتمرير عمودي وأفقي سلس وتوسيط الخلايا"""
     scroll_style = f"max-height: {max_height}px; overflow-y: auto; overflow-x: auto;" if max_height else "overflow-x: auto;"
-    html = f'<div style="{scroll_style} border: 1px solid #CBD5E1; border-radius: 12px; margin: 14px 0; box-shadow: 0 2px 10px rgba(0,0,0,0.03); position: relative;">'
-    html += '<table style="width: 100%; border-collapse: collapse; text-align: center; font-family: Cairo, Segoe UI, sans-serif; font-size: 0.88rem; direction: rtl;">'
-    html += '<thead style="position: sticky; top: 0; z-index: 10;"><tr style="background-color: #F1F5F9; border-bottom: 2px solid #94A3B8;">'
+    html = f'<div class="custom-table-container" style="{scroll_style}">'
+    html += '<table class="custom-table">'
+    html += '<thead><tr>'
     for col in df.columns:
-        html += f'<th style="padding: 12px 14px; text-align: center !important; vertical-align: middle; color: #0F172A; font-weight: 800; white-space: nowrap; border-left: 1px solid #CBD5E1; background: #E2E8F0;">{col}</th>'
+        html += f'<th>{col}</th>'
     html += '</tr></thead><tbody>'
     for idx, row in df.iterrows():
-        bg = '#FFFFFF' if idx % 2 == 0 else '#F8FAFC'
-        html += f'<tr style="background-color: {bg}; border-bottom: 1px solid #CBD5E1;">'
+        html += '<tr>'
         for val in row:
-            html += f'<td style="padding: 10px 14px; text-align: center !important; vertical-align: middle; color: #0F172A; white-space: nowrap; border-left: 1px solid #E2E8F0; font-weight: 700;">{val}</td>'
+            html += f'<td>{val}</td>'
         html += '</tr>'
     html += '</tbody></table></div>'
     st.markdown(html, unsafe_allow_html=True)
@@ -75,29 +74,27 @@ def render_centered_table(df: pd.DataFrame, max_height: Optional[int] = 480):
 def render_decision_hub_html_grid(df: pd.DataFrame):
     """عرض مصفوفة القرارات الهندسية ISO 31000 بتنسيق HTML/CSS فائق الدقة مع شريط تمرير 2D ورأس ثابت وتفاصيل العناصر المتعارضة (Element ID & Item Name)"""
     parts = []
-    parts.append('<div style="max-height: 520px; overflow-y: auto; overflow-x: auto; border: 1px solid #CBD5E1; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.04); direction: rtl; background: #FFFFFF; position: relative; margin: 12px 0;">')
-    parts.append('<table style="width: 100%; border-collapse: collapse; font-family: Cairo, Segoe UI, Tahoma, sans-serif; font-size: 0.84rem; direction: rtl; text-align: right;">')
-    parts.append('<thead style="position: sticky; top: 0; z-index: 20; background: #0F172A; color: #F8FAFC;">')
-    parts.append('<tr style="border-bottom: 2px solid #334155;">')
-    parts.append('<th style="padding: 12px 14px; text-align: center; white-space: nowrap; background: #0F172A; color: #F8FAFC; min-width: 85px; border-left: 1px solid #334155;">كود التعارض</th>')
-    parts.append('<th style="padding: 12px 14px; text-align: center; white-space: nowrap; background: #0F172A; color: #F8FAFC; min-width: 160px; border-left: 1px solid #334155;">معرف العناصر (Element ID)</th>')
-    parts.append('<th style="padding: 12px 14px; text-align: right; white-space: nowrap; background: #0F172A; color: #F8FAFC; min-width: 190px; border-left: 1px solid #334155;">أسماء العناصر المتعارضة (Item Name)</th>')
-    parts.append('<th style="padding: 12px 14px; text-align: right; white-space: nowrap; background: #0F172A; color: #F8FAFC; min-width: 170px; border-left: 1px solid #334155;">توصيف التعارض</th>')
-    parts.append('<th style="padding: 12px 14px; text-align: center; white-space: nowrap; background: #0F172A; color: #F8FAFC; min-width: 100px; border-left: 1px solid #334155;">مؤشر الأولوية Ψ</th>')
-    parts.append('<th style="padding: 12px 14px; text-align: center; white-space: nowrap; background: #0F172A; color: #F8FAFC; min-width: 165px; border-left: 1px solid #334155;">تقييم ISO 31000</th>')
-    parts.append('<th style="padding: 12px 14px; text-align: right; white-space: nowrap; background: #0F172A; color: #F8FAFC; min-width: 220px; border-left: 1px solid #334155;">فارق التقييم الذكي (2D نظري ⇄ 4D تنفيذي)</th>')
-    parts.append('<th style="padding: 12px 14px; text-align: right; white-space: nowrap; background: #0F172A; color: #F8FAFC; min-width: 190px; border-left: 1px solid #334155;">نشاط P6 المتأثر</th>')
-    parts.append('<th style="padding: 12px 14px; text-align: center; white-space: nowrap; background: #0F172A; color: #F8FAFC; min-width: 135px; border-left: 1px solid #334155;">المسار الحرج</th>')
-    parts.append('<th style="padding: 12px 14px; text-align: center; white-space: nowrap; background: #0F172A; color: #F8FAFC; min-width: 90px; border-left: 1px solid #334155;">أيام التأخير</th>')
-    parts.append('<th style="padding: 12px 14px; text-align: center; white-space: nowrap; background: #0F172A; color: #F8FAFC; min-width: 115px; border-left: 1px solid #334155;">كلفة المعالجة 5D</th>')
-    parts.append('<th style="padding: 12px 14px; text-align: right; white-space: nowrap; background: #0F172A; color: #F8FAFC; min-width: 175px; border-left: 1px solid #334155;">العامل التفسيري الأكبر (AI)</th>')
-    parts.append('<th style="padding: 12px 14px; text-align: center; white-space: nowrap; background: #0F172A; color: #F8FAFC; min-width: 105px; border-left: 1px solid #334155;">استراتيجية ISO</th>')
-    parts.append('<th style="padding: 12px 14px; text-align: right; white-space: nowrap; background: #0F172A; color: #F8FAFC; min-width: 250px;">التوصية الإنشائية</th>')
+    parts.append('<div class="decision-hub-container" style="max-height: 520px; overflow-y: auto; overflow-x: auto; position: relative; margin: 12px 0;">')
+    parts.append('<table class="decision-hub-table">')
+    parts.append('<thead>')
+    parts.append('<tr>')
+    parts.append('<th style="text-align: center; min-width: 85px;">كود التعارض</th>')
+    parts.append('<th style="text-align: center; min-width: 160px;">معرف العناصر (Element ID)</th>')
+    parts.append('<th style="text-align: right; min-width: 190px;">أسماء العناصر المتعارضة (Item Name)</th>')
+    parts.append('<th style="text-align: right; min-width: 170px;">توصيف التعارض</th>')
+    parts.append('<th style="text-align: center; min-width: 100px;">مؤشر الأولوية Ψ</th>')
+    parts.append('<th style="text-align: center; min-width: 165px;">تقييم ISO 31000</th>')
+    parts.append('<th style="text-align: right; min-width: 220px;">فارق التقييم الذكي (2D نظري ⇄ 4D تنفيذي)</th>')
+    parts.append('<th style="text-align: right; min-width: 190px;">نشاط P6 المتأثر</th>')
+    parts.append('<th style="text-align: center; min-width: 135px;">المسار الحرج</th>')
+    parts.append('<th style="text-align: center; min-width: 90px;">أيام التأخير</th>')
+    parts.append('<th style="text-align: center; min-width: 115px;">كلفة المعالجة 5D</th>')
+    parts.append('<th style="text-align: right; min-width: 175px;">العامل التفسيري الأكبر (AI)</th>')
+    parts.append('<th style="text-align: center; min-width: 105px;">استراتيجية ISO</th>')
+    parts.append('<th style="text-align: right; min-width: 250px;">التوصية الإنشائية</th>')
     parts.append('</tr></thead><tbody>')
 
     for idx, row in df.iterrows():
-        bg = '#FFFFFF' if idx % 2 == 0 else '#F8FAFC'
-        
         score_val = float(str(row.get("مؤشر الأولوية Ψ", "0")).replace("/100", "").strip() or 0)
         if score_val >= 70:
             badge_score = f'<span style="background:#FEE2E2; color:#991B1B; padding:3px 8px; border-radius:6px; font-weight:800; font-size:0.82rem;">{row.get("مؤشر الأولوية Ψ")}</span>'
@@ -123,28 +120,27 @@ def render_decision_hub_html_grid(df: pd.DataFrame):
         elif "خفض" in delta_txt or "حماية" in delta_txt:
             badge_delta = f'<span style="background:#F0FDF4; color:#15803D; border:1px solid #BBF7D0; padding:3px 8px; border-radius:6px; font-size:0.77rem; font-weight:700;">{delta_txt}</span>'
         else:
-            badge_delta = f'<span style="background:#F8FAFC; color:#475569; border:1px solid #E2E8F0; padding:3px 8px; border-radius:6px; font-size:0.77rem; font-weight:600;">{delta_txt}</span>'
+            badge_delta = f'<span class="badge-neutral-delta">{delta_txt}</span>'
 
-        el_id_badge = f'<span style="font-family:Consolas,SFMono-Regular,monospace; background:#F1F5F9; color:#0F172A; padding:3px 7px; border-radius:6px; font-weight:700; font-size:0.77rem; border:1px solid #CBD5E1; white-space:nowrap;">{row.get("معرف العناصر (Element ID)", "—")}</span>'
-        item_name_badge = f'<span style="color:#1E293B; font-weight:600; font-size:0.80rem;">{row.get("أسماء العناصر (Item Name)", "—")}</span>'
+        el_id_badge = f'<span class="badge-element-id">{row.get("معرف العناصر (Element ID)", "—")}</span>'
+        item_name_badge = f'<span class="badge-item-name">{row.get("أسماء العناصر (Item Name)", "—")}</span>'
 
-        parts.append(f'<tr style="background-color: {bg}; border-bottom: 1px solid #CBD5E1;">')
-        parts.append(f'<td style="padding: 10px 12px; text-align: center; font-weight: 800; color: #0F172A; border-left: 1px solid #E2E8F0; white-space: nowrap;">{row.get("كود التعارض")}</td>')
-        parts.append(f'<td style="padding: 10px 12px; text-align: center; border-left: 1px solid #E2E8F0; white-space: nowrap;">{el_id_badge}</td>')
-        parts.append(f'<td style="padding: 10px 12px; text-align: right; border-left: 1px solid #E2E8F0;">{item_name_badge}</td>')
-        parts.append(f'<td style="padding: 10px 12px; text-align: right; color: #0F172A; border-left: 1px solid #E2E8F0; font-size: 0.84rem; font-weight: 700;">{row.get("توصيف التعارض")}</td>')
-        parts.append(f'<td style="padding: 10px 12px; text-align: center; border-left: 1px solid #E2E8F0; white-space: nowrap;">{badge_score}</td>')
-        parts.append(f'<td style="padding: 10px 12px; text-align: center; color: #0F172A; border-left: 1px solid #E2E8F0; font-size: 0.82rem; font-weight: 800;">{row.get("تقييم ISO 31000")}</td>')
-        parts.append(f'<td style="padding: 10px 12px; text-align: right; border-left: 1px solid #E2E8F0;">{badge_delta}</td>')
-        parts.append(f'<td style="padding: 10px 12px; text-align: right; color: #0F172A; border-left: 1px solid #E2E8F0; font-weight: 700;">{row.get("نشاط P6 المتأثر")}</td>')
-        parts.append(f'<td style="padding: 10px 12px; text-align: center; border-left: 1px solid #E2E8F0; white-space: nowrap;">{badge_crit}</td>')
-        parts.append(f'<td style="padding: 10px 12px; text-align: center; color: #B45309; font-weight: 800; border-left: 1px solid #E2E8F0; white-space: nowrap;">{row.get("أيام التأخير")}</td>')
-        parts.append(f'<td style="padding: 10px 12px; text-align: center; color: #047857; font-weight: 800; border-left: 1px solid #E2E8F0; white-space: nowrap;">{row.get("كلفة المعالجة 5D")}</td>')
-        parts.append(f'<td style="padding: 10px 12px; text-align: right; color: #1E293B; font-size: 0.84rem; font-weight: 700; border-left: 1px solid #E2E8F0;">{row.get("العامل التفسيري الأكبر (AI)")}</td>')
-        parts.append(f'<td style="padding: 10px 12px; text-align: center; border-left: 1px solid #E2E8F0; white-space: nowrap;">{badge_strat}</td>')
-        parts.append(f'<td style="padding: 10px 12px; text-align: right; color: #0F172A; font-size: 0.85rem; font-weight: 700; line-height: 1.45;">{row.get("التوصية الإنشائية")}</td>')
+        parts.append('<tr>')
+        parts.append(f'<td style="text-align: center; font-weight: 800; white-space: nowrap;">{row.get("كود التعارض")}</td>')
+        parts.append(f'<td style="text-align: center; white-space: nowrap;">{el_id_badge}</td>')
+        parts.append(f'<td style="text-align: right;">{item_name_badge}</td>')
+        parts.append(f'<td style="text-align: right; font-size: 0.84rem; font-weight: 700;">{row.get("توصيف التعارض")}</td>')
+        parts.append(f'<td style="text-align: center; white-space: nowrap;">{badge_score}</td>')
+        parts.append(f'<td style="text-align: center; font-size: 0.82rem; font-weight: 800;">{row.get("تقييم ISO 31000")}</td>')
+        parts.append(f'<td style="text-align: right;">{badge_delta}</td>')
+        parts.append(f'<td style="text-align: right; font-weight: 700;">{row.get("نشاط P6 المتأثر")}</td>')
+        parts.append(f'<td style="text-align: center; white-space: nowrap;">{badge_crit}</td>')
+        parts.append(f'<td style="text-align: center; color: #D97706; font-weight: 800; white-space: nowrap;">{row.get("أيام التأخير")}</td>')
+        parts.append(f'<td style="text-align: center; color: #10B981; font-weight: 800; white-space: nowrap;">{row.get("كلفة المعالجة 5D")}</td>')
+        parts.append(f'<td style="text-align: right; font-size: 0.84rem; font-weight: 700;">{row.get("العامل التفسيري الأكبر (AI)")}</td>')
+        parts.append(f'<td style="text-align: center; white-space: nowrap;">{badge_strat}</td>')
+        parts.append(f'<td style="text-align: right; font-size: 0.85rem; font-weight: 700; line-height: 1.45;">{row.get("التوصية الإنشائية")}</td>')
         parts.append('</tr>')
-
     parts.append('</tbody></table></div>')
     st.markdown("".join(parts), unsafe_allow_html=True)
 
@@ -545,12 +541,24 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 def render_dynamic_theme_engine():
-    """محرك الثيمات والتناسق اللوني المتقدم فائق التباين (WCAG AAA Extreme Contrast Engine)"""
+    """محرك الثيمات الديناميكي فائق الدقة: يضمن تباين لوني 100% WCAG AAA لجميع عناصر وخطوط وصفحات المنصة"""
     current_theme = st.session_state.get("theme_mode", "ROYAL")
     
     if current_theme == "ROYAL":
         theme_css = """
-        /* ================= 🏛️ THEME 1: ROYAL EXECUTIVE ================= */
+        /* ================= 🏛️ THEME 1: ROYAL EXECUTIVE (الاستوديو التنفيذي الملكي) ================= */
+        :root {
+            --bg-page: #F8FAFC;
+            --bg-card: #FFFFFF;
+            --text-primary: #0F172A;
+            --text-secondary: #334155;
+            --text-muted: #64748B;
+            --border-primary: #CBD5E1;
+            --border-secondary: #E2E8F0;
+            --accent-primary: #1E3A8A;
+            --accent-secondary: #2563EB;
+        }
+
         .stApp, div[data-testid="stAppViewContainer"], .main {
             background-color: #F8FAFC !important;
             color: #0F172A !important;
@@ -558,20 +566,21 @@ def render_dynamic_theme_engine():
 
         /* 1. Header */
         .main-header {
-            background: linear-gradient(135deg, #0F172A 0%, #1E3A8A 100%) !important;
+            background: linear-gradient(135deg, #0B132B 0%, #1E3A8A 100%) !important;
             border-right: 6px solid #3B82F6 !important;
+            box-shadow: 0 4px 20px rgba(11,19,43,0.2) !important;
         }
         .main-header h2, .main-header p, .main-header span, .main-header b {
             color: #FFFFFF !important;
         }
         .main-header .en-badge-hdr {
-            background: rgba(255,255,255,0.15) !important;
+            background: rgba(255,255,255,0.18) !important;
             color: #FFFFFF !important;
-            border: 1px solid rgba(255,255,255,0.3) !important;
+            border: 1px solid rgba(255,255,255,0.35) !important;
             padding: 2px 8px;
             border-radius: 6px;
             font-size: 0.82rem;
-            font-weight: 700;
+            font-weight: 800;
         }
 
         /* 2. Active Project Card */
@@ -580,7 +589,7 @@ def render_dynamic_theme_engine():
             border: 2px solid #CBD5E1 !important;
             box-shadow: 0 4px 14px rgba(15,23,42,0.04) !important;
         }
-        .active-proj-lbl { color: #64748B !important; }
+        .active-proj-lbl { color: #475569 !important; font-weight: 800 !important; }
         .active-proj-val { color: #0F172A !important; font-weight: 900 !important; }
 
         /* 3. Modern Topbar */
@@ -589,7 +598,7 @@ def render_dynamic_theme_engine():
             border: 2px solid #CBD5E1 !important;
             box-shadow: 0 2px 10px rgba(0,0,0,0.04) !important;
         }
-        .topbar-label { color: #475569 !important; font-weight: 700 !important; }
+        .topbar-label { color: #334155 !important; font-weight: 800 !important; }
         .topbar-val { color: #0F172A !important; font-weight: 900 !important; }
 
         /* 4. Workflow Bar */
@@ -598,14 +607,14 @@ def render_dynamic_theme_engine():
             border: 2px solid #CBD5E1 !important;
             box-shadow: 0 2px 8px rgba(0,0,0,0.03) !important;
         }
-        .workflow-step { color: #334155 !important; font-weight: 700 !important; }
+        .workflow-step { color: #334155 !important; font-weight: 800 !important; }
         .workflow-step.active {
             background: #EFF6FF !important;
             color: #1D4ED8 !important;
             font-weight: 900 !important;
-            border: 1px solid #93C5FD !important;
+            border: 2px solid #93C5FD !important;
         }
-        .workflow-arrow { color: #94A3B8 !important; }
+        .workflow-arrow { color: #64748B !important; font-weight: 900 !important; }
 
         /* 5. Navigation Hubs & Tabs (Segmented Control & Pills) */
         div[data-testid="stSegmentedControl"] button, div[data-testid="stPills"] button {
@@ -656,9 +665,9 @@ def render_dynamic_theme_engine():
         }
         .kpi-title { color: #1E3A8A !important; font-weight: 800 !important; }
         .kpi-value { color: #0F172A !important; font-weight: 900 !important; }
-        .kpi-desc { color: #475569 !important; font-weight: 700 !important; }
+        .kpi-desc { color: #334155 !important; font-weight: 700 !important; }
         .kpi-unit { font-size: 1rem; color: #475569 !important; font-weight: 700; }
-        .kpi-sub { color: #059669 !important; font-weight: 700 !important; font-size: 0.82rem; }
+        .kpi-sub { color: #059669 !important; font-weight: 800 !important; font-size: 0.82rem; }
 
         .isrs-compare-card {
             background: #FFFFFF !important;
@@ -696,42 +705,122 @@ def render_dynamic_theme_engine():
             min-width: 90px !important;
         }
 
-        /* 8. Sidebar in Royal Mode */
-        section[data-testid="stSidebar"], div[data-testid="stSidebarUserContent"] {
-            background-color: #0B132B !important;
-            border-left: 2px solid #1E293B !important;
+        /* 8. Tables & Grids */
+        .custom-table-container, .decision-hub-container {
+            border: 2px solid #CBD5E1 !important;
+            background: #FFFFFF !important;
+            border-radius: 12px !important;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03) !important;
         }
-        section[data-testid="stSidebar"] h1, section[data-testid="stSidebar"] h2, section[data-testid="stSidebar"] h3, section[data-testid="stSidebar"] h4, section[data-testid="stSidebar"] h5, section[data-testid="stSidebar"] h6 {
-            color: #FFFFFF !important;
-            font-weight: 900 !important;
-            text-shadow: 0 1px 4px rgba(0,0,0,0.8) !important;
+        .custom-table, .decision-hub-table {
+            width: 100% !important;
+            border-collapse: collapse !important;
+            font-family: 'Cairo', sans-serif !important;
+            font-size: 0.86rem !important;
+            direction: rtl !important;
         }
-        section[data-testid="stSidebar"] p, section[data-testid="stSidebar"] label, section[data-testid="stSidebar"] span, section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p {
-            color: #FFFFFF !important;
-            font-weight: 700 !important;
-        }
-        section[data-testid="stSidebar"] .en-subtext { color: #93C5FD !important; font-weight: 800 !important; }
-        section[data-testid="stSidebar"] hr { border-color: #334155 !important; }
-        .sidebar-user-card {
-            background: rgba(255,255,255,0.08) !important;
-            border: 1px solid rgba(255,255,255,0.18) !important;
-        }
-        .sidebar-user-lbl { color: #93C5FD !important; }
-        .sidebar-user-val { color: #FFFFFF !important; }
-        .sidebar-user-badge { background: #166534 !important; color: #DCFCE7 !important; border: 1px solid #22C55E !important; }
-        section[data-testid="stSidebar"] .stButton button {
+        .custom-table thead tr, .decision-hub-table thead tr {
             background: #1E293B !important;
             color: #FFFFFF !important;
-            border: 1px solid #475569 !important;
-            font-weight: 800 !important;
         }
-        section[data-testid="stSidebar"] .stButton button:hover {
-            background: #DC2626 !important;
+        .custom-table th, .decision-hub-table th {
+            padding: 12px 14px !important;
             color: #FFFFFF !important;
-            border-color: #EF4444 !important;
+            font-weight: 800 !important;
+            background: #1E293B !important;
+            border-bottom: 2px solid #334155 !important;
+            border-left: 1px solid #334155 !important;
+        }
+        .custom-table tbody tr:nth-child(odd), .decision-hub-table tbody tr:nth-child(odd) {
+            background-color: #FFFFFF !important;
+        }
+        .custom-table tbody tr:nth-child(even), .decision-hub-table tbody tr:nth-child(even) {
+            background-color: #F8FAFC !important;
+        }
+        .custom-table td, .decision-hub-table td {
+            padding: 10px 14px !important;
+            color: #0F172A !important;
+            font-weight: 700 !important;
+            border-bottom: 1px solid #E2E8F0 !important;
+            border-left: 1px solid #E2E8F0 !important;
+        }
+        .badge-neutral-delta {
+            background: #F1F5F9 !important;
+            color: #334155 !important;
+            border: 1px solid #CBD5E1 !important;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 0.77rem;
+            font-weight: 700;
+        }
+        .badge-element-id {
+            font-family: Consolas, monospace !important;
+            background: #F1F5F9 !important;
+            color: #0F172A !important;
+            padding: 3px 7px;
+            border-radius: 6px;
+            font-weight: 800;
+            font-size: 0.78rem;
+            border: 1px solid #CBD5E1;
+        }
+        .badge-item-name {
+            color: #1E293B !important;
+            font-weight: 700 !important;
+            font-size: 0.82rem;
         }
 
-        /* 9. Typography */
+        /* 11. Custom Cards & Banners */
+        .info-card, .guide-card, .stat-box, .geo-profile-card {
+            background: #FFFFFF !important;
+            border: 2px solid #CBD5E1 !important;
+            border-radius: 12px !important;
+            padding: 14px 18px !important;
+            margin-bottom: 14px !important;
+            direction: rtl !important;
+            text-align: right !important;
+            color: #0F172A !important;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03) !important;
+        }
+        .guide-subcard {
+            background: #F8FAFC !important;
+            border: 1px solid #CBD5E1 !important;
+            border-radius: 8px !important;
+            padding: 10px 12px !important;
+            color: #0F172A !important;
+        }
+        .guide-subcard * { color: #0F172A !important; }
+        .import-card-body {
+            background: #FFFFFF !important;
+            border: 2px solid #CBD5E1 !important;
+            border-top: none !important;
+            border-radius: 0 0 10px 10px !important;
+            padding: 12px !important;
+            min-height: 84px !important;
+            font-size: 0.82rem !important;
+            line-height: 1.5 !important;
+            color: #334155 !important;
+            text-align: right !important;
+            margin-bottom: 12px !important;
+        }
+        .telemetry-suite-banner {
+            background: #EFF6FF !important;
+            border: 2px solid #93C5FD !important;
+            border-radius: 10px !important;
+            padding: 10px 14px !important;
+            margin-bottom: 12px !important;
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            color: #1E3A8A !important;
+            font-weight: 800 !important;
+        }
+        .penalty-tag {
+            font-size: 0.78rem !important;
+            color: #1E40AF !important;
+            font-weight: 800 !important;
+        }
+
+        /* 12. Typography */
         .stApp h1, .stApp h2, .stApp h3, .stApp h4, .stApp h5, .stApp h6 {
             color: #0B132B !important;
             font-weight: 900 !important;
@@ -740,10 +829,23 @@ def render_dynamic_theme_engine():
             color: #0F172A !important;
             font-weight: 700 !important;
         }
+        .en-subtext { color: #1E40AF !important; font-weight: 800 !important; }
         """
     elif current_theme == "LIGHT":
         theme_css = """
-        /* ================= 🏢 THEME 2: MODERN LIGHT ================= */
+        /* ================= 🏢 THEME 2: MODERN LIGHT (المكاتب الهندسية الحديثة) ================= */
+        :root {
+            --bg-page: #FFFFFF;
+            --bg-card: #F8FAFC;
+            --text-primary: #0F172A;
+            --text-secondary: #334155;
+            --text-muted: #64748B;
+            --border-primary: #CBD5E1;
+            --border-secondary: #E2E8F0;
+            --accent-primary: #2563EB;
+            --accent-secondary: #1D4ED8;
+        }
+
         .stApp, div[data-testid="stAppViewContainer"], .main {
             background-color: #FFFFFF !important;
             color: #0F172A !important;
@@ -752,46 +854,48 @@ def render_dynamic_theme_engine():
         .main-header {
             background: linear-gradient(135deg, #0F172A 0%, #1E3A8A 100%) !important;
             border-right: 6px solid #2563EB !important;
+            box-shadow: 0 4px 18px rgba(15,23,42,0.12) !important;
         }
         .main-header h2, .main-header p, .main-header span, .main-header b {
             color: #FFFFFF !important;
         }
         .main-header .en-badge-hdr {
-            background: rgba(255,255,255,0.15) !important;
+            background: rgba(255,255,255,0.18) !important;
             color: #FFFFFF !important;
-            border: 1px solid rgba(255,255,255,0.3) !important;
+            border: 1px solid rgba(255,255,255,0.35) !important;
             padding: 2px 8px;
             border-radius: 6px;
             font-size: 0.82rem;
-            font-weight: 700;
+            font-weight: 800;
         }
 
         .active-project-card {
             background: #F8FAFC !important;
             border: 2px solid #CBD5E1 !important;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03) !important;
         }
-        .active-proj-lbl { color: #64748B !important; }
+        .active-proj-lbl { color: #475569 !important; font-weight: 800 !important; }
         .active-proj-val { color: #0F172A !important; font-weight: 900 !important; }
 
         .modern-topbar {
             background: #F8FAFC !important;
             border: 2px solid #CBD5E1 !important;
         }
-        .topbar-label { color: #475569 !important; font-weight: 700 !important; }
+        .topbar-label { color: #334155 !important; font-weight: 800 !important; }
         .topbar-val { color: #0F172A !important; font-weight: 900 !important; }
 
         .workflow-bar {
             background: #F8FAFC !important;
             border: 2px solid #CBD5E1 !important;
         }
-        .workflow-step { color: #334155 !important; font-weight: 700 !important; }
+        .workflow-step { color: #334155 !important; font-weight: 800 !important; }
         .workflow-step.active {
             background: #EFF6FF !important;
             color: #1D4ED8 !important;
             font-weight: 900 !important;
-            border: 1px solid #93C5FD !important;
+            border: 2px solid #93C5FD !important;
         }
-        .workflow-arrow { color: #94A3B8 !important; }
+        .workflow-arrow { color: #64748B !important; font-weight: 900 !important; }
 
         div[data-testid="stSegmentedControl"] button, div[data-testid="stPills"] button {
             background-color: #F8FAFC !important;
@@ -838,7 +942,7 @@ def render_dynamic_theme_engine():
         .kpi-value { color: #0F172A !important; font-weight: 900 !important; }
         .kpi-desc { color: #334155 !important; font-weight: 700 !important; }
         .kpi-unit { font-size: 1rem; color: #475569 !important; font-weight: 700; }
-        .kpi-sub { color: #059669 !important; font-weight: 700 !important; font-size: 0.82rem; }
+        .kpi-sub { color: #059669 !important; font-weight: 800 !important; font-size: 0.82rem; }
 
         .isrs-compare-card {
             background: #F8FAFC !important;
@@ -874,6 +978,65 @@ def render_dynamic_theme_engine():
             min-width: 90px !important;
         }
 
+        .custom-table-container, .decision-hub-container {
+            border: 2px solid #CBD5E1 !important;
+            background: #FFFFFF !important;
+            border-radius: 12px !important;
+        }
+        .custom-table, .decision-hub-table {
+            width: 100% !important;
+            border-collapse: collapse !important;
+            font-family: 'Cairo', sans-serif !important;
+            font-size: 0.86rem !important;
+            direction: rtl !important;
+        }
+        .custom-table thead tr, .decision-hub-table thead tr {
+            background: #1E293B !important;
+            color: #FFFFFF !important;
+        }
+        .custom-table th, .decision-hub-table th {
+            padding: 12px 14px !important;
+            color: #FFFFFF !important;
+            font-weight: 800 !important;
+            background: #1E293B !important;
+            border-bottom: 2px solid #334155 !important;
+            border-left: 1px solid #334155 !important;
+        }
+        .custom-table tbody tr:nth-child(odd), .decision-hub-table tbody tr:nth-child(odd) {
+            background-color: #FFFFFF !important;
+        }
+        .custom-table tbody tr:nth-child(even), .decision-hub-table tbody tr:nth-child(even) {
+            background-color: #F8FAFC !important;
+        }
+        .custom-table td, .decision-hub-table td {
+            padding: 10px 14px !important;
+            color: #0F172A !important;
+            font-weight: 700 !important;
+            border-bottom: 1px solid #E2E8F0 !important;
+            border-left: 1px solid #E2E8F0 !important;
+        }
+
+        div[data-baseweb="select"] > div, div[data-testid="stTextInput"] input, div[data-testid="stNumberInput"] input, textarea {
+            background-color: #FFFFFF !important;
+            color: #0F172A !important;
+            border: 2px solid #CBD5E1 !important;
+            border-radius: 8px !important;
+            font-weight: 700 !important;
+        }
+        div[data-baseweb="popover"] ul, div[data-baseweb="menu"] {
+            background-color: #FFFFFF !important;
+            color: #0F172A !important;
+            border: 1px solid #CBD5E1 !important;
+        }
+        div[data-baseweb="popover"] li, div[data-baseweb="menu"] li {
+            color: #0F172A !important;
+            font-weight: 700 !important;
+        }
+        label, label p, label span {
+            color: #0F172A !important;
+            font-weight: 800 !important;
+        }
+
         section[data-testid="stSidebar"], div[data-testid="stSidebarUserContent"] {
             background-color: #F1F5F9 !important;
             border-left: 2px solid #CBD5E1 !important;
@@ -892,8 +1055,8 @@ def render_dynamic_theme_engine():
             background: #FFFFFF !important;
             border: 1px solid #CBD5E1 !important;
         }
-        .sidebar-user-lbl { color: #64748B !important; }
-        .sidebar-user-val { color: #0F172A !important; }
+        .sidebar-user-lbl { color: #475569 !important; font-weight: 800 !important; }
+        .sidebar-user-val { color: #0F172A !important; font-weight: 800 !important; }
         .sidebar-user-badge { background: #DCFCE7 !important; color: #166534 !important; border: 1px solid #BBF7D0 !important; }
         section[data-testid="stSidebar"] .stButton button {
             background: #FFFFFF !important;
@@ -907,6 +1070,55 @@ def render_dynamic_theme_engine():
             border-color: #FCA5A5 !important;
         }
 
+        .info-card, .guide-card, .stat-box, .geo-profile-card {
+            background: #FFFFFF !important;
+            border: 2px solid #CBD5E1 !important;
+            border-radius: 12px !important;
+            padding: 14px 18px !important;
+            margin-bottom: 14px !important;
+            direction: rtl !important;
+            text-align: right !important;
+            color: #0F172A !important;
+        }
+        .guide-subcard {
+            background: #F8FAFC !important;
+            border: 1px solid #CBD5E1 !important;
+            border-radius: 8px !important;
+            padding: 10px 12px !important;
+            color: #0F172A !important;
+        }
+        .guide-subcard * { color: #0F172A !important; }
+        .import-card-body {
+            background: #F8FAFC !important;
+            border: 2px solid #CBD5E1 !important;
+            border-top: none !important;
+            border-radius: 0 0 10px 10px !important;
+            padding: 12px !important;
+            min-height: 84px !important;
+            font-size: 0.82rem !important;
+            line-height: 1.5 !important;
+            color: #334155 !important;
+            text-align: right !important;
+            margin-bottom: 12px !important;
+        }
+        .telemetry-suite-banner {
+            background: #EFF6FF !important;
+            border: 2px solid #93C5FD !important;
+            border-radius: 10px !important;
+            padding: 10px 14px !important;
+            margin-bottom: 12px !important;
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            color: #1E3A8A !important;
+            font-weight: 800 !important;
+        }
+        .penalty-tag {
+            font-size: 0.78rem !important;
+            color: #1E40AF !important;
+            font-weight: 800 !important;
+        }
+
         .stApp h1, .stApp h2, .stApp h3, .stApp h4, .stApp h5, .stApp h6 {
             color: #0F172A !important;
             font-weight: 900 !important;
@@ -915,10 +1127,23 @@ def render_dynamic_theme_engine():
             color: #0F172A !important;
             font-weight: 700 !important;
         }
+        .en-subtext { color: #1E40AF !important; font-weight: 800 !important; }
         """
     else:  # DARK
         theme_css = """
-        /* ================= 🧊 THEME 3: DIGITAL TWIN DARK ================= */
+        /* ================= 🧊 THEME 3: DIGITAL TWIN DARK (التوأم الرقمي الليلي) ================= */
+        :root {
+            --bg-page: #060A14;
+            --bg-card: #0E1626;
+            --text-primary: #FFFFFF;
+            --text-secondary: #E2E8F0;
+            --text-muted: #94A3B8;
+            --border-primary: #1E293B;
+            --border-secondary: #334155;
+            --accent-primary: #38BDF8;
+            --accent-secondary: #2563EB;
+        }
+
         .stApp, div[data-testid="stAppViewContainer"], .main {
             background-color: #060A14 !important;
             color: #FFFFFF !important;
@@ -933,13 +1158,13 @@ def render_dynamic_theme_engine():
             color: #FFFFFF !important;
         }
         .main-header .en-badge-hdr {
-            background: rgba(56, 189, 248, 0.15) !important;
+            background: rgba(56, 189, 248, 0.18) !important;
             color: #38BDF8 !important;
-            border: 1px solid rgba(56, 189, 248, 0.4) !important;
+            border: 1px solid rgba(56, 189, 248, 0.45) !important;
             padding: 2px 8px;
             border-radius: 6px;
             font-size: 0.82rem;
-            font-weight: 700;
+            font-weight: 800;
         }
 
         .active-project-card {
@@ -947,7 +1172,7 @@ def render_dynamic_theme_engine():
             border: 2px solid #1E293B !important;
             box-shadow: 0 4px 16px rgba(0,0,0,0.4) !important;
         }
-        .active-proj-lbl { color: #94A3B8 !important; }
+        .active-proj-lbl { color: #94A3B8 !important; font-weight: 800 !important; }
         .active-proj-val { color: #38BDF8 !important; font-weight: 900 !important; }
 
         .modern-topbar {
@@ -955,21 +1180,21 @@ def render_dynamic_theme_engine():
             border: 2px solid #1E293B !important;
             box-shadow: 0 4px 16px rgba(0,0,0,0.4) !important;
         }
-        .topbar-label { color: #94A3B8 !important; font-weight: 700 !important; }
+        .topbar-label { color: #94A3B8 !important; font-weight: 800 !important; }
         .topbar-val { color: #38BDF8 !important; font-weight: 900 !important; }
 
         .workflow-bar {
             background: #0E1626 !important;
             border: 2px solid #1E293B !important;
         }
-        .workflow-step { color: #94A3B8 !important; font-weight: 700 !important; }
+        .workflow-step { color: #94A3B8 !important; font-weight: 800 !important; }
         .workflow-step.active {
             background: #1E3A8A !important;
             color: #FFFFFF !important;
             font-weight: 900 !important;
-            border: 1px solid #38BDF8 !important;
+            border: 2px solid #38BDF8 !important;
         }
-        .workflow-arrow { color: #475569 !important; }
+        .workflow-arrow { color: #64748B !important; font-weight: 900 !important; }
 
         div[data-testid="stSegmentedControl"] button, div[data-testid="stPills"] button {
             background-color: #0E1626 !important;
@@ -1020,7 +1245,7 @@ def render_dynamic_theme_engine():
         .kpi-value { color: #FFFFFF !important; font-weight: 900 !important; }
         .kpi-desc { color: #94A3B8 !important; font-weight: 700 !important; }
         .kpi-unit { font-size: 1rem; color: #94A3B8 !important; font-weight: 700; }
-        .kpi-sub { color: #34D399 !important; font-weight: 700 !important; font-size: 0.82rem; }
+        .kpi-sub { color: #34D399 !important; font-weight: 800 !important; font-size: 0.82rem; }
         div[data-testid="stMetric"] * { color: #FFFFFF !important; }
         div[data-testid="stMetric"] [data-testid="stMetricValue"] { color: #38BDF8 !important; }
 
@@ -1060,6 +1285,94 @@ def render_dynamic_theme_engine():
             min-width: 90px !important;
         }
 
+        .custom-table-container, .decision-hub-container {
+            border: 2px solid #1E293B !important;
+            background: #0E1626 !important;
+            border-radius: 12px !important;
+        }
+        .custom-table, .decision-hub-table {
+            width: 100% !important;
+            border-collapse: collapse !important;
+            font-family: 'Cairo', sans-serif !important;
+            font-size: 0.86rem !important;
+            direction: rtl !important;
+        }
+        .custom-table thead tr, .decision-hub-table thead tr {
+            background: #101E3D !important;
+            color: #38BDF8 !important;
+        }
+        .custom-table th, .decision-hub-table th {
+            padding: 12px 14px !important;
+            color: #38BDF8 !important;
+            font-weight: 800 !important;
+            background: #101E3D !important;
+            border-bottom: 2px solid #1E293B !important;
+            border-left: 1px solid #1E293B !important;
+        }
+        .custom-table tbody tr:nth-child(odd), .decision-hub-table tbody tr:nth-child(odd) {
+            background-color: #0E1626 !important;
+        }
+        .custom-table tbody tr:nth-child(even), .decision-hub-table tbody tr:nth-child(even) {
+            background-color: #131E35 !important;
+        }
+        .custom-table td, .decision-hub-table td {
+            padding: 10px 14px !important;
+            color: #FFFFFF !important;
+            font-weight: 700 !important;
+            border-bottom: 1px solid #1E293B !important;
+            border-left: 1px solid #1E293B !important;
+        }
+        .badge-neutral-delta {
+            background: #1E293B !important;
+            color: #E2E8F0 !important;
+            border: 1px solid #334155 !important;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 0.77rem;
+            font-weight: 700;
+        }
+        .badge-element-id {
+            font-family: Consolas, monospace !important;
+            background: #1E293B !important;
+            color: #38BDF8 !important;
+            padding: 3px 7px;
+            border-radius: 6px;
+            font-weight: 800;
+            font-size: 0.78rem;
+            border: 1px solid #334155;
+        }
+        .badge-item-name {
+            color: #E2E8F0 !important;
+            font-weight: 700 !important;
+            font-size: 0.82rem;
+        }
+
+        /* 9. Form Controls & Widgets */
+        div[data-baseweb="select"] > div, div[data-testid="stTextInput"] input, div[data-testid="stNumberInput"] input, textarea {
+            background-color: #0E1626 !important;
+            color: #FFFFFF !important;
+            border: 2px solid #1E293B !important;
+            border-radius: 8px !important;
+            font-weight: 700 !important;
+        }
+        div[data-baseweb="popover"] ul, div[data-baseweb="menu"] {
+            background-color: #0E1626 !important;
+            color: #FFFFFF !important;
+            border: 1px solid #1E293B !important;
+        }
+        div[data-baseweb="popover"] li, div[data-baseweb="menu"] li {
+            color: #FFFFFF !important;
+            font-weight: 700 !important;
+        }
+        div[data-baseweb="popover"] li:hover, div[data-baseweb="menu"] li:hover {
+            background-color: #1E3A8A !important;
+            color: #38BDF8 !important;
+        }
+        label, label p, label span {
+            color: #FFFFFF !important;
+            font-weight: 800 !important;
+        }
+
         section[data-testid="stSidebar"], div[data-testid="stSidebarUserContent"] {
             background-color: #03060D !important;
             border-left: 2px solid #1E293B !important;
@@ -1079,8 +1392,8 @@ def render_dynamic_theme_engine():
             background: rgba(255,255,255,0.06) !important;
             border: 1px solid #1E293B !important;
         }
-        .sidebar-user-lbl { color: #38BDF8 !important; }
-        .sidebar-user-val { color: #FFFFFF !important; }
+        .sidebar-user-lbl { color: #38BDF8 !important; font-weight: 800 !important; }
+        .sidebar-user-val { color: #FFFFFF !important; font-weight: 800 !important; }
         .sidebar-user-badge { background: #166534 !important; color: #DCFCE7 !important; border: 1px solid #22C55E !important; }
         section[data-testid="stSidebar"] .stButton button {
             background: #0E1626 !important;
@@ -1094,6 +1407,56 @@ def render_dynamic_theme_engine():
             border-color: #EF4444 !important;
         }
 
+        .info-card, .guide-card, .stat-box, .geo-profile-card {
+            background: #0E1626 !important;
+            border: 2px solid #1E293B !important;
+            border-radius: 12px !important;
+            padding: 14px 18px !important;
+            margin-bottom: 14px !important;
+            direction: rtl !important;
+            text-align: right !important;
+            color: #FFFFFF !important;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.4) !important;
+        }
+        .guide-subcard {
+            background: #131E35 !important;
+            border: 1px solid #1E293B !important;
+            border-radius: 8px !important;
+            padding: 10px 12px !important;
+            color: #FFFFFF !important;
+        }
+        .guide-subcard * { color: #FFFFFF !important; }
+        .import-card-body {
+            background: #0E1626 !important;
+            border: 2px solid #1E293B !important;
+            border-top: none !important;
+            border-radius: 0 0 10px 10px !important;
+            padding: 12px !important;
+            min-height: 84px !important;
+            font-size: 0.82rem !important;
+            line-height: 1.5 !important;
+            color: #E2E8F0 !important;
+            text-align: right !important;
+            margin-bottom: 12px !important;
+        }
+        .telemetry-suite-banner {
+            background: #0A1128 !important;
+            border: 2px solid #38BDF8 !important;
+            border-radius: 10px !important;
+            padding: 10px 14px !important;
+            margin-bottom: 12px !important;
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            color: #38BDF8 !important;
+            font-weight: 800 !important;
+        }
+        .penalty-tag {
+            font-size: 0.78rem !important;
+            color: #38BDF8 !important;
+            font-weight: 800 !important;
+        }
+
         .stApp h1, .stApp h2, .stApp h3, .stApp h4, .stApp h5, .stApp h6 {
             color: #FFFFFF !important;
             font-weight: 900 !important;
@@ -1103,10 +1466,33 @@ def render_dynamic_theme_engine():
             color: #FFFFFF !important;
             font-weight: 700 !important;
         }
+        .en-subtext { color: #38BDF8 !important; font-weight: 800 !important; }
         """
     st.markdown(f"<style>{theme_css}</style>", unsafe_allow_html=True)
 
 render_dynamic_theme_engine()
+
+def get_chart_layout_theme():
+    """الحصول على إعدادات الخطوط والشبكة للرسوم البيانية متوافقة تماماً مع النمط المختار"""
+    theme = st.session_state.get("theme_mode", "ROYAL")
+    if theme == "DARK":
+        return {
+            "font_color": "#FFFFFF",
+            "title_color": "#38BDF8",
+            "grid_color": "#1E293B",
+            "axis_color": "#94A3B8",
+            "plot_bgcolor": "rgba(0,0,0,0)",
+            "paper_bgcolor": "rgba(0,0,0,0)"
+        }
+    else:
+        return {
+            "font_color": "#0F172A",
+            "title_color": "#1E3A8A",
+            "grid_color": "#E2E8F0",
+            "axis_color": "#475569",
+            "plot_bgcolor": "rgba(0,0,0,0)",
+            "paper_bgcolor": "rgba(0,0,0,0)"
+        }
 
 def load_clean_project_state(
     meta: dict,
@@ -2436,7 +2822,8 @@ if selected_tab == "📊 لوحة القيادة":
                     ]
                 }
             ))
-            fig_g_base.update_layout(height=210, margin=dict(l=10, r=10, t=10, b=10), font=dict(family='Cairo, sans-serif'))
+            ch_theme = get_chart_layout_theme()
+            fig_g_base.update_layout(height=210, margin=dict(l=10, r=10, t=10, b=10), font=dict(family='Cairo, sans-serif', color=ch_theme['font_color']), paper_bgcolor=ch_theme['paper_bgcolor'], plot_bgcolor=ch_theme['plot_bgcolor'])
             st.plotly_chart(fig_g_base, use_container_width=True, key="plot_gauge_base_compare")
             st.markdown(f"<div style='text-align:center; font-size:0.85rem; font-weight:700; color:{b_color};'>{isrs_v2_result['base_isrs']['status_icon']} {isrs_v2_result['base_isrs']['status_ar']}</div>", unsafe_allow_html=True)
 
@@ -2460,7 +2847,7 @@ if selected_tab == "📊 لوحة القيادة":
                     ]
                 }
             ))
-            fig_g_v2.update_layout(height=210, margin=dict(l=10, r=10, t=10, b=10), font=dict(family='Cairo, sans-serif'))
+            fig_g_v2.update_layout(height=210, margin=dict(l=10, r=10, t=10, b=10), font=dict(family='Cairo, sans-serif', color=ch_theme['font_color']), paper_bgcolor=ch_theme['paper_bgcolor'], plot_bgcolor=ch_theme['plot_bgcolor'])
             st.plotly_chart(fig_g_v2, use_container_width=True, key="plot_gauge_v2_compare")
             st.markdown(f"<div style='text-align:center; font-size:0.85rem; font-weight:700; color:{v2_color};'>{isrs_v2_result['status_icon_v2']} {isrs_v2_result['status_ar_v2']}</div>", unsafe_allow_html=True)
 
@@ -2491,11 +2878,16 @@ if selected_tab == "📊 لوحة القيادة":
                 name=ar('الموسع v2.0')
             ))
             fig_comp_radar.update_layout(
-                polar=dict(radialaxis=dict(visible=True, range=[0, 100], ticksuffix='%')),
+                polar=dict(
+                    radialaxis=dict(visible=True, range=[0, 100], ticksuffix='%', tickfont=dict(color=ch_theme['font_color']), linecolor=ch_theme['grid_color'], gridcolor=ch_theme['grid_color']),
+                    angularaxis=dict(tickfont=dict(color=ch_theme['font_color'], size=10), linecolor=ch_theme['grid_color'], gridcolor=ch_theme['grid_color'])
+                ),
                 showlegend=True,
-                legend=dict(orientation="h", yanchor="bottom", y=-0.2, xanchor="center", x=0.5),
+                legend=dict(orientation="h", yanchor="bottom", y=-0.2, xanchor="center", x=0.5, font=dict(color=ch_theme['font_color'])),
                 height=260,
-                font=dict(family='Cairo, sans-serif', size=10),
+                font=dict(family='Cairo, sans-serif', size=10, color=ch_theme['font_color']),
+                paper_bgcolor=ch_theme['paper_bgcolor'],
+                plot_bgcolor=ch_theme['plot_bgcolor'],
                 margin=dict(l=40, r=40, t=10, b=10)
             )
             st.plotly_chart(fig_comp_radar, use_container_width=True, key="plot_radar_compare")
@@ -2530,6 +2922,7 @@ if selected_tab == "📊 لوحة القيادة":
         # العرض القياسي أو المطور المنفرد
         col_gauge, col_radar = st.columns([1.8, 2.2])
 
+        ch_theme = get_chart_layout_theme()
         with col_gauge:
             st.markdown("### 🚨 مؤشر خطر التلكؤ العراقي (ISRS)")
             st.markdown(f"<div class='en-subtext'>{'Advanced ISRS v2.0 Engine' if eval_mode == 'ADVANCED' else 'Standard ISRS Engine'}</div>", unsafe_allow_html=True)
@@ -2560,7 +2953,9 @@ if selected_tab == "📊 لوحة القيادة":
             fig_gauge.update_layout(
                 height=270, 
                 margin=dict(l=15, r=15, t=20, b=15), 
-                font=dict(family='Cairo, sans-serif')
+                font=dict(family='Cairo, sans-serif', color=ch_theme['font_color']),
+                paper_bgcolor=ch_theme['paper_bgcolor'],
+                plot_bgcolor=ch_theme['plot_bgcolor']
             )
             st.plotly_chart(fig_gauge, use_container_width=True, key="plot_single_isrs_gauge")
 
@@ -2588,10 +2983,15 @@ if selected_tab == "📊 لوحة القيادة":
                 name=ar('درجة الخطر')
             ))
             fig_radar.update_layout(
-                polar=dict(radialaxis=dict(visible=True, range=[0, 100], ticksuffix='%')),
+                polar=dict(
+                    radialaxis=dict(visible=True, range=[0, 100], ticksuffix='%', tickfont=dict(color=ch_theme['font_color']), linecolor=ch_theme['grid_color'], gridcolor=ch_theme['grid_color']),
+                    angularaxis=dict(tickfont=dict(color=ch_theme['font_color'], size=11), linecolor=ch_theme['grid_color'], gridcolor=ch_theme['grid_color'])
+                ),
                 showlegend=False,
                 height=300,
-                font=dict(family='Cairo, sans-serif', size=11),
+                font=dict(family='Cairo, sans-serif', size=11, color=ch_theme['font_color']),
+                paper_bgcolor=ch_theme['paper_bgcolor'],
+                plot_bgcolor=ch_theme['plot_bgcolor'],
                 margin=dict(l=50, r=50, t=25, b=25)
             )
             st.plotly_chart(fig_radar, use_container_width=True, key="plot_single_isrs_radar")
@@ -2617,28 +3017,28 @@ if selected_tab == "📊 لوحة القيادة":
     # لوحة المؤشرات الخمسة المتقدمة (ISRS v2.0 Telemetry Suite)
     st.markdown("<br>", unsafe_allow_html=True)
     st.markdown("""
-    <div style="background:#F0FDF4; border:1px solid #BBF7D0; border-radius:10px; padding:10px 14px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center;">
-        <span style="font-weight:700; color:#166534;">📡 2. المؤشرات الحقلية والفضائية الخمسة المتقدمة (Advanced Live Telemetry Feed)</span>
-        <span style="font-size:0.75rem; background:#DCFCE7; color:#15803D; padding:3px 8px; border-radius:6px; font-weight:700;">ISRS v2.0 Suite</span>
+    <div class="telemetry-suite-banner">
+        <span>📡 2. المؤشرات الحقلية والفضائية الخمسة المتقدمة (Advanced Live Telemetry Feed)</span>
+        <span style="font-size:0.75rem; background:rgba(37,99,235,0.15); color:inherit; padding:3px 8px; border-radius:6px; font-weight:800;">ISRS v2.0 Suite</span>
     </div>
     """, unsafe_allow_html=True)
 
     col_adv1, col_adv2, col_adv3, col_adv4, col_adv5 = st.columns(5)
     with col_adv1:
         new_bim_c = st.slider("🧊 تعارضات BIM الحرجة:", 0, 15, int(curr_bim_clashes), key="slider_bim_clashes")
-        st.markdown(f"<div style='font-size:0.75rem; color:#475569;'>عقوبة: <b>+{isrs_v2_result['new_indicators_penalties']['bim_clashes_penalty']}</b> نقطة</div>", unsafe_allow_html=True)
+        st.markdown(f"<div class='penalty-tag'>عقوبة: <b>+{isrs_v2_result['new_indicators_penalties']['bim_clashes_penalty']}</b> نقطة</div>", unsafe_allow_html=True)
     with col_adv2:
         new_inf = st.slider("📈 تضخم أسعار المواد %:", 0.0, 30.0, float(curr_inflation), step=0.5, key="slider_inflation")
-        st.markdown(f"<div style='font-size:0.75rem; color:#475569;'>عقوبة: <b>+{isrs_v2_result['new_indicators_penalties']['material_inflation_penalty']}</b> نقطة</div>", unsafe_allow_html=True)
+        st.markdown(f"<div class='penalty-tag'>عقوبة: <b>+{isrs_v2_result['new_indicators_penalties']['material_inflation_penalty']}</b> نقطة</div>", unsafe_allow_html=True)
     with col_adv3:
         new_lab = st.slider("🧪 تأخر فحص المختبر (أيام):", 0, 40, int(curr_lab_delay), key="slider_lab_delay")
-        st.markdown(f"<div style='font-size:0.75rem; color:#475569;'>عقوبة: <b>+{isrs_v2_result['new_indicators_penalties']['lab_testing_penalty']}</b> نقطة</div>", unsafe_allow_html=True)
+        st.markdown(f"<div class='penalty-tag'>عقوبة: <b>+{isrs_v2_result['new_indicators_penalties']['lab_testing_penalty']}</b> نقطة</div>", unsafe_allow_html=True)
     with col_adv4:
         new_disp = st.slider("⚖️ النزاعات ومطالبات DAB:", 0, 10, int(curr_disputes), key="slider_disputes")
-        st.markdown(f"<div style='font-size:0.75rem; color:#475569;'>عقوبة: <b>+{isrs_v2_result['new_indicators_penalties']['disputes_penalty']}</b> نقطة</div>", unsafe_allow_html=True)
+        st.markdown(f"<div class='penalty-tag'>عقوبة: <b>+{isrs_v2_result['new_indicators_penalties']['disputes_penalty']}</b> نقطة</div>", unsafe_allow_html=True)
     with col_adv5:
         new_heat = st.slider("🛰️ توقف حرارة الصيف (ساعة):", 0, 50, int(curr_heat_stoppage), key="slider_heat_stoppage")
-        st.markdown(f"<div style='font-size:0.75rem; color:#475569;'>عقوبة: <b>+{isrs_v2_result['new_indicators_penalties']['heatwave_penalty']}</b> نقطة</div>", unsafe_allow_html=True)
+        st.markdown(f"<div class='penalty-tag'>عقوبة: <b>+{isrs_v2_result['new_indicators_penalties']['heatwave_penalty']}</b> نقطة</div>", unsafe_allow_html=True)
 
     st.markdown("---")
     st.markdown("### 📌 التوصيات الفنية والتعاقدية الاستباقية لمعالجة التلكؤ")
@@ -2672,11 +3072,16 @@ elif selected_tab == "📈 منحنيات S-Curve":
             fig_dur.add_vline(x=p80_d, line_dash="dash", line_color="#F59E0B", annotation_text=f"P80: {p80_d:.0f}d")
             fig_dur.add_vline(x=p90_d, line_dash="dash", line_color="#EF4444", annotation_text=f"P90: {p90_d:.0f}d")
 
+            ch_theme = get_chart_layout_theme()
             fig_dur.update_layout(
                 xaxis_title=ar("مدة المشروع الكلية (أيام العمل)"),
                 yaxis_title=ar("احتمالية الإنجاز التراكمية (%)"),
                 height=370,
-                font=dict(family='Cairo, sans-serif'),
+                font=dict(family='Cairo, sans-serif', color=ch_theme['font_color']),
+                plot_bgcolor=ch_theme['plot_bgcolor'],
+                paper_bgcolor=ch_theme['paper_bgcolor'],
+                xaxis=dict(gridcolor=ch_theme['grid_color'], tickfont=dict(color=ch_theme['font_color']), title_font=dict(color=ch_theme['axis_color'])),
+                yaxis=dict(gridcolor=ch_theme['grid_color'], tickfont=dict(color=ch_theme['font_color']), title_font=dict(color=ch_theme['axis_color'])),
                 hovermode="x unified"
             )
             st.plotly_chart(fig_dur, use_container_width=True, key="plot_scurve_duration")
@@ -2700,7 +3105,11 @@ elif selected_tab == "📈 منحنيات S-Curve":
                 xaxis_title=ar(f"الكلفة التراكمية الإجمالية ({curr_sym})"),
                 yaxis_title=ar("احتمالية عدم تجاوز الميزانية (%)"),
                 height=370,
-                font=dict(family='Cairo, sans-serif'),
+                font=dict(family='Cairo, sans-serif', color=ch_theme['font_color']),
+                plot_bgcolor=ch_theme['plot_bgcolor'],
+                paper_bgcolor=ch_theme['paper_bgcolor'],
+                xaxis=dict(gridcolor=ch_theme['grid_color'], tickfont=dict(color=ch_theme['font_color']), title_font=dict(color=ch_theme['axis_color'])),
+                yaxis=dict(gridcolor=ch_theme['grid_color'], tickfont=dict(color=ch_theme['font_color']), title_font=dict(color=ch_theme['axis_color'])),
                 hovermode="x unified"
             )
             st.plotly_chart(fig_cost, use_container_width=True, key="plot_scurve_cost")
@@ -2757,23 +3166,28 @@ elif selected_tab == "🌪️ تحليل الحساسية":
             title=ar(chart_title_txt)
         )
         
+        ch_theme = get_chart_layout_theme()
         fig_tornado.update_yaxes(
             automargin=True,
             title="",
-            tickfont=dict(family="Cairo, Segoe UI, Tahoma, sans-serif", size=12, color="#0F172A")
+            tickfont=dict(family="Cairo, Segoe UI, Tahoma, sans-serif", size=12, color=ch_theme["font_color"])
         )
         fig_tornado.update_xaxes(
             title=ar("معامل الارتباط الترتيبي بالحساسية (Spearman Rank Correlation - ρ)"),
-            gridcolor="#E2E8F0",
-            automargin=True
+            gridcolor=ch_theme["grid_color"],
+            automargin=True,
+            tickfont=dict(family="Segoe UI, Tahoma, sans-serif", size=11, color=ch_theme["font_color"]),
+            title_font=dict(family="Cairo, sans-serif", size=12, color=ch_theme["axis_color"])
         )
         
         chart_height = max(420, min(850, 80 + len(df_tornado) * 40))
         fig_tornado.update_layout(
             height=chart_height, 
-            font=dict(family='Cairo, Segoe UI, Tahoma, sans-serif', size=12),
+            font=dict(family='Cairo, Segoe UI, Tahoma, sans-serif', size=12, color=ch_theme["font_color"]),
+            plot_bgcolor=ch_theme["plot_bgcolor"],
+            paper_bgcolor=ch_theme["paper_bgcolor"],
             margin=dict(l=320, r=40, t=60, b=40),
-            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1, font=dict(color=ch_theme["font_color"]))
         )
         fig_tornado.update_traces(
             hovertemplate="<b>%{y}</b><br>🎯 معامل الارتباط بالحساسية (Spearman ρ): <b>%{x:.3f}</b><extra></extra>"
@@ -2802,40 +3216,40 @@ elif selected_tab == "🧩 التنسيق (ISO 31000)":
     st.markdown("<div class='en-subtext'>Construction Coordination Risk Identification, Analysis, Evaluation & Treatment</div>", unsafe_allow_html=True)
     
     st.markdown("""
-    <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:12px; padding:18px 20px; margin-bottom:18px; direction:rtl; text-align:right;">
-        <div style="font-weight:800; font-size:0.98rem; color:#1E293B; margin-bottom:12px;">
+    <div class="guide-card">
+        <div style="font-weight:800; font-size:0.98rem; margin-bottom:12px;">
             📐 <b>المنهجية المعتمدة وفق معيار إدارة المخاطر الدولي (ISO 31000:2018):</b>
         </div>
         <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:12px;">
-            <div style="background:#FFFFFF; border:1px solid #CBD5E1; border-top:4px solid #3B82F6; border-radius:8px; padding:12px 14px;">
-                <div style="font-weight:800; font-size:0.92rem; color:#1E40AF; margin-bottom:6px;">
+            <div class="guide-subcard" style="border-top:4px solid #3B82F6;">
+                <div style="font-weight:800; font-size:0.92rem; color:#2563EB; margin-bottom:6px;">
                     1️⃣ تحديد الخطر <span class='en-badge'>Identification</span>
                 </div>
-                <div style="font-size:0.84rem; color:#475569; line-height:1.55;">
+                <div style="font-size:0.84rem; line-height:1.55;">
                     رصد وتوصيف التعارضات التصميمية والموقعية وتنسيق الجهات والدوائر الخدمية.
                 </div>
             </div>
-            <div style="background:#FFFFFF; border:1px solid #CBD5E1; border-top:4px solid #0284C7; border-radius:8px; padding:12px 14px;">
-                <div style="font-weight:800; font-size:0.92rem; color:#0369A1; margin-bottom:6px;">
+            <div class="guide-subcard" style="border-top:4px solid #0284C7;">
+                <div style="font-weight:800; font-size:0.92rem; color:#0284C7; margin-bottom:6px;">
                     2️⃣ تحليل الخطر <span class='en-badge'>Analysis</span>
                 </div>
-                <div style="font-size:0.84rem; color:#475569; line-height:1.55;">
+                <div style="font-size:0.84rem; line-height:1.55;">
                     تقدير احتمالية الوقوع وشدة العواقب وتأثيرها وقابلية الاكتشاف المبكر.
                 </div>
             </div>
-            <div style="background:#FFFFFF; border:1px solid #CBD5E1; border-top:4px solid #D97706; border-radius:8px; padding:12px 14px;">
-                <div style="font-weight:800; font-size:0.92rem; color:#B45309; margin-bottom:6px;">
+            <div class="guide-subcard" style="border-top:4px solid #D97706;">
+                <div style="font-weight:800; font-size:0.92rem; color:#D97706; margin-bottom:6px;">
                     3️⃣ تقييم الخطر <span class='en-badge'>Evaluation</span>
                 </div>
-                <div style="font-size:0.84rem; color:#475569; line-height:1.55;">
+                <div style="font-size:0.84rem; line-height:1.55;">
                     مواءمة مستوى الخطر وتحديد الأولويات (حرج غير مقبول / متوسط ALARP / مقبول).
                 </div>
             </div>
-            <div style="background:#FFFFFF; border:1px solid #CBD5E1; border-top:4px solid #10B981; border-radius:8px; padding:12px 14px;">
-                <div style="font-weight:800; font-size:0.92rem; color:#047857; margin-bottom:6px;">
+            <div class="guide-subcard" style="border-top:4px solid #10B981;">
+                <div style="font-weight:800; font-size:0.92rem; color:#10B981; margin-bottom:6px;">
                     4️⃣ معالجة الخطر <span class='en-badge'>Treatment</span>
                 </div>
-                <div style="font-size:0.84rem; color:#475569; line-height:1.55;">
+                <div style="font-size:0.84rem; line-height:1.55;">
                     تطبيق استراتيجيات (التجنب Avoid، التخفيف Mitigate، المشاركة Share، والقبول Accept).
                 </div>
             </div>
@@ -2937,44 +3351,45 @@ elif selected_tab == "🧩 التنسيق (ISO 31000)":
         domain_vals = [coord_summary["domain_breakdown"].get(d, 0) for d in iso31000_coordination.COORDINATION_DOMAINS]
         domain_colors = ["#2563EB", "#0284C7", "#D97706", "#059669", "#7C3AED"]
 
+        ch_theme = get_chart_layout_theme()
         fig_dom = go.Figure(go.Bar(
             x=domain_vals,
             y=domain_labels,
             orientation='h',
             marker=dict(
                 color=domain_colors,
-                line=dict(color='#CBD5E1', width=1)
+                line=dict(color=ch_theme['grid_color'], width=1)
             ),
             text=[f"  <b>{v}</b> تعارض" if v > 0 else " 0" for v in domain_vals],
             textposition='auto',
-            textfont=dict(family='Cairo, sans-serif', size=12, color='#0F172A'),
+            textfont=dict(family='Cairo, sans-serif', size=12, color=ch_theme['font_color']),
             hovertemplate='<b>%{y}</b><br>عدد مشكلات التنسيق: <b>%{x}</b><extra></extra>'
         ))
 
         fig_dom.update_layout(
             height=320,
-            font=dict(family='Cairo, sans-serif', size=12),
+            font=dict(family='Cairo, sans-serif', size=12, color=ch_theme['font_color']),
             margin=dict(l=185, r=30, t=20, b=25),
-            plot_bgcolor='rgba(248, 250, 252, 0.6)',
-            paper_bgcolor='rgba(0,0,0,0)',
+            plot_bgcolor=ch_theme['plot_bgcolor'],
+            paper_bgcolor=ch_theme['paper_bgcolor'],
             xaxis=dict(
-                title=dict(text='عدد المشكلات والتعارضات المرصودة', font=dict(family='Cairo, sans-serif', size=12, color='#475569')),
-                gridcolor='#E2E8F0',
+                title=dict(text='عدد المشكلات والتعارضات المرصودة', font=dict(family='Cairo, sans-serif', size=12, color=ch_theme['axis_color'])),
+                gridcolor=ch_theme['grid_color'],
                 zeroline=False,
                 automargin=True,
-                tickfont=dict(family='Segoe UI, Tahoma, sans-serif', size=11)
+                tickfont=dict(family='Segoe UI, Tahoma, sans-serif', size=11, color=ch_theme['font_color'])
             ),
             yaxis=dict(
                 autorange='reversed',
                 automargin=True,
-                tickfont=dict(family='Cairo, sans-serif', size=12, color='#0F172A')
+                tickfont=dict(family='Cairo, sans-serif', size=12, color=ch_theme['font_color'])
             ),
             showlegend=False
         )
         st.plotly_chart(fig_dom, use_container_width=True, key="plot_iso31000_domains")
 
         st.markdown("""
-        <div style="background:#F8FAFC; border-radius:10px; padding:12px; border:1px solid #E2E8F0; font-size:0.82rem; color:#475569; line-height:1.6; text-align:right; direction:rtl;">
+        <div class="guide-subcard" style="font-size:0.82rem; line-height:1.6; text-align:right; direction:rtl; margin-top:8px;">
             💡 <b>إرشاد تحليلي:</b> يوضح المخطط تركز مشكلات التنسيق بين التخصصات المعمارية والإنشائية ومسارات الكهروميكانيك (MEP) والواجهات الموقعية لتحديد أولويات المعالجة التعاقدية.
         </div>
         """, unsafe_allow_html=True)
@@ -2983,17 +3398,17 @@ elif selected_tab == "🧩 التنسيق (ISO 31000)":
 
     # 💡 بطاقة التفسير المفاهيمي الذكية للفرق بين الحصر النظري 2D والفرز التنفيذي 4D (المقترح الثاني)
     st.markdown("""
-    <div style="background: linear-gradient(135deg, #F8FAFC 0%, #EFF6FF 100%); border: 1px solid #BFDBFE; border-radius: 12px; padding: 14px 18px; margin: 12px 0 18px 0; box-shadow: 0 2px 8px rgba(37,99,235,0.05); direction: rtl;">
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; border-bottom: 1px solid #DBEAFE; padding-bottom: 6px;">
-            <span style="font-weight: 800; font-size: 0.95rem; color: #1E40AF;">💡 دليل فهم المصفوفتين (الفرق بين الحصر النظري 2D والفرز التنفيذي الذكي 4D/5D):</span>
-            <span style="font-size: 0.75rem; background: #DBEAFE; color: #1E40AF; padding: 2px 8px; border-radius: 6px; font-weight: 700;">ISO 31000 + Bitaraf Model 2024</span>
+    <div class="guide-card">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; border-bottom: 1px solid rgba(37,99,235,0.2); padding-bottom: 6px;">
+            <span style="font-weight: 800; font-size: 0.95rem; color: #2563EB;">💡 دليل فهم المصفوفتين (الفرق بين الحصر النظري 2D والفرز التنفيذي الذكي 4D/5D):</span>
+            <span style="font-size: 0.75rem; background: rgba(37,99,235,0.15); color: inherit; padding: 2px 8px; border-radius: 6px; font-weight: 700;">ISO 31000 + Bitaraf Model 2024</span>
         </div>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; font-size: 0.82rem; color: #334155; line-height: 1.5;">
-            <div style="background: #FFFFFF; border-radius: 8px; padding: 10px 12px; border: 1px solid #E2E8F0;">
-                <b style="color: #0F172A;">1️⃣ المصفوفة العليا (2D BIM Compliance):</b><br/>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; font-size: 0.82rem; line-height: 1.5;">
+            <div class="guide-subcard">
+                <b style="color: #2563EB;">1️⃣ المصفوفة العليا (2D BIM Compliance):</b><br/>
                 حصر هندسي نظري مجرد (الاحتمالية × الشدة). يضع معظم التعارضات في المنطقة الحمراء (حرجة/كبيرة) بسبب نوع العنصر فقط دون معرفة موعد تنفيذه في الموقع.
             </div>
-            <div style="background: #FFFFFF; border-radius: 8px; padding: 10px 12px; border: 1px solid #E2E8F0;">
+            <div class="guide-subcard">
                 <b style="color: #0284C7;">2️⃣ مصفوفة القرارات الذكية (4D/5D AI-Triage):</b><br/>
                 فرز تنفيذي ديناميكي يدمج جدول <b>Primavera P6</b>؛ فالتعارض الذي يمتلك سماحية زمنية (Float) يُخفض خطره إلى <b>خطر متوسط (ALARP)</b> لعدم مساسه بالمسار الحرج اليوم، مما يوفر جهود الموقع ويركز على الطوارئ الحقيقية.
             </div>
@@ -3308,6 +3723,7 @@ elif selected_tab == "🔮 مقارن السيناريوهات (What-If)":
     st.markdown("#### 📊 مقارنة بصرية بين السيناريو الراهن والسيناريو المعالج:")
     
     col_wc1, col_wc2 = st.columns(2)
+    ch_theme = get_chart_layout_theme()
     with col_wc1:
         fig_w_dur = go.Figure()
         fig_w_dur.add_trace(go.Bar(
@@ -3318,9 +3734,13 @@ elif selected_tab == "🔮 مقارن السيناريوهات (What-If)":
             textposition="auto"
         ))
         fig_w_dur.update_layout(
-            title=ar("مقارنة مدة الإنجاز P80 (أيام)"),
+            title=dict(text=ar("مقارنة مدة الإنجاز P80 (أيام)"), font=dict(color=ch_theme["title_color"], size=13)),
             height=320,
-            font=dict(family="Cairo, sans-serif"),
+            font=dict(family="Cairo, sans-serif", color=ch_theme["font_color"]),
+            plot_bgcolor=ch_theme["plot_bgcolor"],
+            paper_bgcolor=ch_theme["paper_bgcolor"],
+            xaxis=dict(tickfont=dict(color=ch_theme["font_color"])),
+            yaxis=dict(gridcolor=ch_theme["grid_color"], tickfont=dict(color=ch_theme["font_color"])),
             margin=dict(l=20, r=20, t=40, b=20)
         )
         st.plotly_chart(fig_w_dur, use_container_width=True, key="plot_whatif_durations")
@@ -3335,9 +3755,13 @@ elif selected_tab == "🔮 مقارن السيناريوهات (What-If)":
             textposition="auto"
         ))
         fig_w_isrs.update_layout(
-            title=ar("مقارنة مؤشر خطر التلكؤ العراقي (ISRS)"),
+            title=dict(text=ar("مقارنة مؤشر خطر التلكؤ العراقي (ISRS)"), font=dict(color=ch_theme["title_color"], size=13)),
             height=320,
-            font=dict(family="Cairo, sans-serif"),
+            font=dict(family="Cairo, sans-serif", color=ch_theme["font_color"]),
+            plot_bgcolor=ch_theme["plot_bgcolor"],
+            paper_bgcolor=ch_theme["paper_bgcolor"],
+            xaxis=dict(tickfont=dict(color=ch_theme["font_color"])),
+            yaxis=dict(gridcolor=ch_theme["grid_color"], tickfont=dict(color=ch_theme["font_color"])),
             margin=dict(l=20, r=20, t=40, b=20)
         )
         st.plotly_chart(fig_w_isrs, use_container_width=True, key="plot_whatif_isrs")
@@ -3416,9 +3840,9 @@ elif selected_tab == "🧊 عارض BIM 3D التفاعلي":
     elem_summary = active_meta.get("element_summary", {})
     if elem_summary:
         st.markdown(f"""
-        <div style="background:#F0FDF4; border:1px solid #86EFAC; border-radius:10px; padding:12px 18px; margin-bottom:14px; direction:rtl;">
-            <span style="font-weight:700; color:#166534; font-size:0.95rem;">🏢 نموذج BIM المفعّل حالياً: {active_meta.get('name_ar')}</span>
-            <div style="font-size:0.82rem; color:#475569; margin-top:3px;">
+        <div class="info-card" style="border-right: 5px solid #10B981; margin-bottom:14px;">
+            <span style="font-weight:800; font-size:0.95rem; color:#10B981;">🏢 نموذج BIM المفعّل حالياً: {active_meta.get('name_ar')}</span>
+            <div style="font-size:0.84rem; margin-top:4px;">
                 تم حصر <b>{active_meta.get('total_elements', 0)}</b> عنصراً هندسياً موزعة على <b>{active_meta.get('storeys_count', 4)}</b> طوابق إنشائية.
             </div>
         </div>
@@ -3436,7 +3860,7 @@ elif selected_tab == "🧊 عارض BIM 3D التفاعلي":
             st.markdown(f"""
             <div class="kpi-card" style="padding:10px;">
                 <div class="kpi-title" style="font-size:0.75rem;">⚪ الأعمدة الخرسانية</div>
-                <div class="kpi-value" style="font-size:1.25rem; color:#475569;">{elem_summary.get('الأعمدة الخرسانية (Columns)', 0)} <span style="font-size:0.75rem; color:#64748B;">عمود</span></div>
+                <div class="kpi-value" style="font-size:1.25rem; color:#0284C7;">{elem_summary.get('الأعمدة الخرسانية (Columns)', 0)} <span style="font-size:0.75rem; color:#64748B;">عمود</span></div>
             </div>
             """, unsafe_allow_html=True)
         with col_b3:
@@ -3467,7 +3891,7 @@ elif selected_tab == "🧊 عارض BIM 3D التفاعلي":
     )
 
     if "🧊 1." in viewer_mode:
-        st.markdown("<div style='margin-bottom:8px; font-size:0.85rem; color:#475569;'>💡 <b>عارض BIM WebGL تفاعلي كامل:</b> يدعم التحريك بالماوس، الدوران 360°، وضع الشفافية (X-Ray)، الهيكل الشبكي (Wireframe)، وإظهار خصائص أي عنصر بالنقر عليه المباشر.</div>", unsafe_allow_html=True)
+        st.markdown("<div class='guide-subcard' style='margin-bottom:8px; font-size:0.85rem;'>💡 <b>عارض BIM WebGL تفاعلي كامل:</b> يدعم التحريك بالماوس، الدوران 360°، وضع الشفافية (X-Ray)، الهيكل الشبكي (Wireframe)، وإظهار خصائص أي عنصر بالنقر عليه المباشر.</div>", unsafe_allow_html=True)
         webgl_html = webgl_bim_viewer.render_webgl_ifc_viewer_html(
             spatial_elements=st.session_state.get("ifc_spatial_elements"),
             storeys_count=int(active_meta.get("storeys_count", 8)),
@@ -3494,7 +3918,7 @@ elif selected_tab == "🧊 عارض BIM 3D التفاعلي":
             show_clash_pts = st.checkbox("🔴 إبراز نقاط التعارض الحرج", value=True, key="chk_lay_clashes")
 
             st.markdown("""
-            <div style="background:#F8FAFC; border-radius:8px; padding:10px; font-size:0.8rem; color:#475569; border:1px solid #CBD5E1; margin-top:10px;">
+            <div class="guide-subcard" style="margin-top:10px; font-size:0.82rem;">
                 <b>دليل التلوين ثلاثي الأبعاد:</b><br/>
                 • 🟢 <b>الأخضر:</b> قواعد وسقوف سليمة<br/>
                 • ⚪ <b>الرمادي:</b> أعمدة وهيكل خرساني<br/>
@@ -3532,7 +3956,7 @@ elif selected_tab == "🧊 عارض BIM 3D التفاعلي":
                     key="raw_ifc_multisel_cats"
                 )
                 st.markdown(f"""
-                <div style="background:#F8FAFC; border-radius:8px; padding:10px; font-size:0.8rem; color:#475569; border:1px solid #CBD5E1; margin-top:10px;">
+                <div class="guide-subcard" style="margin-top:10px; font-size:0.82rem;">
                     <b>بيانات المودل الحقيقي:</b><br/>
                     • إجمالي العناصر المكانية: <b>{len(st.session_state.ifc_spatial_elements):,}</b> عنصر<br/>
                     • التخصصات المكتشفة: <b>{len(available_cats)}</b> تصنيف<br/>
@@ -4098,19 +4522,19 @@ elif selected_tab == "🏢 استيراد (P6 / IFC / JSON)":
 
         with col_gis_right:
             st.markdown(f"""
-            <div style="background:#FFFFFF; border:1px solid #CBD5E1; border-radius:12px; padding:18px; box-shadow:0 3px 12px rgba(0,0,0,0.05); direction:rtl; text-align:right;">
-                <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #E2E8F0; padding-bottom:10px; margin-bottom:12px;">
+            <div class="geo-profile-card">
+                <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid rgba(37,99,235,0.2); padding-bottom:10px; margin-bottom:12px;">
                     <div>
-                        <span style="font-weight:800; font-size:1.1rem; color:#0F172A;">📍 محافظة {prof['name_ar']}</span>
-                        <div style="font-size:0.75rem; color:#64748B;">المسافة من المركز: {dist_to_center:.1f} كم</div>
+                        <span style="font-weight:800; font-size:1.1rem;">📍 محافظة {prof['name_ar']}</span>
+                        <div style="font-size:0.78rem; opacity:0.8;">المسافة من المركز: {dist_to_center:.1f} كم</div>
                     </div>
-                    <span style="background:#EFF6FF; color:#1E40AF; padding:3px 10px; border-radius:6px; font-size:0.8rem; font-weight:700;">{prof['region_ar']}</span>
+                    <span style="background:rgba(37,99,235,0.15); color:inherit; padding:3px 10px; border-radius:6px; font-size:0.8rem; font-weight:800;">{prof['region_ar']}</span>
                 </div>
-                <div style="margin-bottom:12px; background:#FEF2F2; border:1px solid #FCA5A5; border-radius:8px; padding:8px 12px; display:flex; justify-content:space-between; align-items:center;">
-                    <span style="font-size:0.85rem; color:#991B1B; font-weight:700;">مؤشر الخطورة المكانية:</span>
+                <div style="margin-bottom:12px; background:rgba(220,38,38,0.12); border:1px solid rgba(220,38,38,0.3); border-radius:8px; padding:8px 12px; display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-size:0.85rem; font-weight:700;">مؤشر الخطورة المكانية:</span>
                     <b style="font-size:1.15rem; color:#DC2626;">{prof['overall_geo_risk_score']}/100</b>
                 </div>
-                <div style="font-size:0.86rem; line-height:1.75; color:#1E293B;">
+                <div style="font-size:0.86rem; line-height:1.75;">
                     <b>💧 المياه الجوفية:</b> {prof['groundwater_depth_m']} م ({prof['salinity_badge']})<br>
                     <b>🧱 طبيعة التربة:</b> {prof['soil_type_ar']}<br>
                     <b>🌡️ الإجهاد الحراري صيفاً:</b> {prof['summer_heat_index']}% (تأثير >50°C)<br>
@@ -4118,7 +4542,7 @@ elif selected_tab == "🏢 استيراد (P6 / IFC / JSON)":
                     <b>🚧 مخاطر القطوعات المرورية:</b> {prof['traffic_closure_risk']}<br>
                     <b>⛏️ مصادر المقالع والحصى:</b> {prof['quarry_source_ar']}<br>
                     <b>🚢 البعد عن ميناء أم قصر:</b> {prof['port_distance_km']} كم<br>
-                    <b>🏗️ التوصية الإنشائية:</b> <span style="color:#0284C7; font-weight:700;">{prof['foundation_recommendation_ar']}</span>
+                    <b>🏗️ التوصية الإنشائية:</b> <span style="color:#0284C7; font-weight:800;">{prof['foundation_recommendation_ar']}</span>
                 </div>
             </div>
             """, unsafe_allow_html=True)
@@ -4184,7 +4608,7 @@ elif selected_tab == "🏢 استيراد (P6 / IFC / JSON)":
             <div style="background:linear-gradient(135deg, #1E40AF, #1D4ED8); color:#FFFFFF; border-radius:10px 10px 0 0; padding:10px 12px; text-align:center; font-weight:800; font-size:0.95rem;">
                 1️⃣ جدول بريمافيرا (P6 XER)
             </div>
-            <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-top:none; border-radius:0 0 10px 10px; padding:12px; height:84px; font-size:0.82rem; color:#475569; line-height:1.5; text-align:right; margin-bottom:12px;">
+            <div class="import-card-body">
                 استيراد شبكة الأنشطة والمدد الأصلية والعلاقات المنطقية من ملف <code>.xer</code> مع تصفية البيانات القديمة.
             </div>
             """, unsafe_allow_html=True)
@@ -4207,7 +4631,7 @@ elif selected_tab == "🏢 استيراد (P6 / IFC / JSON)":
             <div style="background:linear-gradient(135deg, #0284C7, #0369A1); color:#FFFFFF; border-radius:10px 10px 0 0; padding:10px 12px; text-align:center; font-weight:800; font-size:0.95rem;">
                 2️⃣ نموذج البناء (BIM IFC)
             </div>
-            <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-top:none; border-radius:0 0 10px 10px; padding:12px; height:84px; font-size:0.82rem; color:#475569; line-height:1.5; text-align:right; margin-bottom:12px;">
+            <div class="import-card-body">
                 حصر العناصر وتوليد أنشطة WBS وتعادل التنسيق ISO 31000 من ملف <code>.ifc</code> الهندسي.
             </div>
             """, unsafe_allow_html=True)
@@ -4234,7 +4658,7 @@ elif selected_tab == "🏢 استيراد (P6 / IFC / JSON)":
             <div style="background:linear-gradient(135deg, #D97706, #B45309); color:#FFFFFF; border-radius:10px 10px 0 0; padding:10px 12px; text-align:center; font-weight:800; font-size:0.95rem;">
                 3️⃣ تعارضات نافيسووركس
             </div>
-            <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-top:none; border-radius:0 0 10px 10px; padding:12px; height:84px; font-size:0.82rem; color:#475569; line-height:1.5; text-align:right; margin-bottom:12px;">
+            <div class="import-card-body">
                 استيراد تقارير Clash Detective وترجمتها آلياً لمخاطر وتأخيرات تعاقدية ISO 31000.
             </div>
             """, unsafe_allow_html=True)
@@ -4253,7 +4677,7 @@ elif selected_tab == "🏢 استيراد (P6 / IFC / JSON)":
             <div style="background:linear-gradient(135deg, #059669, #047857); color:#FFFFFF; border-radius:10px 10px 0 0; padding:10px 12px; text-align:center; font-weight:800; font-size:0.95rem;">
                 4️⃣ استيراد واستعادة JSON الذكي
             </div>
-            <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-top:none; border-radius:0 0 10px 10px; padding:12px; height:84px; font-size:0.82rem; color:#475569; line-height:1.5; text-align:right; margin-bottom:12px;">
+            <div class="import-card-body">
                 استعادة كامل بيانات المشروع، أو استيراد تذاكر OpenBIM BCF، أو جداول الأنشطة وسجلات المخاطر بصيغة <code>.json</code>.
             </div>
             """, unsafe_allow_html=True)
