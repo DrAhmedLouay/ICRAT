@@ -556,6 +556,7 @@ def render_dynamic_theme_engine():
             color: #0F172A !important;
         }
 
+        /* 1. Header */
         .main-header {
             background: linear-gradient(135deg, #0F172A 0%, #1E3A8A 100%) !important;
             border-right: 6px solid #3B82F6 !important;
@@ -563,24 +564,39 @@ def render_dynamic_theme_engine():
         .main-header h2, .main-header p, .main-header span, .main-header b {
             color: #FFFFFF !important;
         }
+        .main-header .en-badge-hdr {
+            background: rgba(255,255,255,0.15) !important;
+            color: #FFFFFF !important;
+            border: 1px solid rgba(255,255,255,0.3) !important;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 0.82rem;
+            font-weight: 700;
+        }
 
+        /* 2. Active Project Card */
         .active-project-card {
             background: #FFFFFF !important;
             border: 2px solid #CBD5E1 !important;
+            box-shadow: 0 4px 14px rgba(15,23,42,0.04) !important;
         }
         .active-proj-lbl { color: #64748B !important; }
         .active-proj-val { color: #0F172A !important; font-weight: 900 !important; }
 
+        /* 3. Modern Topbar */
         .modern-topbar {
             background: #FFFFFF !important;
             border: 2px solid #CBD5E1 !important;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.04) !important;
         }
         .topbar-label { color: #475569 !important; font-weight: 700 !important; }
         .topbar-val { color: #0F172A !important; font-weight: 900 !important; }
 
+        /* 4. Workflow Bar */
         .workflow-bar {
             background: #FFFFFF !important;
             border: 2px solid #CBD5E1 !important;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03) !important;
         }
         .workflow-step { color: #334155 !important; font-weight: 700 !important; }
         .workflow-step.active {
@@ -589,26 +605,60 @@ def render_dynamic_theme_engine():
             font-weight: 900 !important;
             border: 1px solid #93C5FD !important;
         }
+        .workflow-arrow { color: #94A3B8 !important; }
 
-        .kpi-card, .metric-card, .chart-card, div[data-testid="stMetric"], div[data-testid="stExpander"] {
-            background: #FFFFFF !important;
+        /* 5. Navigation Hubs & Tabs (Segmented Control & Pills) */
+        div[data-testid="stSegmentedControl"] button, div[data-testid="stPills"] button {
+            background-color: #FFFFFF !important;
+            color: #0F172A !important;
             border: 2px solid #CBD5E1 !important;
+            border-radius: 10px !important;
+            font-weight: 800 !important;
+            font-size: 0.88rem !important;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04) !important;
         }
-        .kpi-title { color: #1E3A8A !important; font-weight: 800 !important; }
-        .kpi-value { color: #0F172A !important; font-weight: 900 !important; }
-        .kpi-desc { color: #475569 !important; font-weight: 700 !important; }
+        div[data-testid="stSegmentedControl"] button *, div[data-testid="stPills"] button * {
+            color: #0F172A !important;
+            font-weight: 800 !important;
+        }
+        div[data-testid="stSegmentedControl"] button[aria-checked="true"], div[data-testid="stPills"] button[aria-checked="true"] {
+            background: linear-gradient(135deg, #1E3A8A 0%, #2563EB 100%) !important;
+            color: #FFFFFF !important;
+            border-color: #1D4ED8 !important;
+            box-shadow: 0 4px 12px rgba(37,99,235,0.3) !important;
+        }
+        div[data-testid="stSegmentedControl"] button[aria-checked="true"] *, div[data-testid="stPills"] button[aria-checked="true"] * {
+            color: #FFFFFF !important;
+            font-weight: 900 !important;
+        }
 
+        /* 6. Tabs */
         .stTabs [data-baseweb="tab-list"] { border-bottom: 2px solid #CBD5E1 !important; }
         .stTabs [data-baseweb="tab"] {
             background: #FFFFFF !important;
             color: #0F172A !important;
             border: 2px solid #CBD5E1 !important;
+            font-weight: 800 !important;
         }
+        .stTabs [data-baseweb="tab"] * { color: #0F172A !important; font-weight: 800 !important; }
         .stTabs [aria-selected="true"] {
             background: linear-gradient(135deg, #1E3A8A, #2563EB) !important;
             color: #FFFFFF !important;
+            border-color: #1D4ED8 !important;
         }
+        .stTabs [aria-selected="true"] * { color: #FFFFFF !important; font-weight: 900 !important; }
 
+        /* 7. KPI & General Cards */
+        .kpi-card, .metric-card, .chart-card, div[data-testid="stMetric"], div[data-testid="stExpander"] {
+            background: #FFFFFF !important;
+            border: 2px solid #CBD5E1 !important;
+            box-shadow: 0 4px 18px rgba(15,23,42,0.06) !important;
+        }
+        .kpi-title { color: #1E3A8A !important; font-weight: 800 !important; }
+        .kpi-value { color: #0F172A !important; font-weight: 900 !important; }
+        .kpi-desc { color: #475569 !important; font-weight: 700 !important; }
+
+        /* 8. Sidebar in Royal Mode */
         section[data-testid="stSidebar"], div[data-testid="stSidebarUserContent"] {
             background-color: #0B132B !important;
             border-left: 2px solid #1E293B !important;
@@ -616,9 +666,40 @@ def render_dynamic_theme_engine():
         section[data-testid="stSidebar"] h1, section[data-testid="stSidebar"] h2, section[data-testid="stSidebar"] h3, section[data-testid="stSidebar"] h4, section[data-testid="stSidebar"] h5, section[data-testid="stSidebar"] h6 {
             color: #FFFFFF !important;
             font-weight: 900 !important;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.8) !important;
         }
-        section[data-testid="stSidebar"] p, section[data-testid="stSidebar"] label, section[data-testid="stSidebar"] span {
+        section[data-testid="stSidebar"] p, section[data-testid="stSidebar"] label, section[data-testid="stSidebar"] span, section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p {
             color: #FFFFFF !important;
+            font-weight: 700 !important;
+        }
+        section[data-testid="stSidebar"] .en-subtext { color: #93C5FD !important; font-weight: 800 !important; }
+        section[data-testid="stSidebar"] hr { border-color: #334155 !important; }
+        .sidebar-user-card {
+            background: rgba(255,255,255,0.08) !important;
+            border: 1px solid rgba(255,255,255,0.18) !important;
+        }
+        .sidebar-user-lbl { color: #93C5FD !important; }
+        .sidebar-user-val { color: #FFFFFF !important; }
+        .sidebar-user-badge { background: #166534 !important; color: #DCFCE7 !important; border: 1px solid #22C55E !important; }
+        section[data-testid="stSidebar"] .stButton button {
+            background: #1E293B !important;
+            color: #FFFFFF !important;
+            border: 1px solid #475569 !important;
+            font-weight: 800 !important;
+        }
+        section[data-testid="stSidebar"] .stButton button:hover {
+            background: #DC2626 !important;
+            color: #FFFFFF !important;
+            border-color: #EF4444 !important;
+        }
+
+        /* 9. Typography */
+        .stApp h1, .stApp h2, .stApp h3, .stApp h4, .stApp h5, .stApp h6 {
+            color: #0B132B !important;
+            font-weight: 900 !important;
+        }
+        .stApp p, .stApp li, .stApp label, .stApp td, .stApp th {
+            color: #0F172A !important;
             font-weight: 700 !important;
         }
         """
@@ -629,18 +710,136 @@ def render_dynamic_theme_engine():
             background-color: #FFFFFF !important;
             color: #0F172A !important;
         }
+
         .main-header {
             background: linear-gradient(135deg, #0F172A 0%, #1E3A8A 100%) !important;
+            border-right: 6px solid #2563EB !important;
         }
-        .kpi-card, .metric-card {
+        .main-header h2, .main-header p, .main-header span, .main-header b {
+            color: #FFFFFF !important;
+        }
+        .main-header .en-badge-hdr {
+            background: rgba(255,255,255,0.15) !important;
+            color: #FFFFFF !important;
+            border: 1px solid rgba(255,255,255,0.3) !important;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 0.82rem;
+            font-weight: 700;
+        }
+
+        .active-project-card {
+            background: #F8FAFC !important;
+            border: 2px solid #CBD5E1 !important;
+        }
+        .active-proj-lbl { color: #64748B !important; }
+        .active-proj-val { color: #0F172A !important; font-weight: 900 !important; }
+
+        .modern-topbar {
+            background: #F8FAFC !important;
+            border: 2px solid #CBD5E1 !important;
+        }
+        .topbar-label { color: #475569 !important; font-weight: 700 !important; }
+        .topbar-val { color: #0F172A !important; font-weight: 900 !important; }
+
+        .workflow-bar {
+            background: #F8FAFC !important;
+            border: 2px solid #CBD5E1 !important;
+        }
+        .workflow-step { color: #334155 !important; font-weight: 700 !important; }
+        .workflow-step.active {
+            background: #EFF6FF !important;
+            color: #1D4ED8 !important;
+            font-weight: 900 !important;
+            border: 1px solid #93C5FD !important;
+        }
+        .workflow-arrow { color: #94A3B8 !important; }
+
+        div[data-testid="stSegmentedControl"] button, div[data-testid="stPills"] button {
+            background-color: #F8FAFC !important;
+            color: #0F172A !important;
+            border: 2px solid #CBD5E1 !important;
+            border-radius: 10px !important;
+            font-weight: 800 !important;
+            font-size: 0.88rem !important;
+        }
+        div[data-testid="stSegmentedControl"] button *, div[data-testid="stPills"] button * {
+            color: #0F172A !important;
+            font-weight: 800 !important;
+        }
+        div[data-testid="stSegmentedControl"] button[aria-checked="true"], div[data-testid="stPills"] button[aria-checked="true"] {
+            background-color: #1D4ED8 !important;
+            color: #FFFFFF !important;
+            border-color: #1E40AF !important;
+        }
+        div[data-testid="stSegmentedControl"] button[aria-checked="true"] *, div[data-testid="stPills"] button[aria-checked="true"] * {
+            color: #FFFFFF !important;
+            font-weight: 900 !important;
+        }
+
+        .stTabs [data-baseweb="tab-list"] { border-bottom: 2px solid #CBD5E1 !important; }
+        .stTabs [data-baseweb="tab"] {
+            background: #F8FAFC !important;
+            color: #0F172A !important;
+            border: 2px solid #CBD5E1 !important;
+            font-weight: 800 !important;
+        }
+        .stTabs [data-baseweb="tab"] * { color: #0F172A !important; font-weight: 800 !important; }
+        .stTabs [aria-selected="true"] {
+            background: #1D4ED8 !important;
+            color: #FFFFFF !important;
+            border-color: #1E40AF !important;
+        }
+        .stTabs [aria-selected="true"] * { color: #FFFFFF !important; font-weight: 900 !important; }
+
+        .kpi-card, .metric-card, .chart-card, div[data-testid="stMetric"], div[data-testid="stExpander"] {
             background: #F8FAFC !important;
             border: 2px solid #CBD5E1 !important;
         }
         .kpi-title { color: #1E40AF !important; font-weight: 800 !important; }
         .kpi-value { color: #0F172A !important; font-weight: 900 !important; }
         .kpi-desc { color: #334155 !important; font-weight: 700 !important; }
+
         section[data-testid="stSidebar"], div[data-testid="stSidebarUserContent"] {
             background-color: #F1F5F9 !important;
+            border-left: 2px solid #CBD5E1 !important;
+        }
+        section[data-testid="stSidebar"] h1, section[data-testid="stSidebar"] h2, section[data-testid="stSidebar"] h3, section[data-testid="stSidebar"] h4, section[data-testid="stSidebar"] h5, section[data-testid="stSidebar"] h6 {
+            color: #0F172A !important;
+            font-weight: 900 !important;
+        }
+        section[data-testid="stSidebar"] p, section[data-testid="stSidebar"] label, section[data-testid="stSidebar"] span, section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p {
+            color: #0F172A !important;
+            font-weight: 700 !important;
+        }
+        section[data-testid="stSidebar"] .en-subtext { color: #1E40AF !important; font-weight: 800 !important; }
+        section[data-testid="stSidebar"] hr { border-color: #CBD5E1 !important; }
+        .sidebar-user-card {
+            background: #FFFFFF !important;
+            border: 1px solid #CBD5E1 !important;
+        }
+        .sidebar-user-lbl { color: #64748B !important; }
+        .sidebar-user-val { color: #0F172A !important; }
+        .sidebar-user-badge { background: #DCFCE7 !important; color: #166534 !important; border: 1px solid #BBF7D0 !important; }
+        section[data-testid="stSidebar"] .stButton button {
+            background: #FFFFFF !important;
+            color: #0F172A !important;
+            border: 1px solid #CBD5E1 !important;
+            font-weight: 800 !important;
+        }
+        section[data-testid="stSidebar"] .stButton button:hover {
+            background: #FEE2E2 !important;
+            color: #DC2626 !important;
+            border-color: #FCA5A5 !important;
+        }
+
+        .stApp h1, .stApp h2, .stApp h3, .stApp h4, .stApp h5, .stApp h6 {
+            color: #0F172A !important;
+            font-weight: 900 !important;
+        }
+        .stApp p, .stApp li, .stApp label, .stApp td, .stApp th {
+            color: #0F172A !important;
+            font-weight: 700 !important;
         }
         """
     else:  # DARK
@@ -650,60 +849,147 @@ def render_dynamic_theme_engine():
             background-color: #060A14 !important;
             color: #FFFFFF !important;
         }
+
         .main-header {
             background: linear-gradient(135deg, #0A1128 0%, #101E3D 100%) !important;
             border-right: 6px solid #38BDF8 !important;
+            box-shadow: 0 6px 24px rgba(0,0,0,0.5) !important;
         }
-        .kpi-card, .metric-card {
+        .main-header h2, .main-header p, .main-header span, .main-header b {
+            color: #FFFFFF !important;
+        }
+        .main-header .en-badge-hdr {
+            background: rgba(56, 189, 248, 0.15) !important;
+            color: #38BDF8 !important;
+            border: 1px solid rgba(56, 189, 248, 0.4) !important;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 0.82rem;
+            font-weight: 700;
+        }
+
+        .active-project-card {
             background: #0E1626 !important;
             border: 2px solid #1E293B !important;
-            color: #FFFFFF !important;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.4) !important;
         }
-        .kpi-title { color: #38BDF8 !important; font-weight: 800 !important; }
-        .kpi-value { color: #FFFFFF !important; font-weight: 900 !important; }
-        .kpi-desc { color: #94A3B8 !important; font-weight: 700 !important; }
-        section[data-testid="stSidebar"], div[data-testid="stSidebarUserContent"] {
-            background-color: #03060D !important;
-        }
-        .workflow-step {
-            color: #E2E8F0 !important;
-            font-weight: 700 !important;
-        }
-        .workflow-arrow {
-            color: #64748B !important;
-        }
-        div[data-testid="stMetric"] * {
-            color: #FFFFFF !important;
-        }
-        div[data-testid="stMetric"] [data-testid="stMetricValue"] {
-            color: #38BDF8 !important;
-            font-weight: 900 !important;
-        }
+        .active-proj-lbl { color: #94A3B8 !important; }
+        .active-proj-val { color: #38BDF8 !important; font-weight: 900 !important; }
+
         .modern-topbar {
             background: #0E1626 !important;
             border: 2px solid #1E293B !important;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.35) !important;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.4) !important;
         }
-        .modern-topbar .topbar-label {
-            color: #94A3B8 !important;
-            font-weight: 700 !important;
+        .topbar-label { color: #94A3B8 !important; font-weight: 700 !important; }
+        .topbar-val { color: #38BDF8 !important; font-weight: 900 !important; }
+
+        .workflow-bar {
+            background: #0E1626 !important;
+            border: 2px solid #1E293B !important;
         }
-        .modern-topbar .topbar-val {
-            color: #38BDF8 !important;
+        .workflow-step { color: #94A3B8 !important; font-weight: 700 !important; }
+        .workflow-step.active {
+            background: #1E3A8A !important;
+            color: #FFFFFF !important;
+            font-weight: 900 !important;
+            border: 1px solid #38BDF8 !important;
+        }
+        .workflow-arrow { color: #475569 !important; }
+
+        div[data-testid="stSegmentedControl"] button, div[data-testid="stPills"] button {
+            background-color: #0E1626 !important;
+            color: #E2E8F0 !important;
+            border: 2px solid #1E293B !important;
+            border-radius: 10px !important;
+            font-weight: 800 !important;
+            font-size: 0.88rem !important;
+        }
+        div[data-testid="stSegmentedControl"] button *, div[data-testid="stPills"] button * {
+            color: #E2E8F0 !important;
+            font-weight: 800 !important;
+        }
+        div[data-testid="stSegmentedControl"] button[aria-checked="true"], div[data-testid="stPills"] button[aria-checked="true"] {
+            background-color: #2563EB !important;
+            color: #FFFFFF !important;
+            border-color: #38BDF8 !important;
+            box-shadow: 0 0 14px rgba(37, 99, 235, 0.6) !important;
+        }
+        div[data-testid="stSegmentedControl"] button[aria-checked="true"] *, div[data-testid="stPills"] button[aria-checked="true"] * {
+            color: #FFFFFF !important;
             font-weight: 900 !important;
         }
+
+        .stTabs [data-baseweb="tab-list"] { border-bottom: 2px solid #1E293B !important; }
         .stTabs [data-baseweb="tab"] {
             background: #0E1626 !important;
             color: #E2E8F0 !important;
             border: 2px solid #1E293B !important;
             font-weight: 800 !important;
         }
+        .stTabs [data-baseweb="tab"] * { color: #E2E8F0 !important; font-weight: 800 !important; }
         .stTabs [aria-selected="true"] {
             background: #2563EB !important;
             color: #FFFFFF !important;
             border-color: #60A5FA !important;
-            font-weight: 900 !important;
             box-shadow: 0 0 14px rgba(37, 99, 235, 0.6) !important;
+        }
+        .stTabs [aria-selected="true"] * { color: #FFFFFF !important; font-weight: 900 !important; }
+
+        .kpi-card, .metric-card, .chart-card, div[data-testid="stMetric"], div[data-testid="stExpander"] {
+            background: #0E1626 !important;
+            border: 2px solid #1E293B !important;
+            color: #FFFFFF !important;
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.5) !important;
+        }
+        .kpi-title { color: #38BDF8 !important; font-weight: 800 !important; }
+        .kpi-value { color: #FFFFFF !important; font-weight: 900 !important; }
+        .kpi-desc { color: #94A3B8 !important; font-weight: 700 !important; }
+        div[data-testid="stMetric"] * { color: #FFFFFF !important; }
+        div[data-testid="stMetric"] [data-testid="stMetricValue"] { color: #38BDF8 !important; }
+
+        section[data-testid="stSidebar"], div[data-testid="stSidebarUserContent"] {
+            background-color: #03060D !important;
+            border-left: 2px solid #1E293B !important;
+        }
+        section[data-testid="stSidebar"] h1, section[data-testid="stSidebar"] h2, section[data-testid="stSidebar"] h3, section[data-testid="stSidebar"] h4, section[data-testid="stSidebar"] h5, section[data-testid="stSidebar"] h6 {
+            color: #FFFFFF !important;
+            font-weight: 900 !important;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.9) !important;
+        }
+        section[data-testid="stSidebar"] p, section[data-testid="stSidebar"] label, section[data-testid="stSidebar"] span, section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p {
+            color: #FFFFFF !important;
+            font-weight: 700 !important;
+        }
+        section[data-testid="stSidebar"] .en-subtext { color: #38BDF8 !important; font-weight: 800 !important; }
+        section[data-testid="stSidebar"] hr { border-color: #1E293B !important; }
+        .sidebar-user-card {
+            background: rgba(255,255,255,0.06) !important;
+            border: 1px solid #1E293B !important;
+        }
+        .sidebar-user-lbl { color: #38BDF8 !important; }
+        .sidebar-user-val { color: #FFFFFF !important; }
+        .sidebar-user-badge { background: #166534 !important; color: #DCFCE7 !important; border: 1px solid #22C55E !important; }
+        section[data-testid="stSidebar"] .stButton button {
+            background: #0E1626 !important;
+            color: #FFFFFF !important;
+            border: 1px solid #1E293B !important;
+            font-weight: 800 !important;
+        }
+        section[data-testid="stSidebar"] .stButton button:hover {
+            background: #DC2626 !important;
+            color: #FFFFFF !important;
+            border-color: #EF4444 !important;
+        }
+
+        .stApp h1, .stApp h2, .stApp h3, .stApp h4, .stApp h5, .stApp h6 {
+            color: #FFFFFF !important;
+            font-weight: 900 !important;
+            text-shadow: 0 1px 8px rgba(0,0,0,0.8) !important;
+        }
+        .stApp p, .stApp li, .stApp label, .stApp td, .stApp th {
+            color: #FFFFFF !important;
+            font-weight: 700 !important;
         }
         """
     st.markdown(f"<style>{theme_css}</style>", unsafe_allow_html=True)
