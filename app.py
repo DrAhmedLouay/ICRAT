@@ -35,6 +35,7 @@ import navisworks_parser
 import iraq_georisk_engine
 import ai_bim_decision_hub
 import glossary_data
+import central_db_engine
 import streamlit.components.v1 as components
 from typing import Optional
 
@@ -2939,9 +2940,12 @@ Iraqi Construction Risk Assessment & Decision Support Platform (ICRAT 2.0)
                 u_val = u_input.strip()
                 p_val = p_input.strip()
                 u_key = u_val.lower()
-                if u_key in AUTHORIZED_CREDENTIALS and AUTHORIZED_CREDENTIALS[u_key] == p_val:
+                user_rec = central_db_engine.authenticate_user(u_val, p_val)
+                if user_rec or (u_key in AUTHORIZED_CREDENTIALS and AUTHORIZED_CREDENTIALS[u_key] == p_val):
                     st.session_state["authenticated"] = True
                     st.session_state["logged_user"] = u_val
+                    st.session_state["user_role"] = user_rec["role"] if user_rec else ("ADMIN" if u_key in ["admin", "drahmed"] else "BIM_COORDINATOR")
+                    st.session_state["user_fullname"] = user_rec["full_name_ar"] if user_rec else u_val
                     token = generate_session_token(u_key)
                     st.query_params["session"] = token
                     st.query_params["user"] = u_val
@@ -3150,13 +3154,18 @@ with st.sidebar:
         else:
             st.image("https://img.icons8.com/isometric/512/crane.png", width=65)
 
+    curr_u_role = st.session_state.get('user_role', 'ADMIN')
+    role_meta = central_db_engine.get_user_role_info(curr_u_role)
+    curr_u_name = st.session_state.get('user_fullname', st.session_state.get('logged_user', 'Admin'))
+    
     st.markdown(f"""
     <div class="sidebar-user-card">
         <div>
             <div class="sidebar-user-lbl">المستخدم النشط:</div>
-            <div class="sidebar-user-val">👤 {st.session_state.get('logged_user', 'Admin')}</div>
+            <div class="sidebar-user-val">👤 {curr_u_name}</div>
+            <div style="margin-top:4px;"><span style="font-size:0.72rem; background:{role_meta['badge_color']}; color:{role_meta['text_color']}; padding:2px 8px; border-radius:4px; font-weight:800;">{role_meta['title_ar']}</span></div>
         </div>
-        <span class="sidebar-user-badge">🟢 مصرح</span>
+        <span class="sidebar-user-badge">🟢 متصل</span>
     </div>
     """, unsafe_allow_html=True)
     if st.button("🔒 تسجيل الخروج (Lock)", key="btn_auth_logout", use_container_width=True):
@@ -4457,6 +4466,25 @@ if selected_tab == "📊 لوحة القيادة":
     recs_to_show = isrs_v2_result["advanced_recommendations"] if eval_mode in ["COMPARE", "ADVANCED"] else isrs_result["recommendations"]
     for rec in recs_to_show:
         st.info(f"📌 **إجراء تعاقدي موصى به:** {rec}")
+
+    # 📜 سجل التعديلات والنشاطات التشاركية الحية
+    st.markdown("---")
+    with st.expander("📜 سجل التعديلات والنشاطات التشاركية الحية لفريق العمل (Live Audit Trail)", expanded=False):
+        recent_logs = central_db_engine.get_recent_audit_logs(limit=8)
+        if not recent_logs:
+            st.info("ℹ️ لا توجد تعديلات مسجلة بعد في سجل النشاط المشترك.")
+        else:
+            for log in recent_logs:
+                role_info = central_db_engine.get_user_role_info(log["user_role"])
+                st.markdown(f"""
+                <div style="background:var(--bg-card, #0E1626); border-right:4px solid {role_info['badge_color']}; border-radius:6px; padding:8px 12px; margin-bottom:6px; display:flex; justify-content:space-between; align-items:center;">
+                    <div>
+                        <b style="color:var(--text-primary, #FFFFFF);">{log['description_ar']}</b>
+                        <div style="font-size:0.75rem; color:var(--text-muted, #94A3B8);">بواسطة: <b>{log['username']}</b> • <span class="en-badge" style="font-size:0.68rem; background:{role_info['badge_color']}; color:{role_info['text_color']};">{role_info['title_ar']}</span></div>
+                    </div>
+                    <span style="font-size:0.75rem; color:var(--text-muted, #94A3B8); direction:ltr;">{log['created_at'][:16].replace('T', ' ')}</span>
+                </div>
+                """, unsafe_allow_html=True)
 
 # ----------------- TAB 2: S-CURVES -----------------
 elif selected_tab == "📈 منحنيات S-Curve":
@@ -5770,10 +5798,11 @@ elif selected_tab == "🏢 استيراد (P6 / IFC / JSON)":
     st.markdown("### 🏢 مركز إعداد المشروع والموقع المكاني واستيراد النماذج المتعددة")
     st.markdown("<div class='en-subtext'>Project Setup, Interactive GIS Site Mapping (Satellite / Standard), Primavera P6, BIM IFC & Navisworks Ingestion Hub</div>", unsafe_allow_html=True)
     
-    tab_setup_gis, tab_setup_meta, tab_setup_import = st.tabs([
+    tab_setup_gis, tab_setup_meta, tab_setup_import, tab_setup_cloud = st.tabs([
         "🗺️ 1. الموقع المكاني وخريطة العراق (GIS Map)",
         "📝 2. البيانات التعاقدية للمشروع (Metadata)",
-        "📥 3. استيراد النماذج والجداول (P6 / IFC / Navisworks / JSON)"
+        "📥 3. استيراد النماذج والجداول (P6 / IFC / Navisworks / JSON)",
+        "☁️ 4. مشاريع الفريق السحابية المشتركة (Shared Team Projects)"
     ])
 
     # ------------------ SUB-TAB 1: GIS LOCATION & SATELLITE MAP ------------------
@@ -6163,6 +6192,93 @@ elif selected_tab == "🏢 استيراد (P6 / IFC / JSON)":
                 use_container_width=True,
                 key="btn_download_json_hub"
             )
+
+    # ------------------ SUB-TAB 4: SHARED TEAM CLOUD PROJECTS ------------------
+    with tab_setup_cloud:
+        st.markdown("#### ☁️ مستودع المشاريع السحابية المشتركة لفريق العمل (Central Cloud Repository)")
+        st.markdown('<div class="subtext-muted" style="margin-bottom:16px;">استعراض وتحميل ومزامنة المشاريع الهندسية المشتركة المخزنة مركزياً في السحابة ومتابعة إصداراتها وسجل تدقيقها.</div>', unsafe_allow_html=True)
+        
+        # 1. حفظ المشروع الحالي كنسخة سحابية
+        col_c_save1, col_c_save2 = st.columns([3, 1.3])
+        with col_c_save1:
+            st.info("💡 **حفظ ومزامنة فورية:** يمكنك حفظ ومشاركة مشروعك الحالي النشط مع جميع زملائك في الفريق بنقرة زر واحدة لتحديث قاعدة البيانات المركزية.")
+        with col_c_save2:
+            if st.button("☁️ نشر/مزامنة المشروع الحالي سحابياً", type="primary", key="btn_save_curr_to_cloud_tab11", use_container_width=True):
+                s_ok, s_msg = central_db_engine.save_project_to_cloud(
+                    project_id=active_meta.get("id", "PROJ_CUSTOM"),
+                    meta=active_meta,
+                    activities=st.session_state.activities,
+                    risks=st.session_state.risk_register,
+                    coordination_issues=st.session_state.coordination_issues,
+                    delay_events=st.session_state.delay_events,
+                    expert_overrides=st.session_state.get("expert_overrides", {}),
+                    spatial_elements=st.session_state.get("ifc_spatial_elements", []),
+                    user=st.session_state.get("logged_user", "engineer"),
+                    user_role=st.session_state.get("user_role", "ADMIN")
+                )
+                if s_ok:
+                    st.session_state.last_import_msg = s_msg
+                    st.rerun()
+                else:
+                    st.error(s_msg)
+                    
+        st.markdown("---")
+        st.markdown("##### 📂 قائمة المشاريع الهندسية المتاحة في السحابة المركزية:")
+        
+        cloud_projs = central_db_engine.list_cloud_projects()
+        if not cloud_projs:
+            st.info("ℹ️ لا توجد مشاريع محفوظة في السحابة المركزية حتى الآن. انقر على الزر أعلاه لنشر أول مشروع مشترك لزملائك!")
+        else:
+            for p_item in cloud_projs:
+                with st.container():
+                    col_p_info, col_p_btn = st.columns([3.2, 1.1])
+                    with col_p_info:
+                        st.markdown(f"""
+                        <div style="background:var(--bg-card, #0E1626); border:1.5px solid var(--border-secondary, #334155); border-radius:10px; padding:12px 16px; margin-bottom:10px;">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                                <b style="font-size:1.05rem; color:var(--accent-primary, #38BDF8);">🏢 {p_item['name_ar']}</b>
+                                <span class="en-badge" style="font-size:0.75rem;">الإصدار v{p_item['version_id']}</span>
+                            </div>
+                            <div style="font-size:0.84rem; color:var(--text-secondary, #E2E8F0); margin-bottom:4px;">
+                                📍 <b>المحافظة:</b> {p_item['governorate']} • 🏛️ <b>الجهة المالكة:</b> {p_item.get('client_ar', 'العراق')} • 🏗️ <b>المقاول:</b> {p_item.get('contractor_ar', 'عام')}
+                            </div>
+                            <div style="font-size:0.80rem; color:var(--text-muted, #94A3B8);">
+                                📊 <b>المحتويات:</b> {p_item['activities_count']} نشاط | {p_item['risks_count']} بند خطر | {p_item['clashes_count']} تعارض BIM | {p_item['claims_count']} حدث تأخير
+                                <br/>🕒 <b>آخر تحديث:</b> {p_item['updated_at'][:16].replace('T', ' ')} بواسطة <b>{p_item['updated_by']}</b>
+                            </div>
+                        </div>
+                        """, unsafe_allow_html=True)
+                    with col_p_btn:
+                        st.write("")
+                        if st.button("🚀 تحميل وتفعيل", key=f"btn_load_cloud_{p_item['project_id']}", use_container_width=True, type="primary"):
+                            loaded_pkg = central_db_engine.load_project_from_cloud(p_item['project_id'])
+                            if loaded_pkg:
+                                load_clean_project_state(
+                                    meta=loaded_pkg.get("project_meta", {}),
+                                    activities=loaded_pkg.get("activities", []),
+                                    risks=loaded_pkg.get("risk_register"),
+                                    coordination_issues=loaded_pkg.get("coordination_issues"),
+                                    delay_events=loaded_pkg.get("delay_events"),
+                                    spatial_elements=loaded_pkg.get("ifc_spatial_elements", []),
+                                    source="CUSTOM",
+                                    success_msg=f"🎉 تم بنجاح تحميل وتفعيل المشروع السحابي: '{p_item['name_ar']}' (الإصدار v{p_item['version_id']})!"
+                                )
+                                st.session_state.expert_overrides = loaded_pkg.get("expert_overrides", {})
+                                st.rerun()
+                        
+                        if st.session_state.get("user_role") == "ADMIN":
+                            if st.button("🗑️ حذف من السحابة", key=f"btn_del_cloud_{p_item['project_id']}", use_container_width=True):
+                                d_ok, d_msg = central_db_engine.delete_cloud_project(
+                                    p_item['project_id'],
+                                    user=st.session_state.get("logged_user", "admin"),
+                                    user_role=st.session_state.get("user_role", "ADMIN")
+                                )
+                                if d_ok:
+                                    st.success(d_msg)
+                                    st.rerun()
+                                else:
+                                    st.error(d_msg)
+
 
 # ----------------- TAB 12: EXECUTIVE REPORTING & PDF -----------------
 elif selected_tab == "📄 التقرير والتصدير":
